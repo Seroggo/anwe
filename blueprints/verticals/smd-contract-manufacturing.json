@@ -6,7 +6,11 @@
   "status": "draft",
   "title": "SMD / PCB Contract Manufacturing",
   "description": "Reusable vertical structure for contract PCB assembly and related electronics manufacturing services.",
-  "extends": ["archetype.manufacturing", "pattern.quote-request", "pattern.file-upload", "pattern.portfolio"],
+  "extends": ["archetype.manufacturing", "pattern.quote-request"],
+  "conditional_patterns": [
+    {"blueprint": "pattern.file-upload", "if": "The manufacturer accepts project or production files through the website."},
+    {"blueprint": "pattern.portfolio", "if": "Real production cases are available and permitted for publication."}
+  ],
   "applicability": {
     "business_models": ["contract_manufacturing", "electronics_manufacturing"],
     "market_types": ["b2b"],
@@ -15,8 +19,8 @@
   },
   "structure": {
     "entities": {
-      "required": ["service", "production_capability", "technology", "input_requirement"],
-      "recommended": ["equipment", "production_process", "technical_requirement", "quality_control", "certification", "case"]
+      "required": ["technology", "input_requirement"],
+      "recommended": ["technical_requirement", "certification"]
     },
     "pages": [
       {"page_type": "services", "requirement": "recommended", "purpose": "Present PCB assembly and related production services."},
@@ -26,18 +30,16 @@
       {"page_type": "cases", "requirement": "conditional", "purpose": "Present verified production cases."}
     ],
     "blocks": {
-      "required": ["service_overview", "production_capabilities", "technologies", "quote_action"],
-      "recommended": ["technical_specs", "technical_requirements", "equipment", "production_process", "quality_control", "certifications", "cases", "file_requirements"]
+      "required": ["technologies", "quote_action"],
+      "recommended": ["technical_requirements", "quality_control", "certifications", "file_requirements"]
     },
     "actions": {
-      "primary": ["request_quote", "submit_project"],
+      "primary": ["request_quote"],
       "secondary": ["contact"]
     },
     "evidence_types": ["technical_capability", "equipment", "quality_process", "completed_production_case"]
   },
   "conditional_rules": [
-    {"if": "The business accepts project or production files online.", "then": "Include the file-upload pattern in the conversion flow."},
-    {"if": "Verified production cases are available and can be disclosed.", "then": "Include portfolio and case presentation."},
     {"if": "Equipment materially supports the explanation of production capabilities.", "then": "Include an equipment page or equipment evidence block."},
     {"if": "Certifications or applicable production standards can be disclosed.", "then": "Present them as verified quality evidence without implying unsupported certification."}
   ],

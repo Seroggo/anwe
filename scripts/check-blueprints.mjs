@@ -35,6 +35,16 @@ for (const [id, rel] of ids) {
       failed = true;
     }
   }
+  for (const pattern of bp.conditional_patterns ?? []) {
+    if (!ids.has(pattern.blueprint)) {
+      console.error(`UNRESOLVED CONDITIONAL PATTERN: ${id} -> ${pattern.blueprint}`);
+      failed = true;
+    }
+    if ((bp.extends ?? []).includes(pattern.blueprint)) {
+      console.error(`DUPLICATE CONDITIONAL PATTERN: ${id} -> ${pattern.blueprint}`);
+      failed = true;
+    }
+  }
 }
 
 if (failed) process.exit(1);

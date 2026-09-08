@@ -28,6 +28,19 @@
       "uniqueItems": true,
       "default": []
     },
+    "conditional_patterns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["blueprint", "if"],
+        "properties": {
+          "blueprint": {"type": "string"},
+          "if": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      },
+      "default": []
+    },
     "applicability": {
       "type": "object",
       "required": ["business_models", "market_types", "signals"],
