@@ -1,0 +1,38 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "pattern.portfolio",
+  "version": "0.1",
+  "kind": "pattern",
+  "status": "draft",
+  "title": "Portfolio / Cases",
+  "description": "Reusable site pattern for businesses where completed work is important purchase evidence.",
+  "extends": [],
+  "applicability": {
+    "business_models": [],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": [],
+    "signals": ["portfolio", "cases", "completed_projects", "work_examples"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["case"],
+      "recommended": ["media", "result", "testimonial"]
+    },
+    "pages": [
+      {"page_type": "portfolio", "requirement": "recommended", "purpose": "Present a collection of completed work."},
+      {"page_type": "case", "requirement": "recommended", "purpose": "Present an individual completed project or case."}
+    ],
+    "blocks": {
+      "required": ["case_list"],
+      "recommended": ["case_summary", "gallery", "result", "testimonial"]
+    },
+    "actions": {
+      "primary": [],
+      "secondary": ["view_case"]
+    },
+    "evidence_types": ["completed_work", "case", "before_after", "result"]
+  },
+  "conditional_rules": [],
+  "constraints": ["Portfolio and case content must represent real completed work."],
+  "notes": []
+}

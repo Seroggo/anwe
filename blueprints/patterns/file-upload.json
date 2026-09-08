@@ -1,0 +1,37 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "pattern.file-upload",
+  "version": "0.1",
+  "kind": "pattern",
+  "status": "draft",
+  "title": "File Upload",
+  "description": "Reusable site pattern for flows that require project files or source assets from the user.",
+  "extends": [],
+  "applicability": {
+    "business_models": [],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": ["project", "quote", "self_service"],
+    "signals": ["files_required", "source_assets", "project_documents"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["action", "input_requirement"],
+      "recommended": ["constraint"]
+    },
+    "pages": [
+      {"page_type": "file_submission", "requirement": "conditional", "purpose": "Collect files required to perform the service or product action."}
+    ],
+    "blocks": {
+      "required": ["file_upload"],
+      "recommended": ["input_requirements", "upload_constraints"]
+    },
+    "actions": {
+      "primary": ["upload_file", "submit_project"],
+      "secondary": []
+    },
+    "evidence_types": []
+  },
+  "conditional_rules": [],
+  "constraints": ["Accepted file formats and limits must be verified for the specific business or product."],
+  "notes": []
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "vertical.example",
+  "version": "0.1",
+  "kind": "vertical",
+  "status": "draft",
+  "title": "Example SiteBlueprint",
+  "description": "Reusable description of a site structure for a business class.",
+  "extends": [],
+  "applicability": {
+    "business_models": [],
+    "market_types": [],
+    "sales_models": [],
+    "signals": []
+  },
+  "structure": {
+    "entities": {
+      "required": [],
+      "recommended": []
+    },
+    "pages": [],
+    "blocks": {
+      "required": [],
+      "recommended": []
+    },
+    "actions": {
+      "primary": [],
+      "secondary": []
+    },
+    "evidence_types": []
+  },
+  "conditional_rules": [],
+  "constraints": [],
+  "notes": []
+}

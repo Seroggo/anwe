@@ -1,0 +1,46 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "vertical.ad-banner-resizer",
+  "version": "0.1",
+  "kind": "vertical",
+  "status": "draft",
+  "title": "Ad Banner Resizer",
+  "description": "Reusable vertical structure for a narrow software product that transforms advertising creatives into channel-specific formats.",
+  "extends": ["archetype.software-product", "pattern.file-upload", "pattern.lead-generation"],
+  "applicability": {
+    "business_models": ["software_product", "creative_automation"],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": ["self_service", "subscription", "lead"],
+    "signals": ["ad_creative", "resize", "image_upload", "output_formats", "creative_automation"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["product", "feature", "input_requirement", "output_format"],
+      "recommended": ["workflow", "use_case", "pricing", "constraint", "faq", "evidence"]
+    },
+    "pages": [
+      {"page_type": "product_home", "requirement": "required", "purpose": "Explain the product and provide the primary product action."},
+      {"page_type": "formats", "requirement": "recommended", "purpose": "Present supported output formats or format groups."},
+      {"page_type": "use_case", "requirement": "conditional", "purpose": "Explain a specific advertising workflow or use case."},
+      {"page_type": "pricing", "requirement": "conditional", "purpose": "Present pricing when it is public."}
+    ],
+    "blocks": {
+      "required": ["product_hero", "workflow", "supported_formats", "primary_action"],
+      "recommended": ["before_after", "use_cases", "constraints", "pricing", "faq", "evidence"]
+    },
+    "actions": {
+      "primary": ["start_product", "upload_file"],
+      "secondary": ["view_format", "contact"]
+    },
+    "evidence_types": ["before_after", "product_demo", "output_example", "supported_format_evidence"]
+  },
+  "conditional_rules": [
+    {"if": "Pricing is public.", "then": "Include pricing in the product structure."},
+    {"if": "A format or use case requires substantial explanation.", "then": "Represent it with a dedicated page type."}
+  ],
+  "constraints": [
+    "Supported formats and exact output guarantees must come from verified product data.",
+    "Do not infer advertising-platform moderation guarantees."
+  ],
+  "notes": []
+}

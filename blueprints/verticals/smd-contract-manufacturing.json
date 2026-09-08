@@ -1,0 +1,51 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "vertical.smd-contract-manufacturing",
+  "version": "0.1",
+  "kind": "vertical",
+  "status": "draft",
+  "title": "SMD / PCB Contract Manufacturing",
+  "description": "Reusable vertical structure for contract PCB assembly and related electronics manufacturing services.",
+  "extends": ["archetype.manufacturing", "pattern.quote-request", "pattern.file-upload", "pattern.portfolio"],
+  "applicability": {
+    "business_models": ["contract_manufacturing", "electronics_manufacturing"],
+    "market_types": ["b2b"],
+    "sales_models": ["quote", "project", "repeat_order"],
+    "signals": ["pcb", "smd", "smt", "assembly", "electronics_production", "technical_files"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["service", "production_capability", "technology", "input_requirement"],
+      "recommended": ["equipment", "production_process", "technical_requirement", "quality_control", "certification", "case"]
+    },
+    "pages": [
+      {"page_type": "services", "requirement": "recommended", "purpose": "Present PCB assembly and related production services."},
+      {"page_type": "capabilities", "requirement": "recommended", "purpose": "Present verified technical production capabilities."},
+      {"page_type": "equipment", "requirement": "conditional", "purpose": "Present equipment when it materially supports capability evidence."},
+      {"page_type": "quality", "requirement": "recommended", "purpose": "Explain quality control methods and the evidence available to support them."},
+      {"page_type": "cases", "requirement": "conditional", "purpose": "Present verified production cases."}
+    ],
+    "blocks": {
+      "required": ["service_overview", "production_capabilities", "technologies", "quote_action"],
+      "recommended": ["technical_specs", "technical_requirements", "equipment", "production_process", "quality_control", "certifications", "cases", "file_requirements"]
+    },
+    "actions": {
+      "primary": ["request_quote", "submit_project"],
+      "secondary": ["contact"]
+    },
+    "evidence_types": ["technical_capability", "equipment", "quality_process", "completed_production_case"]
+  },
+  "conditional_rules": [
+    {"if": "The business accepts project or production files online.", "then": "Include the file-upload pattern in the conversion flow."},
+    {"if": "Verified production cases are available and can be disclosed.", "then": "Include portfolio and case presentation."},
+    {"if": "Equipment materially supports the explanation of production capabilities.", "then": "Include an equipment page or equipment evidence block."},
+    {"if": "Certifications or applicable production standards can be disclosed.", "then": "Present them as verified quality evidence without implying unsupported certification."}
+  ],
+  "constraints": [
+    "Do not infer component packages, tolerances, batch sizes, standards or equipment from industry norms.",
+    "All technical capabilities, supported technologies and project input requirements must be verified for the specific manufacturer.",
+    "Distinguish currently supported capabilities from planned, target or partner-delivered capabilities.",
+    "Production cases and technical evidence must use real, disclosable project information."
+  ],
+  "notes": []
+}

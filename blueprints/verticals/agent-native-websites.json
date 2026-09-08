@@ -1,0 +1,45 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "vertical.agent-native-websites",
+  "version": "0.1",
+  "kind": "vertical",
+  "status": "draft",
+  "title": "ANWE Websites for SMB",
+  "description": "Reusable vertical structure for selling creation and ongoing management of agent-native business websites to SMB clients.",
+  "extends": ["archetype.digital-service", "pattern.lead-generation", "pattern.portfolio"],
+  "applicability": {
+    "business_models": ["digital_service", "website_service"],
+    "market_types": ["b2b"],
+    "sales_models": ["consultative_sale", "project", "service"],
+    "signals": ["website_creation", "agent_management", "ai_first_website", "smb"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["service", "process", "capability", "action"],
+      "recommended": ["deliverable", "offer", "case", "faq", "evidence", "comparison"]
+    },
+    "pages": [
+      {"page_type": "service_home", "requirement": "required", "purpose": "Explain the ANWE website service and its value for SMB."},
+      {"page_type": "service", "requirement": "conditional", "purpose": "Explain a distinct service or capability."},
+      {"page_type": "cases", "requirement": "conditional", "purpose": "Show deployed client websites and results when evidence is available."},
+      {"page_type": "case", "requirement": "conditional", "purpose": "Present an individual client implementation."}
+    ],
+    "blocks": {
+      "required": ["service_hero", "capabilities", "process", "primary_action"],
+      "recommended": ["deliverables", "comparison", "cases", "evidence", "faq"]
+    },
+    "actions": {
+      "primary": ["request_consultation", "request_quote"],
+      "secondary": ["view_case", "contact"]
+    },
+    "evidence_types": ["case", "demo", "process_evidence", "operational_evidence"]
+  },
+  "conditional_rules": [
+    {"if": "Approved client websites are available for disclosure.", "then": "Include them as case evidence."}
+  ],
+  "constraints": [
+    "Describe only verified current service capabilities.",
+    "Do not state guaranteed ranking advantages in AI or classical search."
+  ],
+  "notes": []
+}

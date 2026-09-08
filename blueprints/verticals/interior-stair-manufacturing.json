@@ -1,0 +1,46 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "vertical.interior-stair-manufacturing",
+  "version": "0.1",
+  "kind": "vertical",
+  "status": "draft",
+  "title": "Interior Stair Manufacturing",
+  "description": "Reusable vertical structure for custom interior stair design, manufacturing and project delivery.",
+  "extends": ["archetype.project-manufacturing", "pattern.quote-request", "pattern.portfolio", "pattern.lead-generation"],
+  "applicability": {
+    "business_models": ["project_manufacturing", "custom_interior_product"],
+    "market_types": ["b2c", "b2b"],
+    "sales_models": ["project", "quote", "consultative_sale"],
+    "signals": ["stairs", "custom_design", "materials", "measurement", "installation", "portfolio"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["service", "stair_project"],
+      "recommended": ["stair_type", "material", "configuration", "portfolio_item", "measurement", "installation", "faq"]
+    },
+    "pages": [
+      {"page_type": "solutions", "requirement": "recommended", "purpose": "Present available stair types or solution categories."},
+      {"page_type": "portfolio", "requirement": "recommended", "purpose": "Present completed stair projects."},
+      {"page_type": "project", "requirement": "recommended", "purpose": "Present an individual completed staircase project."},
+      {"page_type": "materials", "requirement": "conditional", "purpose": "Present available materials when material choice is important to the offer."}
+    ],
+    "blocks": {
+      "required": ["solution_overview", "project_process", "quote_action"],
+      "recommended": ["portfolio", "gallery", "materials", "configurations", "measurement", "installation", "faq"]
+    },
+    "actions": {
+      "primary": ["request_quote", "request_consultation"],
+      "secondary": ["contact", "view_project"]
+    },
+    "evidence_types": ["completed_project", "portfolio", "material_example", "process_evidence"]
+  },
+  "conditional_rules": [
+    {"if": "The business has verified completed-project photography.", "then": "Include portfolio and project pages."},
+    {"if": "Measurement or installation is part of the offer.", "then": "Represent it explicitly as a service or project-stage entity."}
+  ],
+  "constraints": [
+    "Do not infer available materials, construction types, geography, warranties or installation scope.",
+    "Portfolio entries must represent real completed work."
+  ],
+  "notes": []
+}

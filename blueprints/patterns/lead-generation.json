@@ -1,0 +1,37 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "pattern.lead-generation",
+  "version": "0.1",
+  "kind": "pattern",
+  "status": "draft",
+  "title": "Lead Generation",
+  "description": "Reusable site pattern for businesses where the primary website role is conversion into a qualified contact or request.",
+  "extends": [],
+  "applicability": {
+    "business_models": [],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": ["lead", "consultative_sale", "project"],
+    "signals": ["lead_generation", "consultation", "contact_request"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["action", "offer"],
+      "recommended": ["evidence", "faq"]
+    },
+    "pages": [
+      {"page_type": "conversion", "requirement": "recommended", "purpose": "Convert an interested visitor into a qualified request."}
+    ],
+    "blocks": {
+      "required": ["primary_action"],
+      "recommended": ["lead_form", "evidence", "faq"]
+    },
+    "actions": {
+      "primary": ["request_consultation", "contact"],
+      "secondary": ["phone", "messenger"]
+    },
+    "evidence_types": ["trust_evidence"]
+  },
+  "conditional_rules": [],
+  "constraints": [],
+  "notes": []
+}

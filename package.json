@@ -1,0 +1,11 @@
+{
+  "name": "anwe-project",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ANWE SiteBlueprint library",
+  "scripts": {
+    "check:json": "node scripts/check-json.mjs",
+    "check:blueprints": "node scripts/check-blueprints.mjs",
+    "check": "npm run check:json && npm run check:blueprints"
+  }
+}

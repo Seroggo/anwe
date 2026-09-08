@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "archetype.manufacturing",
+  "version": "0.1",
+  "kind": "archetype",
+  "status": "draft",
+  "title": "Manufacturing Business",
+  "description": "Reusable structure for businesses that manufacture physical products or provide contract production.",
+  "extends": ["core.business-site"],
+  "applicability": {
+    "business_models": ["manufacturing", "contract_manufacturing"],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": ["quote", "project", "repeat_order"],
+    "signals": ["production", "capabilities", "equipment", "technical_requirements"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["service", "capability"],
+      "recommended": ["equipment", "process", "constraint", "case", "quality_evidence"]
+    },
+    "pages": [
+      {"page_type": "services", "requirement": "recommended", "purpose": "Present available production services."},
+      {"page_type": "capabilities", "requirement": "recommended", "purpose": "Explain production capabilities and limits."},
+      {"page_type": "case", "requirement": "conditional", "purpose": "Provide evidence through completed production work."}
+    ],
+    "blocks": {
+      "required": ["service_overview", "capabilities", "primary_action"],
+      "recommended": ["technical_specs", "equipment", "process", "evidence", "cases"]
+    },
+    "actions": {
+      "primary": ["request_quote"],
+      "secondary": ["contact"]
+    },
+    "evidence_types": ["technical_capability", "equipment", "completed_work", "quality_process"]
+  },
+  "conditional_rules": [],
+  "constraints": ["Production capabilities and limits must be based on verified business data."],
+  "notes": []
+}

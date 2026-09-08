@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "blueprints": [
+    {"id": "core.business-site", "path": "core/business-site-core.json", "status": "draft"},
+    {"id": "archetype.manufacturing", "path": "archetypes/manufacturing.json", "status": "draft"},
+    {"id": "archetype.project-manufacturing", "path": "archetypes/project-manufacturing.json", "status": "draft"},
+    {"id": "archetype.software-product", "path": "archetypes/software-product.json", "status": "draft"},
+    {"id": "archetype.digital-service", "path": "archetypes/digital-service.json", "status": "draft"},
+    {"id": "pattern.quote-request", "path": "patterns/quote-request.json", "status": "draft"},
+    {"id": "pattern.portfolio", "path": "patterns/portfolio.json", "status": "draft"},
+    {"id": "pattern.file-upload", "path": "patterns/file-upload.json", "status": "draft"},
+    {"id": "pattern.lead-generation", "path": "patterns/lead-generation.json", "status": "draft"},
+    {"id": "vertical.smd-contract-manufacturing", "path": "verticals/smd-contract-manufacturing.json", "status": "draft"},
+    {"id": "vertical.interior-stair-manufacturing", "path": "verticals/interior-stair-manufacturing.json", "status": "draft"},
+    {"id": "vertical.ad-banner-resizer", "path": "verticals/ad-banner-resizer.json", "status": "draft"},
+    {"id": "vertical.agent-native-websites", "path": "verticals/agent-native-websites.json", "status": "draft"}
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "archetype.software-product",
+  "version": "0.1",
+  "kind": "archetype",
+  "status": "draft",
+  "title": "Software Product",
+  "description": "Reusable structure for SaaS and narrow digital software products.",
+  "extends": ["core.business-site"],
+  "applicability": {
+    "business_models": ["software_product", "saas"],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": ["self_service", "subscription", "lead"],
+    "signals": ["software", "features", "workflow", "pricing", "use_cases"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["product", "feature", "action"],
+      "recommended": ["workflow", "use_case", "pricing", "faq", "integration", "evidence"]
+    },
+    "pages": [
+      {"page_type": "product_home", "requirement": "required", "purpose": "Explain product value and provide the primary product action."},
+      {"page_type": "feature_or_use_case", "requirement": "conditional", "purpose": "Explain an important feature or use case in detail."},
+      {"page_type": "pricing", "requirement": "conditional", "purpose": "Explain commercial terms when pricing is public."}
+    ],
+    "blocks": {
+      "required": ["product_hero", "features", "primary_action"],
+      "recommended": ["workflow", "use_cases", "evidence", "pricing", "faq"]
+    },
+    "actions": {
+      "primary": ["start_product", "sign_up"],
+      "secondary": ["request_demo", "contact"]
+    },
+    "evidence_types": ["product_demo", "output_example", "use_case", "result"]
+  },
+  "conditional_rules": [],
+  "constraints": ["Product capabilities, supported formats and integrations must come from verified product data."],
+  "notes": []
+}

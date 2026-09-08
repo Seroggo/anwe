@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "archetype.project-manufacturing",
+  "version": "0.1",
+  "kind": "archetype",
+  "status": "draft",
+  "title": "Project Manufacturing",
+  "description": "Reusable structure for custom physical products designed and delivered as individual projects.",
+  "extends": ["core.business-site"],
+  "applicability": {
+    "business_models": ["project_manufacturing", "custom_product"],
+    "market_types": ["b2c", "b2b"],
+    "sales_models": ["project", "quote", "consultative_sale"],
+    "signals": ["custom_design", "materials", "portfolio", "measurement", "installation"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["service", "project"],
+      "recommended": ["material", "configuration", "portfolio_item", "process", "faq", "evidence"]
+    },
+    "pages": [
+      {"page_type": "services", "requirement": "recommended", "purpose": "Present available project services or solutions."},
+      {"page_type": "portfolio", "requirement": "recommended", "purpose": "Show completed projects."},
+      {"page_type": "project", "requirement": "recommended", "purpose": "Describe an individual completed project."}
+    ],
+    "blocks": {
+      "required": ["offer_overview", "project_process", "primary_action"],
+      "recommended": ["portfolio", "materials", "configurations", "evidence", "faq"]
+    },
+    "actions": {
+      "primary": ["request_quote", "request_consultation"],
+      "secondary": ["contact"]
+    },
+    "evidence_types": ["completed_project", "portfolio", "material_example", "process_evidence"]
+  },
+  "conditional_rules": [],
+  "constraints": ["Available materials, configurations and service scope must be verified for the specific business."],
+  "notes": []
+}

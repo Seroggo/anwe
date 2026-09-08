@@ -1,0 +1,37 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "pattern.quote-request",
+  "version": "0.1",
+  "kind": "pattern",
+  "status": "draft",
+  "title": "Quote Request",
+  "description": "Reusable site pattern for businesses where price or feasibility depends on project parameters.",
+  "extends": [],
+  "applicability": {
+    "business_models": [],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": ["quote", "project", "consultative_sale"],
+    "signals": ["variable_price", "project_parameters", "custom_quote"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["action"],
+      "recommended": ["input_requirement", "constraint"]
+    },
+    "pages": [
+      {"page_type": "quote_request", "requirement": "recommended", "purpose": "Collect the information required to prepare a quote."}
+    ],
+    "blocks": {
+      "required": ["quote_cta"],
+      "recommended": ["quote_form", "input_requirements"]
+    },
+    "actions": {
+      "primary": ["request_quote"],
+      "secondary": ["contact"]
+    },
+    "evidence_types": []
+  },
+  "conditional_rules": [],
+  "constraints": [],
+  "notes": []
+}

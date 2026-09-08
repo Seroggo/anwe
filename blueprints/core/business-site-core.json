@@ -1,0 +1,38 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "core.business-site",
+  "version": "0.1",
+  "kind": "core",
+  "status": "draft",
+  "title": "Business Site Core",
+  "description": "Universal reusable structure shared by most business websites.",
+  "extends": [],
+  "applicability": {
+    "business_models": [],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": [],
+    "signals": ["business_website"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["organization", "contact", "action"],
+      "recommended": ["service", "product", "offer", "location", "evidence", "faq", "media"]
+    },
+    "pages": [
+      {"page_type": "home", "requirement": "required", "purpose": "Primary presentation of the business and its offer."},
+      {"page_type": "contact", "requirement": "recommended", "purpose": "Provide direct contact and conversion options."}
+    ],
+    "blocks": {
+      "required": ["header", "hero", "primary_action", "footer"],
+      "recommended": ["entity_list", "evidence", "faq", "contacts"]
+    },
+    "actions": {
+      "primary": ["contact"],
+      "secondary": ["phone", "email", "messenger"]
+    },
+    "evidence_types": ["business_identity", "contactability"]
+  },
+  "conditional_rules": [],
+  "constraints": ["Do not infer company-specific facts from generic blueprint knowledge."],
+  "notes": []
+}

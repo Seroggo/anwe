@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "archetype.digital-service",
+  "version": "0.1",
+  "kind": "archetype",
+  "status": "draft",
+  "title": "Digital Service",
+  "description": "Reusable structure for digital and professional services delivered through a defined process.",
+  "extends": ["core.business-site"],
+  "applicability": {
+    "business_models": ["digital_service", "professional_service"],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": ["lead", "consultative_sale", "project"],
+    "signals": ["service", "process", "expertise", "deliverables", "cases"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["service", "process", "action"],
+      "recommended": ["deliverable", "case", "offer", "faq", "evidence"]
+    },
+    "pages": [
+      {"page_type": "services", "requirement": "recommended", "purpose": "Present the service portfolio."},
+      {"page_type": "service", "requirement": "recommended", "purpose": "Explain an individual service."},
+      {"page_type": "case", "requirement": "conditional", "purpose": "Show evidence of completed work."}
+    ],
+    "blocks": {
+      "required": ["service_overview", "process", "primary_action"],
+      "recommended": ["deliverables", "cases", "evidence", "faq"]
+    },
+    "actions": {
+      "primary": ["request_consultation", "request_quote"],
+      "secondary": ["contact"]
+    },
+    "evidence_types": ["case", "result", "process_evidence", "expertise"]
+  },
+  "conditional_rules": [],
+  "constraints": ["Service outcomes and proof must not be fabricated from generic blueprint knowledge."],
+  "notes": []
+}
