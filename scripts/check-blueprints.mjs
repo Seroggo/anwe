@@ -40,6 +40,13 @@ for (const [id, rel] of ids) {
       console.error(`UNRESOLVED CONDITIONAL PATTERN: ${id} -> ${pattern.blueprint}`);
       failed = true;
     }
+    if (ids.has(pattern.blueprint)) {
+      const referenced = JSON.parse(fs.readFileSync(path.join(bpRoot, ids.get(pattern.blueprint)), 'utf8'));
+      if (referenced.kind !== 'pattern') {
+        console.error(`INVALID CONDITIONAL PATTERN KIND: ${id} -> ${pattern.blueprint} (kind=${referenced.kind})`);
+        failed = true;
+      }
+    }
     if ((bp.extends ?? []).includes(pattern.blueprint)) {
       console.error(`DUPLICATE CONDITIONAL PATTERN: ${id} -> ${pattern.blueprint}`);
       failed = true;
