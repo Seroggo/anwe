@@ -26,7 +26,7 @@ const variantClass = `gallery-block--${block.variant}`;
   <div class="gallery-block__list">
     {galleryViews.map((gItem) => (
       <figure class="gallery-item">
-        {gItem.media && <MediaFrame media={gItem.media} class="gallery-item__media" label={`Placeholder работы ${gItem.index + 1}`} />}
+        {gItem.media && <MediaFrame media={gItem.media} class="gallery-item__media" label={`Визуальный placeholder ${gItem.index + 1}`} />}
         <figcaption><strong>{gItem.title}</strong>{gItem.caption && <span>{gItem.caption}</span>}</figcaption>
       </figure>
     ))}

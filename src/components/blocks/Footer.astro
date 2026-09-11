@@ -9,6 +9,9 @@ interface Props {
 
 const { block } = Astro.props;
 const content = asRecord(block.content);
+const brand = asString(content.brand).trim();
+const description = asString(content.description);
+const note = asString(content.note).trim();
 const columns = Array.isArray(content.columns) ? content.columns.map((item) => asRecord(item)) : [];
 const footerColumns = columns.map((column) => ({
   title: asString(column.title),
@@ -25,10 +28,10 @@ const variantClass = `site-footer--${block.variant}`;
 
 <footer class:list={['block', 'block--footer', surfaceClass, 'site-footer', variantClass]}>
   <div class="site-footer__lead">
-    <a class="site-footer__brand" href="#top">{asString(content.brand, 'Красивые ноготочки')}</a>
-    <p>{asString(content.description)}</p>
+    {brand && <a class="site-footer__brand" href="#top">{brand}</a>}
+    {description && <p>{description}</p>}
     {actions.length > 0 && <div class="action-row">{actions.map((action) => <ActionLink action={action} />)}</div>}
   </div>
   {footerColumns.length > 0 && <div class="site-footer__columns">{footerColumns.map((col) => <div><h3>{col.title}</h3><ul>{col.links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}</ul></div>)}</div>}
-  <div class="site-footer__bottom"><span>© {year} {asString(content.brand, 'Красивые ноготочки')}</span><span>{asString(content.note, 'Синтетический fixture для ANWE Block Library Alpha')}</span></div>
+  {(brand || note) && <div class="site-footer__bottom">{brand && <span>© {year} {brand}</span>}{note && <span>{note}</span>}</div>}
 </footer>

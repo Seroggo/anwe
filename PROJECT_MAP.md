@@ -14,6 +14,9 @@ C:\Project_all\anwe\
 ├── PROJECT_MAP.md
 ├── CHANGELOG.md
 ├── package.json
+├── package-lock.json
+├── astro.config.mjs
+├── tsconfig.json
 ├── blueprints\
 ├── contracts\
 ├── templates\
@@ -22,6 +25,9 @@ C:\Project_all\anwe\
 │       └── SITE_CONTEXT_ANMA_V1_APPROVED.md
 ├── docs\
 ├── scripts\
+├── src\
+├── tests\
+│   └── fixtures\
 └── tasks\
 ```
 
@@ -33,7 +39,12 @@ C:\Project_all\anwe\
 - `sites/<site-id>/` — data for a specific site.
 - `docs/` — current working documentation only.
 - `scripts/` — deterministic tooling.
+- `src/` — Astro runtime: generic block components, renderer, layouts, data, styles, and themes.
+- `tests/fixtures/` — controlled JSON page fixtures and the layout/theme demo matrix.
 - `tasks/` — current development tasks.
+- `astro.config.mjs` — static Astro build configuration.
+- `tsconfig.json` — TypeScript configuration for the Astro runtime.
+- `package-lock.json` — locked npm dependency graph.
 
 The current ANMA SiteContext is `sites/anma/SITE_CONTEXT_ANMA_V1_APPROVED.md`.
 

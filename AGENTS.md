@@ -2,7 +2,13 @@
 
 ## Текущий фокус разработки
 
-Текущий фокус разработки — библиотека `SiteBlueprint`.
+Текущий focus разработки — ANWE MVP assembly engine:
+
+```text
+Block Library + themes + JSON renderer
+```
+
+Правила SiteBlueprint ниже сохраняются для blueprint-файлов.
 
 ## SiteBlueprint
 
@@ -117,5 +123,6 @@ archetype.digital-service
 3. Не переносить свойства исходного клиента в reusable blueprint, если они не являются общим свойством класса бизнеса.
 4. Не выдавать предположение за факт. Неизвестное оставлять неизвестным.
 5. Изменения должны быть минимальными и относиться к текущему blueprint или общему слою, который он действительно требует.
-6. После изменений выполнить `npm run check`.
-7. Historical materials outside the repository are non-normative and must not be used unless explicitly requested.
+6. Reusable renderer/components must contain no site-specific or fixture-specific business content.
+7. После изменений выполнить `npm run check`.
+8. Historical materials outside the repository are non-normative and must not be used unless explicitly requested.

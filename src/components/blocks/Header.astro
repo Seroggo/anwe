@@ -9,6 +9,9 @@ interface Props {
 
 const { block } = Astro.props;
 const content = asRecord(block.content);
+const brand = asString(content.brand).trim();
+const brandMark = Array.from(brand)[0] ?? '';
+const brandAriaLabel = brand ? `${brand} — в начало` : 'В начало';
 const actions = asActions(content.actions);
 const nav = Array.isArray(content.nav) ? content.nav.map((item) => asRecord(item)) : [];
 const surfaceClass = `surface--${block.surface}`;
@@ -16,10 +19,12 @@ const variantClass = `site-header--${block.variant}`;
 ---
 
 <header class:list={['block', 'block--header', surfaceClass, 'site-header', variantClass]}>
-  <a class="site-header__brand" href="#top" aria-label="Красивые ноготочки — в начало">
-    <span class="brand-mark" aria-hidden="true">К</span>
-    <span>{asString(content.brand, 'Красивые ноготочки')}</span>
-  </a>
+  {brand && (
+    <a class="site-header__brand" href="#top" aria-label={brandAriaLabel}>
+      {brandMark && <span class="brand-mark" aria-hidden="true">{brandMark}</span>}
+      <span>{brand}</span>
+    </a>
+  )}
   <nav class="site-header__nav" aria-label="Основная навигация">
     {nav.map((item) => <a href={asString(item.href, '#')}>{asString(item.label)}</a>)}
   </nav>
