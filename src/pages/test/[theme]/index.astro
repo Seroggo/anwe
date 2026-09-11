@@ -1,0 +1,27 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+import BlockRenderer from '../../../renderer/BlockRenderer.astro';
+import testSite from '../../../../tests/fixtures/site/test-site.json';
+import type { PageFixture, ThemeId, Block } from '../../../renderer/types';
+
+export function getStaticPaths() {
+  const themes: ThemeId[] = ['editorial-pastel', 'cinematic-dark', 'color-block'];
+  return themes.map((theme) => ({
+    params: { theme: theme },
+    props: { page: testSite as PageFixture, theme }
+  }));
+}
+
+interface Props {
+  page: PageFixture;
+  theme: ThemeId;
+}
+
+const { page, theme } = Astro.props as Props;
+---
+
+<DemoLayout title={page.title} description={page.description} theme={theme}>
+  <main id="top" class="demo-page">
+    {page.blocks.map((block: Block) => <BlockRenderer block={block} />)}
+  </main>
+</DemoLayout>
