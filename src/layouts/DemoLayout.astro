@@ -1,0 +1,29 @@
+---
+import '../styles/base.css';
+import '../themes/editorial-pastel.css';
+import '../themes/cinematic-dark.css';
+import '../themes/color-block.css';
+import type { ThemeId } from '../renderer/types';
+
+interface Props {
+  title: string;
+  description: string;
+  theme: ThemeId;
+}
+
+const { title, description, theme } = Astro.props;
+---
+<!doctype html>
+<html lang="ru" data-theme={theme}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title} · ANWE Block Library</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <slot />
+    </div>
+  </body>
+</html>

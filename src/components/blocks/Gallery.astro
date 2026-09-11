@@ -1,0 +1,34 @@
+---
+import MediaFrame from '../MediaFrame.astro';
+import SectionIntro from '../SectionIntro.astro';
+import { asMedia, asRecord, asString } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const content = asRecord(block.content);
+const items = Array.isArray(content.items) ? content.items.map((item) => asRecord(item)) : [];
+const galleryItems = items.map((item, index) => ({ item, index, media: asMedia(item.media) }));
+const galleryViews = galleryItems.map((gItem) => ({
+  ...gItem,
+  title: asString(gItem.item.title),
+  caption: gItem.item.caption ? asString(gItem.item.caption) : null
+}));
+const surfaceClass = `surface--${block.surface}`;
+const variantClass = `gallery-block--${block.variant}`;
+---
+
+<section class:list={['block', 'block--gallery', surfaceClass, 'gallery-block', variantClass]}>
+  <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
+  <div class="gallery-block__list">
+    {galleryViews.map((gItem) => (
+      <figure class="gallery-item">
+        {gItem.media && <MediaFrame media={gItem.media} class="gallery-item__media" label={`Placeholder работы ${gItem.index + 1}`} />}
+        <figcaption><strong>{gItem.title}</strong>{gItem.caption && <span>{gItem.caption}</span>}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>

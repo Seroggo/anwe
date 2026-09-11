@@ -1,0 +1,30 @@
+---
+import ActionLink from '../ActionLink.astro';
+import { asActions, asRecord, asString } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const content = asRecord(block.content);
+const actions = asActions(content.actions);
+const nav = Array.isArray(content.nav) ? content.nav.map((item) => asRecord(item)) : [];
+const surfaceClass = `surface--${block.surface}`;
+const variantClass = `site-header--${block.variant}`;
+---
+
+<header class:list={['block', 'block--header', surfaceClass, 'site-header', variantClass]}>
+  <a class="site-header__brand" href="#top" aria-label="Красивые ноготочки — в начало">
+    <span class="brand-mark" aria-hidden="true">К</span>
+    <span>{asString(content.brand, 'Красивые ноготочки')}</span>
+  </a>
+  <nav class="site-header__nav" aria-label="Основная навигация">
+    {nav.map((item) => <a href={asString(item.href, '#')}>{asString(item.label)}</a>)}
+  </nav>
+  <div class="site-header__actions">
+    {actions[0] && <ActionLink action={actions[0]} />}
+    <button class="menu-toggle" type="button" aria-label="Открыть меню"><span></span><span></span></button>
+  </div>
+</header>

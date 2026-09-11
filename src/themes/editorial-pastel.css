@@ -1,0 +1,25 @@
+html[data-theme="editorial-pastel"] {
+  --font-display: "Trebuchet MS", "Segoe UI", sans-serif;
+  --font-body: "Segoe UI", Arial, sans-serif;
+  --font-mono: "Cascadia Mono", Consolas, monospace;
+  --color-canvas: #f6f4f1;
+  --color-surface: #fffdf9;
+  --color-surface-muted: #f1e9ee;
+  --color-accent: #d7c8fb;
+  --color-primary: #5645d4;
+  --color-primary-hover: #4534b3;
+  --color-on-primary: #ffffff;
+  --color-on-accent: #1b1730;
+  --color-text: #151629;
+  --color-text-muted: #62606c;
+  --color-inverse: #0a1530;
+  --color-inverse-text: #ffffff;
+  --color-line: rgba(21, 22, 41, 0.14);
+  --color-focus: #5645d4;
+  --radius-card: 22px;
+  --radius-panel: 30px;
+  --radius-button: 14px;
+  --shadow-card: 0 12px 28px rgba(40, 23, 65, 0.08);
+  --space-section: clamp(4.5rem, 9vw, 8.8rem);
+  --display-size: clamp(3.2rem, 8vw, 7.5rem);
+}

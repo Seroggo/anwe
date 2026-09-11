@@ -1,0 +1,145 @@
+{
+  "id": "a",
+  "title": "Маникюр, который остаётся с вами",
+  "description": "Синтетический layout A для проверки ANWE Block Library Alpha.",
+  "blocks": [
+    {
+      "id": "a-header",
+      "type": "header",
+      "variant": "default",
+      "surface": "default",
+      "content": {
+        "brand": "Красивые ноготочки",
+        "nav": [
+          { "label": "Услуги", "href": "#services" },
+          { "label": "Работы", "href": "#gallery" },
+          { "label": "Как записаться", "href": "#steps" }
+        ],
+        "actions": [{ "label": "Записаться", "href": "#contact", "style": "primary" }]
+      }
+    },
+    {
+      "id": "a-hero",
+      "type": "hero",
+      "variant": "split",
+      "surface": "inverse",
+      "content": {
+        "eyebrow": "Студия ухода и дизайна",
+        "title": "Маникюр, который остаётся с вами",
+        "body": "Спокойное пространство для аккуратного ухода, нового цвета и маленьких ритуалов, которые делают день лучше.",
+        "actions": [
+          { "label": "Выбрать время", "href": "#contact", "style": "primary" },
+          { "label": "Посмотреть работы", "href": "#gallery", "style": "text" }
+        ],
+        "note": "Синтетический контент · layout A",
+        "media": { "src": null, "alt": "", "aspect": "4:5", "fit": "cover" }
+      }
+    },
+    {
+      "id": "a-cards",
+      "type": "cards",
+      "variant": "grid",
+      "surface": "muted",
+      "content": {
+        "eyebrow": "Выберите настроение",
+        "title": "Уход под ваш ритм",
+        "lead": "Три понятных сценария для первого визита и привычного ухода.",
+        "columns": 3,
+        "items": [
+          { "eyebrow": "01", "title": "Маникюр", "body": "Форма, покрытие и аккуратная обработка кутикулы без спешки.", "media": { "src": null, "alt": "", "aspect": "4:3", "fit": "cover" } },
+          { "eyebrow": "02", "title": "Педикюр", "body": "Мягкий уход и цвет, который легко вписывается в неделю.", "media": { "src": null, "alt": "", "aspect": "4:3", "fit": "cover" } },
+          { "eyebrow": "03", "title": "Дизайн", "body": "Небольшой акцент или выразительная идея — соберём вместе.", "media": { "src": null, "alt": "", "aspect": "4:3", "fit": "cover" } }
+        ]
+      }
+    },
+    {
+      "id": "a-split",
+      "type": "split",
+      "variant": "media-right",
+      "surface": "accent",
+      "content": {
+        "eyebrow": "О студии",
+        "title": "Внимание к деталям видно сразу",
+        "body": "Мы оставили в процессе только то, что помогает почувствовать себя спокойно: понятная консультация, бережный уход и время на финальный взгляд.",
+        "points": [
+          { "title": "Подскажем без давления", "body": "Соберём форму и оттенок под ваш образ жизни." },
+          { "title": "Работаем в своём темпе", "body": "Закладываем время на аккуратность, а не на поток." },
+          { "title": "Фиксируем идею", "body": "Сохраняем детали дизайна, чтобы повторить настроение." }
+        ],
+        "media": { "src": null, "alt": "", "aspect": "4:3", "fit": "cover" }
+      }
+    },
+    {
+      "id": "a-steps",
+      "type": "steps",
+      "variant": "horizontal",
+      "surface": "default",
+      "content": {
+        "eyebrow": "Три шага",
+        "title": "Запись без лишних сообщений",
+        "lead": "Простой маршрут от идеи до готового покрытия.",
+        "items": [
+          { "title": "Выберите услугу", "body": "Расскажите, что хочется сделать сегодня." },
+          { "title": "Найдите окно", "body": "Подберём спокойное время для визита." },
+          { "title": "Приходите", "body": "Остальное соберём вместе в студии." }
+        ]
+      }
+    },
+    {
+      "id": "a-gallery",
+      "type": "gallery",
+      "variant": "grid",
+      "surface": "muted",
+      "content": {
+        "eyebrow": "Галерея",
+        "title": "Идеи для следующего визита",
+        "lead": "Синтетические placeholders сохраняют пропорции будущих изображений.",
+        "items": [
+          { "title": "Молочный блеск", "caption": "спокойный акцент", "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" } },
+          { "title": "Розовая линия", "caption": "графичный минимализм", "media": { "src": null, "alt": "", "aspect": "4:5", "fit": "cover" } },
+          { "title": "Мятный день", "caption": "свежий оттенок", "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" } },
+          { "title": "Тихий перламутр", "caption": "на каждый день", "media": { "src": null, "alt": "", "aspect": "4:5", "fit": "cover" } }
+        ]
+      }
+    },
+    {
+      "id": "a-faq",
+      "type": "faq",
+      "variant": "stacked",
+      "surface": "default",
+      "content": {
+        "eyebrow": "FAQ",
+        "title": "Перед первым визитом",
+        "items": [
+          { "question": "Можно прийти со своей идеей?", "answer": "Да. Покажите референс или опишите настроение — вместе адаптируем его под форму и время визита." },
+          { "question": "Что выбрать, если я сомневаюсь?", "answer": "Начните с базового маникюра: мастер предложит варианты покрытия и дизайна после короткой консультации." },
+          { "question": "Сколько длится визит?", "answer": "Время зависит от услуги и сложности идеи. Точное окно уточняется при записи." }
+        ]
+      }
+    },
+    {
+      "id": "a-cta",
+      "type": "cta",
+      "variant": "centered",
+      "surface": "accent",
+      "content": {
+        "eyebrow": "Ваш следующий цвет",
+        "title": "Оставьте место для маленькой радости",
+        "body": "Выберите услугу и удобный день — дальше мы всё уточним лично.",
+        "actions": [{ "label": "Записаться в студию", "href": "#contact", "style": "primary" }]
+      }
+    },
+    {
+      "id": "a-footer",
+      "type": "footer",
+      "variant": "simple",
+      "surface": "inverse",
+      "content": {
+        "brand": "Красивые ноготочки",
+        "description": "Синтетический fixture для проверки сборки страницы из reusable blocks.",
+        "note": "ANWE Block Library Alpha",
+        "actions": [{ "label": "Написать студии", "href": "#contact", "style": "secondary" }]
+      }
+    }
+  ]
+}

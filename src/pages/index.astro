@@ -1,0 +1,29 @@
+---
+import { demoLayouts, demoThemes } from '../data/demo';
+import '../styles/base.css';
+import '../themes/editorial-pastel.css';
+import '../themes/cinematic-dark.css';
+import '../themes/color-block.css';
+---
+<!doctype html>
+<html lang="ru" data-theme="editorial-pastel">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="ANWE Block Library Alpha demo matrix." />
+    <title>ANWE Block Library Alpha</title>
+  </head>
+  <body>
+    <main class="index-page">
+      <div class="index-page__intro">
+        <p class="eyebrow">ANWE / Block Library Alpha</p>
+        <h1>Одна библиотека блоков.<br /><em>Девять способов</em> увидеть её.</h1>
+        <p>Статическая матрица проверяет, как один vocabulary reusable blocks собирает разные layouts и принимает три независимых visual themes.</p>
+      </div>
+      <div class="index-page__matrix">
+        {demoLayouts.map((layout) => <section class="matrix-row"><div><span class="matrix-row__number">{layout.id.toUpperCase()}</span><h2>{layout.title}</h2></div><div class="matrix-row__links">{demoThemes.map((theme) => <a class={`matrix-link matrix-link--${theme}`} href={`/demo/${layout.id}/${theme}/`}><span>{theme}</span><span aria-hidden="true">↗</span></a>)}</div></section>)}
+      </div>
+      <p class="index-page__note">Synthetic fixture · no ANMA, SMD, SiteContext or SiteBlueprint content.</p>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "themes": ["editorial-pastel", "cinematic-dark", "color-block"],
+  "layouts": [
+    { "id": "a", "fixture": "layout-a" },
+    { "id": "b", "fixture": "layout-b" },
+    { "id": "c", "fixture": "layout-c" }
+  ]
+}

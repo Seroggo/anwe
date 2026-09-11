@@ -1,0 +1,159 @@
+{
+  "id": "c",
+  "title": "Твой следующий маникюр начинается с идеи",
+  "description": "Синтетический layout C для проверки прозрачного shell и альтернативных вариантов блоков.",
+  "blocks": [
+    {
+      "id": "c-header",
+      "type": "header",
+      "variant": "transparent",
+      "surface": "inverse",
+      "content": {
+        "brand": "Красивые ноготочки",
+        "nav": [
+          { "label": "Сценарии", "href": "#services" },
+          { "label": "Шаги", "href": "#steps" },
+          { "label": "Вопросы", "href": "#faq" }
+        ],
+        "actions": [{ "label": "Записаться", "href": "#contact", "style": "secondary" }]
+      }
+    },
+    {
+      "id": "c-hero",
+      "type": "hero",
+      "variant": "split",
+      "surface": "inverse",
+      "content": {
+        "eyebrow": "Сделано для вашего настроения",
+        "title": "Твой следующий маникюр начинается с идеи",
+        "body": "Сохраняйте референсы, смешивайте цвета и приходите за тем самым ощущением «вот теперь да». ",
+        "actions": [{ "label": "Начать выбор", "href": "#services", "style": "primary" }],
+        "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" }
+      }
+    },
+    {
+      "id": "c-stats",
+      "type": "stats",
+      "variant": "grid",
+      "surface": "accent",
+      "content": {
+        "eyebrow": "Из чего складывается визит",
+        "title": "Маленькие детали создают результат",
+        "items": [
+          { "value": "01", "label": "идея", "note": "референс или настроение" },
+          { "value": "02", "label": "диалог", "note": "форма и покрытие" },
+          { "value": "03", "label": "ритуал", "note": "спокойный процесс" },
+          { "value": "04", "label": "финал", "note": "результат, который радует" }
+        ]
+      }
+    },
+    {
+      "id": "c-split",
+      "type": "split",
+      "variant": "media-right",
+      "surface": "default",
+      "content": {
+        "eyebrow": "Консультация",
+        "title": "Можно начать с одного слова",
+        "body": "«Светлый», «необычный», «как в отпуске» — этого уже достаточно, чтобы найти направление.",
+        "points": [
+          { "title": "Уточним задачу", "body": "Для работы, события или просто хорошего дня." },
+          { "title": "Соберём палитру", "body": "Покажем варианты, которые легко представить." }
+        ],
+        "media": { "src": null, "alt": "", "aspect": "3:4", "fit": "cover" }
+      }
+    },
+    {
+      "id": "c-cards",
+      "type": "cards",
+      "variant": "horizontal",
+      "surface": "muted",
+      "content": {
+        "eyebrow": "Сценарии",
+        "title": "Выберите точку входа",
+        "lead": "Горизонтальные карточки сохраняют ритм длинного списка.",
+        "items": [
+          { "title": "На каждый день", "body": "Чистая форма и оттенок, который легко сочетать." },
+          { "title": "К событию", "body": "Деталь, которая поддержит образ и настроение." },
+          { "title": "Для эксперимента", "body": "Новый цвет или дизайн без обязательств." },
+          { "title": "Вдвоём", "body": "Общий ритуал для подруг или особого дня." }
+        ]
+      }
+    },
+    {
+      "id": "c-steps",
+      "type": "steps",
+      "variant": "vertical",
+      "surface": "default",
+      "content": {
+        "eyebrow": "Как всё проходит",
+        "title": "Четыре спокойных шага",
+        "items": [
+          { "title": "Расскажите идею", "body": "Можно показать изображение или просто назвать цвет." },
+          { "title": "Выберем формат", "body": "Уточним длину, форму и подходящий сценарий." },
+          { "title": "Сделаем паузу", "body": "Процесс идёт в понятном темпе, без суеты." },
+          { "title": "Сохраним результат", "body": "Зафиксируем идею для следующего визита." }
+        ]
+      }
+    },
+    {
+      "id": "c-gallery",
+      "type": "gallery",
+      "variant": "grid",
+      "surface": "accent",
+      "content": {
+        "eyebrow": "Галерея",
+        "title": "Цветовые заметки",
+        "items": [
+          { "title": "Лайм", "caption": "смелый старт", "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" } },
+          { "title": "Лилак", "caption": "мягкая графика", "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" } },
+          { "title": "Крем", "caption": "тихий фон", "media": { "src": null, "alt": "", "aspect": "4:5", "fit": "cover" } },
+          { "title": "Розовый", "caption": "один яркий штрих", "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" } }
+        ]
+      }
+    },
+    {
+      "id": "c-faq",
+      "type": "faq",
+      "variant": "stacked",
+      "surface": "default",
+      "content": {
+        "eyebrow": "Вопросы",
+        "title": "Чтобы было проще решиться",
+        "items": [
+          { "question": "Нужно ли заранее знать дизайн?", "answer": "Нет. Можно прийти только с настроением — варианты появятся в разговоре." },
+          { "question": "Можно ли изменить идею н�� месте?", "answer": "Да, финальные детали уточняются до начала работы." },
+          { "question": "Есть ли места для спонтанной записи?", "answer": "Свободные окна зависят от дня, лучше уточнить у студии." }
+        ]
+      }
+    },
+    {
+      "id": "c-cta",
+      "type": "cta",
+      "variant": "centered",
+      "surface": "inverse",
+      "content": {
+        "eyebrow": "Финальный штрих",
+        "title": "Давайте найдём ваш следующий цвет",
+        "body": "Первый шаг — написать нам пару слов о том, чего хочется.",
+        "actions": [{ "label": "Написать студии", "href": "#contact", "style": "primary" }]
+      }
+    },
+    {
+      "id": "c-footer",
+      "type": "footer",
+      "variant": "columns",
+      "surface": "inverse",
+      "content": {
+        "brand": "Красивые ноготочки",
+        "description": "Синтетический fixture для проверки footer columns.",
+        "columns": [
+          { "title": "Навигация", "links": [{ "label": "Услуги", "href": "#services" }, { "label": "Галерея", "href": "#gallery" }] },
+          { "title": "Связаться", "links": [{ "label": "Запись", "href": "#contact" }, { "label": "Вопросы", "href": "#faq" }] },
+          { "title": "Ритм", "links": [{ "label": "О студии", "href": "#about" }, { "label": "Шаги", "href": "#steps" }] }
+        ],
+        "note": "ANWE Block Library Alpha"
+      }
+    }
+  ]
+}

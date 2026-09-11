@@ -1,48 +1,31 @@
-# ANWE Project
+# ANWE Block Library Alpha
 
-ANWE is a permanent project and repository. Its canonical root is `C:\Project_all\anwe`.
+ANWE Block Library Alpha is a small Astro static showcase for a fixed vocabulary of reusable website blocks. Pages are JSON descriptions assembled by one generic renderer and can be rendered with any of the three manual themes.
 
-The current development stage is the `SiteBlueprint` library: reusable knowledge describing how a site for a business type should be structured.
+## Run the demo
 
-## Структура
-
-```text
-blueprints/
-  core/         универсальная основа
-  archetypes/   типы бизнеса
-  patterns/     повторяемые задачи сайта
-  verticals/    отраслевые расширения
-
-contracts/
-  site-blueprint.schema.json
-
-templates/
-  site-blueprint.template.json
-
-sites/
-  anma/
-    SITE_CONTEXT_ANMA_V1_APPROVED.md
-
-docs/
-  BLUEPRINT_GUIDE.md
-
-tasks/
-  00-site-blueprints.md
+```bash
+npm install
+npm run dev
 ```
 
-## Стартовые vertical blueprint
+The generated matrix contains nine pages:
 
-- `vertical.smd-contract-manufacturing`
-- `vertical.interior-stair-manufacturing`
-- `vertical.ad-banner-resizer`
-- `vertical.agent-native-websites`
+- `/demo/a/editorial-pastel/`
+- `/demo/a/cinematic-dark/`
+- `/demo/a/color-block/`
+- `/demo/b/editorial-pastel/`
+- `/demo/b/cinematic-dark/`
+- `/demo/b/color-block/`
+- `/demo/c/editorial-pastel/`
+- `/demo/c/cinematic-dark/`
+- `/demo/c/color-block/`
 
-Перед работой прочитать `AGENTS.md`.
-
-Текущий SiteContext ANMA находится в `sites/anma/SITE_CONTEXT_ANMA_V1_APPROVED.md`.
-
-Проверка файлов:
+## Checks
 
 ```bash
 npm run check
+npm run build
 ```
+
+The fixture data is deliberately synthetic and uses only the approved generic block vocabulary. Theme CSS is separate from block CSS, so swapping a theme changes the visual language without changing page structure or Astro components.

@@ -1,0 +1,49 @@
+---
+import MediaFrame from '../MediaFrame.astro';
+import ActionLink from '../ActionLink.astro';
+import SectionIntro from '../SectionIntro.astro';
+import { asActions, asMedia, asRecord, asString } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const content = asRecord(block.content);
+const items = Array.isArray(content.items) ? content.items.map((item) => asRecord(item)) : [];
+const cards = items.map((item, index) => ({
+  item,
+  index,
+  media: asMedia(item.media),
+  actions: asActions(item.actions)
+}));
+const cardViews = cards.map((card) => ({
+  ...card,
+  number: String(card.index + 1).padStart(2, '0'),
+  eyebrow: asString(card.item.eyebrow),
+  title: asString(card.item.title),
+  body: asString(card.item.body)
+}));
+const actions = asActions(content.actions);
+const columns = Math.min(4, Math.max(1, Number(content.columns) || 3));
+const cardColumnsStyle = `--card-columns: ${columns};`;
+const surfaceClass = `surface--${block.surface}`;
+const variantClass = `cards-block--${block.variant}`;
+---
+
+<section class:list={['block', 'block--cards', surfaceClass, 'cards-block', variantClass]}>
+  <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
+  <div class="cards-block__list" style={cardColumnsStyle}>
+    {cardViews.map((card) => (
+      <article class="card">
+        <div class="card__topline"><span class="card__index">{card.number}</span>{card.eyebrow && <span class="card__eyebrow">{card.eyebrow}</span>}</div>
+        {card.media && <MediaFrame media={card.media} class="card__media" label={`Placeholder карточки ${card.number}`} />}
+        <h3>{card.title}</h3>
+        <p>{card.body}</p>
+        {card.actions.length > 0 && <div class="card__actions">{card.actions.map((action) => <ActionLink action={action} />)}</div>}
+      </article>
+    ))}
+  </div>
+  {actions.length > 0 && <div class="block__footer-actions">{actions.map((action) => <ActionLink action={action} />)}</div>}
+</section>

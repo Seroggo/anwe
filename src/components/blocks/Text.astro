@@ -1,0 +1,25 @@
+---
+import ActionLink from '../ActionLink.astro';
+import SectionIntro from '../SectionIntro.astro';
+import { asActions, asRecord, asString, textLines } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const content = asRecord(block.content);
+const paragraphs = textLines(content.paragraphs ?? content.body);
+const actions = asActions(content.actions);
+const surfaceClass = `surface--${block.surface}`;
+const variantClass = `text-block--${block.variant}`;
+---
+
+<section class:list={['block', 'block--text', surfaceClass, 'text-block', variantClass]}>
+  <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
+  <div class="text-block__body">
+    {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    {actions.length > 0 && <div class="action-row">{actions.map((action) => <ActionLink action={action} />)}</div>}
+  </div>
+</section>

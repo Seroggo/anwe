@@ -1,0 +1,28 @@
+---
+import ActionLink from '../ActionLink.astro';
+import MediaFrame from '../MediaFrame.astro';
+import { asActions, asMedia, asRecord, asString } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const content = asRecord(block.content);
+const media = asMedia(content.media);
+const actions = asActions(content.actions);
+const surfaceClass = `surface--${block.surface}`;
+const variantClass = `hero--${block.variant}`;
+---
+
+<section class:list={['block', 'block--hero', surfaceClass, 'hero', variantClass]}>
+  <div class="hero__copy">
+    {content.eyebrow && <p class="eyebrow">{asString(content.eyebrow)}</p>}
+    <h1>{asString(content.title)}</h1>
+    <p class="hero__body">{asString(content.body)}</p>
+    {actions.length > 0 && <div class="action-row">{actions.map((action) => <ActionLink action={action} />)}</div>}
+    {content.note && <p class="hero__note">{asString(content.note)}</p>}
+  </div>
+  {media && <MediaFrame media={media} class="hero__media" label="Абстрактная визуальная сцена студии" />}
+</section>

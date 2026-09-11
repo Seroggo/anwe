@@ -1,0 +1,31 @@
+---
+import DemoLayout from '../../../../layouts/DemoLayout.astro';
+import BlockRenderer from '../../../../renderer/BlockRenderer.astro';
+import { demoLayouts, demoThemes } from '../../../../data/demo';
+import type { PageFixture, ThemeId } from '../../../../renderer/types';
+
+export function getStaticPaths() {
+  return demoLayouts.flatMap((layout) =>
+    demoThemes.map((theme) => ({
+      params: { 
+        layout: layout.id, 
+        theme: theme 
+      },
+      props: { layout, theme }
+    }))
+  );
+}
+
+interface Props {
+  layout: PageFixture;
+  theme: ThemeId;
+}
+
+const { layout, theme } = Astro.props as Props;
+---
+
+<DemoLayout title={layout.title} description={layout.description} theme={theme}>
+  <main id="top" class="demo-page">
+    {layout.blocks.map((block) => <BlockRenderer block={block} />)}
+  </main>
+</DemoLayout>

@@ -1,0 +1,33 @@
+---
+import type { MediaObject } from '../renderer/types';
+import { mediaAspect } from '../renderer/types';
+
+interface Props {
+  media: MediaObject;
+  class?: string;
+  label?: string;
+}
+
+const { media } = Astro.props;
+const className = Astro.props.class || '';
+const label = Astro.props.label || 'Визуальный placeholder';
+const alt = media.alt || label;
+const mediaRatio = mediaAspect(media.aspect);
+const objectFit = media.fit;
+---
+
+<div
+  class:list={['media-frame', className]}
+  style={`--media-ratio: ${mediaRatio};`}
+>
+  {media.src ? (
+    <img src={media.src} alt={alt} loading="lazy" style={`object-fit: ${objectFit};`} />
+  ) : (
+    <div class="media-placeholder" role="img" aria-label={label}>
+      <span class="media-placeholder__orb media-placeholder__orb--one" aria-hidden="true"></span>
+      <span class="media-placeholder__orb media-placeholder__orb--two" aria-hidden="true"></span>
+      <span class="media-placeholder__label">{label}</span>
+      <span class="media-placeholder__ratio">{media.aspect}</span>
+    </div>
+  )}
+</div>

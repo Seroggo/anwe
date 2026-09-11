@@ -1,0 +1,22 @@
+---
+import SectionIntro from '../SectionIntro.astro';
+import { asRecord, asString } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const content = asRecord(block.content);
+const items = Array.isArray(content.items) ? content.items.map((item) => asRecord(item)) : [];
+const surfaceClass = `surface--${block.surface}`;
+const variantClass = `steps-block--${block.variant}`;
+---
+
+<section class:list={['block', 'block--steps', surfaceClass, 'steps-block', variantClass]}>
+  <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
+  <ol class="steps-block__list">
+    {items.map((item, index) => <li class="step"><span class="step__number">{String(index + 1).padStart(2, '0')}</span><div><h3>{asString(item.title)}</h3><p>{asString(item.body)}</p></div></li>)}
+  </ol>
+</section>

@@ -1,0 +1,145 @@
+{
+  "id": "b",
+  "title": "Цвет, форма и немного времени для себя",
+  "description": "Синтетический layout B для проверки ANWE Block Library Alpha.",
+  "blocks": [
+    {
+      "id": "b-header",
+      "type": "header",
+      "variant": "default",
+      "surface": "default",
+      "content": {
+        "brand": "Красивые ноготочки",
+        "nav": [
+          { "label": "Услуги", "href": "#services" },
+          { "label": "Результаты", "href": "#gallery" },
+          { "label": "FAQ", "href": "#faq" }
+        ],
+        "actions": [{ "label": "Записаться", "href": "#contact", "style": "primary" }]
+      }
+    },
+    {
+      "id": "b-hero",
+      "type": "hero",
+      "variant": "centered",
+      "surface": "accent",
+      "content": {
+        "eyebrow": "Красивые ноготочки / layout B",
+        "title": "Цвет, форма и немного времени для себя",
+        "body": "Студия для тех, кто любит, когда уход выглядит как личный ритуал.",
+        "actions": [
+          { "label": "Посмотреть услуги", "href": "#services", "style": "primary" },
+          { "label": "Задать вопрос", "href": "#faq", "style": "secondary" }
+        ]
+      }
+    },
+    {
+      "id": "b-stats",
+      "type": "stats",
+      "variant": "inline",
+      "surface": "default",
+      "content": {
+        "eyebrow": "Настроение студии",
+        "title": "Простые ориентиры",
+        "items": [
+          { "value": "3", "label": "сценария ухода", "note": "для разного ритма" },
+          { "value": "12", "label": "идей дизайна", "note": "в синтетической коллекции" },
+          { "value": "1:1", "label": "внимание к запросу", "note": "от выбора до финала" }
+        ]
+      }
+    },
+    {
+      "id": "b-text",
+      "type": "text",
+      "variant": "narrow",
+      "surface": "muted",
+      "content": {
+        "eyebrow": "Наш подход",
+        "title": "Красиво — это когда подходит именно вам",
+        "lead": "Мы не собираем одинаковые решения на всех.",
+        "paragraphs": [
+          "Сначала слушаем, как вы живёте и что хочется видеть на руках каждый день. Потом предлагаем форму, покрытие и детали, которые не спорят с вами.",
+          "Это синтетический текст для проверки узкого текстового блока в общей системе сборки."
+        ],
+        "actions": [{ "label": "Узнать больше", "href": "#services", "style": "text" }]
+      }
+    },
+    {
+      "id": "b-gallery",
+      "type": "gallery",
+      "variant": "featured",
+      "surface": "inverse",
+      "content": {
+        "eyebrow": "Визуальный дневник",
+        "title": "Четыре настроения",
+        "lead": "Featured layout оставляет одной идее больше воздуха.",
+        "items": [
+          { "title": "Тёплый минимализм", "caption": "главный референс недели", "media": { "src": null, "alt": "", "aspect": "16:9", "fit": "cover" } },
+          { "title": "Лиловый штрих", "caption": "мягкий контраст", "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" } },
+          { "title": "Чистый френч", "caption": "вечная база", "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" } },
+          { "title": "Мятный акцент", "caption": "для эксперимента", "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" } }
+        ]
+      }
+    },
+    {
+      "id": "b-cards",
+      "type": "cards",
+      "variant": "grid",
+      "surface": "default",
+      "content": {
+        "eyebrow": "Услуги",
+        "title": "Соберите свой визит",
+        "columns": 3,
+        "items": [
+          { "title": "Быстрый уход", "body": "Когда нужно привести руки в порядок между делами." },
+          { "title": "Новый оттенок", "body": "Когда хочется заметной перемены без сложного дизайна." },
+          { "title": "Идея из сохранённых", "body": "Когда референс уже ждёт своего часа." }
+        ]
+      }
+    },
+    {
+      "id": "b-split",
+      "type": "split",
+      "variant": "media-left",
+      "surface": "muted",
+      "content": {
+        "eyebrow": "Мастера",
+        "title": "Смотрим на руки, а не только на картинку",
+        "body": "Мастер помогает перевести идею в удобную форму, учитывая привычки, длину и настроение.",
+        "points": [
+          { "title": "Показываем варианты", "body": "Чтобы решение было понятным до начала работы." },
+          { "title": "Оставляем пространство", "body": "Для вашего вкуса и маленьких изменений по ходу." }
+        ],
+        "media": { "src": null, "alt": "", "aspect": "4:3", "fit": "cover" },
+        "actions": [{ "label": "Познакомиться с подходом", "href": "#contact", "style": "secondary" }]
+      }
+    },
+    {
+      "id": "b-cta",
+      "type": "cta",
+      "variant": "split",
+      "surface": "inverse",
+      "content": {
+        "eyebrow": "Готовы к своему оттенку?",
+        "title": "Пусть в календаре появится что-то красивое",
+        "body": "Выберите удобный способ связаться со студией.",
+        "actions": [
+          { "label": "Записаться", "href": "#contact", "style": "primary" },
+          { "label": "Спросить о дизайне", "href": "#faq", "style": "text" }
+        ],
+        "media": { "src": null, "alt": "", "aspect": "4:3", "fit": "cover" }
+      }
+    },
+    {
+      "id": "b-footer",
+      "type": "footer",
+      "variant": "simple",
+      "surface": "default",
+      "content": {
+        "brand": "Красивые ноготочки",
+        "description": "Синтетический fixture для проверки второй композиции.",
+        "note": "ANWE Block Library Alpha"
+      }
+    }
+  ]
+}

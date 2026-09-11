@@ -1,0 +1,29 @@
+---
+import MediaFrame from '../MediaFrame.astro';
+import ActionLink from '../ActionLink.astro';
+import { asActions, asMedia, asRecord, asString } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const content = asRecord(block.content);
+const media = asMedia(content.media);
+const actions = asActions(content.actions);
+const points = Array.isArray(content.points) ? content.points.map((item) => asRecord(item)) : [];
+const surfaceClass = `surface--${block.surface}`;
+const variantClass = `split-block--${block.variant}`;
+---
+
+<section class:list={['block', 'block--split', surfaceClass, 'split-block', variantClass]}>
+  {media && <MediaFrame media={media} class="split-block__media" label="Абстрактный визуальный placeholder" />}
+  <div class="split-block__copy">
+    {content.eyebrow && <p class="eyebrow">{asString(content.eyebrow)}</p>}
+    <h2>{asString(content.title)}</h2>
+    <p class="split-block__body">{asString(content.body)}</p>
+    {points.length > 0 && <ul class="check-list">{points.map((point) => <li><span aria-hidden="true">↗</span><span><strong>{asString(point.title)}</strong>{point.body && <small>{asString(point.body)}</small>}</span></li>)}</ul>}
+    {actions.length > 0 && <div class="action-row">{actions.map((action) => <ActionLink action={action} />)}</div>}
+  </div>
+</section>

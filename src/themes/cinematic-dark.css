@@ -1,0 +1,27 @@
+html[data-theme="cinematic-dark"] {
+  --font-display: "Arial Narrow", "Segoe UI", Arial, sans-serif;
+  --font-body: "Segoe UI", Arial, sans-serif;
+  --font-mono: "Cascadia Mono", Consolas, monospace;
+  --color-canvas: #070707;
+  --color-surface: #101112;
+  --color-surface-muted: #171a1b;
+  --color-accent: #c9f5d5;
+  --color-primary: #ffffff;
+  --color-primary-hover: #d9d9d9;
+  --color-on-primary: #080808;
+  --color-on-accent: #080808;
+  --color-text: #f9f9f7;
+  --color-text-muted: #a8aaa9;
+  --color-inverse: #050505;
+  --color-inverse-text: #ffffff;
+  --color-line: rgba(255, 255, 255, 0.19);
+  --color-focus: #c9f5d5;
+  --radius-card: 28px;
+  --radius-panel: 28px;
+  --radius-button: 999px;
+  --border-card: 1px solid rgba(255, 255, 255, 0.2);
+  --shadow-card: 0 20px 50px rgba(0, 0, 0, 0.28);
+  --space-section: clamp(5rem, 12vw, 11rem);
+  --display-size: clamp(3.4rem, 9.5vw, 9.5rem);
+  --heading-size: clamp(2.3rem, 5.2vw, 5.4rem);
+}

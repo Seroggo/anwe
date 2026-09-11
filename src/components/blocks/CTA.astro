@@ -1,0 +1,27 @@
+---
+import ActionLink from '../ActionLink.astro';
+import MediaFrame from '../MediaFrame.astro';
+import { asActions, asMedia, asRecord, asString } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const content = asRecord(block.content);
+const media = asMedia(content.media);
+const actions = asActions(content.actions);
+const surfaceClass = `surface--${block.surface}`;
+const variantClass = `cta-block--${block.variant}`;
+---
+
+<section class:list={['block', 'block--cta', surfaceClass, 'cta-block', variantClass]}>
+  <div class="cta-block__copy">
+    {content.eyebrow && <p class="eyebrow">{asString(content.eyebrow)}</p>}
+    <h2>{asString(content.title)}</h2>
+    <p>{asString(content.body)}</p>
+    {actions.length > 0 && <div class="action-row">{actions.map((action) => <ActionLink action={action} />)}</div>}
+  </div>
+  {media && <MediaFrame media={media} class="cta-block__media" label="Placeholder финального акцента" />}
+</section>

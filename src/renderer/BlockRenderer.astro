@@ -1,0 +1,13 @@
+---
+import { getBlockComponent } from './registry';
+import type { Block } from './types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const Component = getBlockComponent(block.type);
+---
+
+<Component block={block} />

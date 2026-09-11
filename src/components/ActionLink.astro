@@ -1,0 +1,17 @@
+---
+import type { Action } from '../renderer/types';
+
+interface Props {
+  action: Action;
+  class?: string;
+}
+
+const { action } = Astro.props;
+const className = Astro.props.class || '';
+const actionStyleClass = `action-link--${action.style}`;
+---
+
+<a class:list={['action-link', actionStyleClass, className]} href={action.href}>
+  <span>{action.label}</span>
+  {action.style !== 'text' && <span class="action-link__arrow" aria-hidden="true">↗</span>}
+</a>
