@@ -1,0 +1,44 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "pattern.diagnostic-entry",
+  "version": "0.1",
+  "kind": "pattern",
+  "status": "draft",
+  "title": "Diagnostic Entry",
+  "description": "Reusable bounded diagnostic or audit entry route that lowers friction before a larger commercial conversation.",
+  "extends": [],
+  "applicability": {
+    "business_models": [],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": ["lead", "consultative_sale", "project"],
+    "signals": ["bounded_diagnostic", "audit_entry", "lower_friction_acquisition"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["diagnostic", "action"],
+      "recommended": ["input_requirement", "result", "scope_boundary", "next_route"]
+    },
+    "pages": [
+      {"page_type": "diagnostic", "requirement": "recommended", "purpose": "Explain the bounded diagnostic, its scope and the next route available to the visitor."}
+    ],
+    "blocks": {
+      "required": ["diagnostic_scope", "diagnostic_action"],
+      "recommended": ["diagnostic_criteria", "scope_exclusions", "input_requirements", "result_preview", "next_route"]
+    },
+    "actions": {
+      "primary": ["start_diagnostic"],
+      "secondary": ["contact"]
+    },
+    "evidence_types": []
+  },
+  "conditional_rules": [],
+  "constraints": [
+    "The diagnostic scope must be explicit.",
+    "A bounded diagnostic must not be presented as a full audit.",
+    "Do not invent input fields.",
+    "Do not invent runtime behavior.",
+    "Do not invent output, gating or delivery mechanics.",
+    "Do not imply a guaranteed commercial outcome."
+  ],
+  "notes": []
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "pattern.situation-routing",
+  "version": "0.1",
+  "kind": "pattern",
+  "status": "draft",
+  "title": "Situation Routing",
+  "description": "Reusable site pattern for businesses whose commercial navigation is organized around distinct client situations, problems or jobs rather than a generic service catalog.",
+  "extends": [],
+  "applicability": {
+    "business_models": [],
+    "market_types": ["b2b", "b2c"],
+    "sales_models": ["lead", "consultative_sale", "project"],
+    "signals": ["situation_led_navigation", "demand_routing", "multiple_demand_routes"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["demand_situation", "action"],
+      "recommended": ["offer", "evidence"]
+    },
+    "pages": [
+      {"page_type": "demand_route", "requirement": "required", "purpose": "Present one distinct client situation/problem and lead it toward the appropriate commercial route."}
+    ],
+    "blocks": {
+      "required": ["situation_routes"],
+      "recommended": ["situation_recognition", "route_outcome", "route_proof", "route_action"]
+    },
+    "actions": {
+      "primary": [],
+      "secondary": ["view_route"]
+    },
+    "evidence_types": []
+  },
+  "conditional_rules": [],
+  "constraints": [
+    "Do not turn situation routing into a generic service catalog.",
+    "Distinct primary demand or search intents may require separate route pages.",
+    "Internal segmentation or demand IDs must not automatically become public labels.",
+    "Wording may vary, but the route semantics must be preserved."
+  ],
+  "notes": []
+}

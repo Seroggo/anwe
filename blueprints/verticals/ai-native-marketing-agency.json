@@ -1,0 +1,61 @@
+{
+  "schema_version": "0.1",
+  "blueprint_id": "vertical.ai-native-marketing-agency",
+  "version": "0.1",
+  "kind": "vertical",
+  "status": "draft",
+  "title": "AI-Native Marketing Agency",
+  "description": "Reusable vertical structure for B2B marketing agencies and consultancies that combine accountable senior expertise, connected capabilities and AI-supported production.",
+  "extends": ["archetype.digital-service", "pattern.lead-generation", "pattern.situation-routing"],
+  "conditional_patterns": [
+    {"blueprint": "pattern.diagnostic-entry", "if": "The business offers a bounded diagnostic or audit as a distinct acquisition route."},
+    {"blueprint": "pattern.portfolio", "if": "Real completed client/project cases are available and permitted for publication."}
+  ],
+  "applicability": {
+    "business_models": ["marketing_agency", "marketing_consultancy", "professional_service"],
+    "market_types": ["b2b"],
+    "sales_models": ["lead", "consultative_sale", "project"],
+    "signals": ["marketing_agency", "senior_accountability", "connected_capabilities", "multiple_demand_routes", "strategy_to_implementation", "ai_native_production"]
+  },
+  "structure": {
+    "entities": {
+      "required": ["accountable_expert"],
+      "recommended": ["responsibility_boundary", "operating_model", "insight"]
+    },
+    "pages": [
+      {"page_type": "method", "requirement": "required", "purpose": "Explain the inherited process as a transparent method from evidence and decisions through demand and implementation."},
+      {"page_type": "about", "requirement": "required", "purpose": "Present accountable expertise, operating model and the boundaries of human and AI responsibility."},
+      {"page_type": "experience", "requirement": "conditional", "purpose": "Present heterogeneous proof such as track record, pilots, self-projects or external cases with honest provenance and status labels."},
+      {"page_type": "insights", "requirement": "conditional", "purpose": "Provide a content hub when enough substantive content exists to support demand and authority."}
+    ],
+    "blocks": {
+      "required": ["senior_accountability"],
+      "recommended": ["responsibility_boundary", "operating_model", "insight_routes"]
+    },
+    "actions": {
+      "primary": ["request_consultation"],
+      "secondary": ["contact", "view_route"]
+    },
+    "evidence_types": ["founder_track_record", "human_accountability"]
+  },
+  "conditional_rules": [
+    {"if": "The buyer has an internal marketing owner/team.", "then": "Present responsibility boundaries and collaboration model explicitly."},
+    {"if": "AI-enabled production is presented publicly.", "then": "Explain human responsibility and AI role without making AI the primary value proposition."},
+    {"if": "Publishable proof exists and benefits from a dedicated collection page.", "then": "Include an experience page and label proof by its real provenance and status."},
+    {"if": "Enough substantive content exists to justify a content hub.", "then": "Include an insights page."}
+  ],
+  "constraints": [
+    "Commercial architecture is primarily demand or situation-led rather than a generic long service catalog.",
+    "AI is a supporting operating model or reason to believe, not automatically the primary value proposition.",
+    "Do not claim replacement of an entire internal marketing team unless that scope is genuinely defined.",
+    "Do not fabricate prices, clients, results, testimonials, metrics or cases.",
+    "Founder experience, pilots, self-projects and external client cases must remain distinguishable.",
+    "A self-project must not be represented as an external client case.",
+    "Distinct primary demand or search intents must not be merged merely for navigation simplicity.",
+    "Use one primary conversion route per page unless a genuinely distinct lower-friction route is intentional.",
+    "Internal IDs must not automatically become public labels.",
+    "Methodology or process must not imply a guaranteed outcome.",
+    "Synthetic research must not be represented as real customer research."
+  ],
+  "notes": []
+}

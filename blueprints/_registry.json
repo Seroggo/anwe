@@ -10,9 +10,12 @@
     {"id": "pattern.portfolio", "path": "patterns/portfolio.json", "status": "draft"},
     {"id": "pattern.file-upload", "path": "patterns/file-upload.json", "status": "draft"},
     {"id": "pattern.lead-generation", "path": "patterns/lead-generation.json", "status": "draft"},
+    {"id": "pattern.situation-routing", "path": "patterns/situation-routing.json", "status": "draft"},
+    {"id": "pattern.diagnostic-entry", "path": "patterns/diagnostic-entry.json", "status": "draft"},
     {"id": "vertical.smd-contract-manufacturing", "path": "verticals/smd-contract-manufacturing.json", "status": "draft"},
     {"id": "vertical.interior-stair-manufacturing", "path": "verticals/interior-stair-manufacturing.json", "status": "draft"},
     {"id": "vertical.ad-banner-resizer", "path": "verticals/ad-banner-resizer.json", "status": "draft"},
-    {"id": "vertical.agent-native-websites", "path": "verticals/agent-native-websites.json", "status": "draft"}
+    {"id": "vertical.agent-native-websites", "path": "verticals/agent-native-websites.json", "status": "draft"},
+    {"id": "vertical.ai-native-marketing-agency", "path": "verticals/ai-native-marketing-agency.json", "status": "draft"}
   ]
 }
