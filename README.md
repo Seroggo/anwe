@@ -1,8 +1,8 @@
 # ANWE Project
 
-Репозиторий текущего этапа разработки ANWE: библиотека `SiteBlueprint`.
+ANWE is a permanent project and repository. Its canonical root is `C:\Project_all\anwe`.
 
-`SiteBlueprint` — формализованная переиспользуемая схема того, как должен быть устроен сайт определённого типа бизнеса.
+The current development stage is the `SiteBlueprint` library: reusable knowledge describing how a site for a business type should be structured.
 
 ## Структура
 
@@ -19,6 +19,10 @@ contracts/
 templates/
   site-blueprint.template.json
 
+sites/
+  anma/
+    SITE_CONTEXT_ANMA_V1_APPROVED.md
+
 docs/
   BLUEPRINT_GUIDE.md
 
@@ -34,6 +38,8 @@ tasks/
 - `vertical.agent-native-websites`
 
 Перед работой прочитать `AGENTS.md`.
+
+Текущий SiteContext ANMA находится в `sites/anma/SITE_CONTEXT_ANMA_V1_APPROVED.md`.
 
 Проверка файлов:
 

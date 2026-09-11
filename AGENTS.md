@@ -1,8 +1,8 @@
 # AGENTS.md — ANWE Project
 
-## Текущий этап
+## Текущий фокус разработки
 
-Рабочий объект этого этапа — библиотека `SiteBlueprint`.
+Текущий фокус разработки — библиотека `SiteBlueprint`.
 
 ## SiteBlueprint
 
@@ -118,3 +118,4 @@ archetype.digital-service
 4. Не выдавать предположение за факт. Неизвестное оставлять неизвестным.
 5. Изменения должны быть минимальными и относиться к текущему blueprint или общему слою, который он действительно требует.
 6. После изменений выполнить `npm run check`.
+7. Historical materials outside the repository are non-normative and must not be used unless explicitly requested.
