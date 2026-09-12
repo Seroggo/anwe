@@ -166,10 +166,27 @@ clean grid, large typography, simple surfaces), а затем сопоставл
    - humanist sans — один из возможных более мягких и читабельных характеров;
    - serif — один из возможных editorial или контрастных характеров;
    - mono — один из возможных акцентных или технических характеров.
-2. **Body stack** — читаемость, x-height, line-height-mode (через density).
-3. **Mono stack** (если нужен) — технический, neutral.
+2. **Body stack** — читаемость, x-height и line-height как отдельное решение.
+3. **Mono stack** (если нужен) — отдельная роль для кода, metadata или иного
+   обоснованного контекста.
 4. **Weight scale** — набор весов, доступных в production-стеке.
-5. **Tracking** — отрицательный для display, нейтральный для body, нулевой для mono.
+5. **Tracking** — самостоятельное решение для каждого typographic role.
+
+### Tracking
+
+Для display, body, mono и акцентных text roles допустимы negative, zero и positive
+tracking. Ни typographic role, ни label visual character не задают tracking автоматически.
+
+Interpreter выбирает tracking с учётом:
+- reference evidence;
+- desired/avoid character;
+- metrics конкретного font family;
+- readability на целевом размере и длине текста;
+- hierarchy между text roles.
+
+Positive display tracking — валидный вариант, если он обоснован этими факторами.
+Значения tracking должны быть зафиксированы как самостоятельные decisions, а не выводиться
+из display/body/mono роли по готовой таблице.
 
 ### Безопасные fallback-категории
 
@@ -306,9 +323,16 @@ Alpha не кодируется внутрь базового semantic color. П
 
 ### Связь с типографикой
 
-- Compact → уменьшенный line-height, плотный leading, узкие margins.
-- Airy → увеличенный line-height, широкие margins.
-- Editorial → ритмические пробелы между секциями как часть композиции.
+Density-mode не вычисляет line-height, margins или section spacing автоматически.
+Compact, airy и editorial могут быть сигналами для проверки ритма, но не готовыми
+значениями типографики и отступов.
+
+Interpreter отдельно выбирает line-height, leading, margins и section spacing, проверяя
+их согласованность с typography, content density, readability, reference evidence и
+visual character. Например, compact может сочетаться с увеличенным line-height для
+сложного body text, а airy может использовать умеренный line-height при большой display
+typography. Editorial rhythm может использовать большие паузы, но это не обязательное
+следствие label `editorial`.
 
 ---
 
@@ -354,9 +378,16 @@ Alpha не кодируется внутрь базового semantic color. П
 
 ### Контраст
 
-- **Low contrast** — accessibility-friendly, мягкий, editorial.
-- **Medium contrast** — нейтральный стандарт B2B/B2C.
-- **High contrast** — выразительный, energy-driven, акцентный.
+- **Low contrast**, **medium contrast** и **high contrast** — описания общего
+  визуального режима и относительной контрастности выбранной системы.
+- Ни один режим не закреплён за B2B, B2C, premium, technical, expressive или другим
+  business/character label.
+- Accessibility не выводится из stylistic label low/medium/high. Она оценивается по
+  достаточному contrast текста и интерактивных элементов в их конкретных сочетаниях.
+
+Interpreter выбирает visual contrast как самостоятельное решение на основе full brief,
+reference evidence, hierarchy, readability и constraints, а затем проверяет фактическую
+достаточность contrast для текста и интерактивных элементов.
 
 ### Decorative intensity
 
