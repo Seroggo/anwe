@@ -21,33 +21,51 @@ Methodology не описывает конкретные CSS-свойства и
 ### Что обязательно зафиксировать перед дизайном
 
 1. **Направление продаж**: B2B или B2C.
-   - B2B по умолчанию требует рационального языка: техническая достоверность,
-     структурированность, доказательность, отсутствие декоративного шума.
-   - B2C допускает эмоциональный язык: выразительная типографика, акценты,
-     декоративная интенсивность.
+   - Уточняет роль доказательности, эмоционального вовлечения, ясности предложения и
+     ожидаемой сложности сценария.
+   - Не предписывает заранее ни палитру, ни типографику, ни плотность, ни декор.
 2. **Характер покупки**: transactional или emotional.
-   - Transactional — короткий цикл решения, цена/наличие/сроки; визуал — supporting.
-   - Emotional — длинный цикл, вовлечение, доверие через атмосферу; визуал — ведущий.
+   - Помогает определить, какие свойства интерфейса должны поддерживать принятие решения:
+     скорость, сравнение, объяснение, атмосферу, доверие или комбинацию этих задач.
+   - Не определяет визуальный стиль самостоятельно.
 3. **Экспертность аудитории**: expert или mass.
-   - Expert ожидает плотности информации, технической точности, отсутствия упрощений.
-   - Mass ожидает читаемости, воздуха, простой навигации.
+   - Помогает оценить допустимую информационную сложность, потребность в объяснении и
+     способ представления доказательств.
+   - Не является готовым правилом для density, typography или shape.
 4. **Режим доверия**: trust-first или novelty-first.
-   - Trust-first — нейтральная палитра, типографика без экспериментов,
-     restrained decorative intensity.
-   - Novelty-first — допускается expressive typography, яркие акценты,
-     нестандартные формы.
+   - Уточняет баланс между предсказуемостью, доказательностью, дифференциацией и новизной.
+   - Не задаёт автоматически нейтральную палитру, экспериментальную типографику или уровень декора.
 5. **Ценовое позиционирование**: premium или accessible.
-   - Premium — спокойные surfaces, выверенная иерархия, сдержанная декоративность.
-   - Accessible — нейтральная палитра, нормальная плотность, без экспериментальной типографики.
+   - Уточняет, какое ощущение ценности, ясности и доступности должно поддерживать решение.
+   - Не предписывает конкретную surface hierarchy, contrast mode или decorative intensity.
 6. **Техническая или экспрессивная природа**: technical или expressive.
-   - Technical — структура важнее эмоции; mono, low decoration, edge-led.
-   - Expressive — character важнее структуры; serif/display, layered surfaces.
+   - Уточняет, что должно сильнее считываться в сообщении темы: точность, характер,
+     ясность, эмоциональная выразительность или их обоснованное сочетание.
+   - Не предписывает mono, serif, border-led, rounded или иной готовый язык формы.
 
-### Запрет жёстких шаблонов
+### Правило совместной интерпретации
 
-Запрещено правило вида `If industrial → gray`. Каждое решение должно выводиться из
-совокупности Business_type + Audience + Desired_character + Brand_constraints + Reference.
-Отраслевые ожидания — это фоновый контекст, а не источник решения.
+Ни один отдельный признак business context не определяет palette, typography, shape,
+density или effects самостоятельно.
+
+Каждое решение выводится из совокупности:
+
+```text
+Business_type
++ Audience
++ Desired_character
++ Avoid
++ Brand_constraints
++ Reference
+```
+
+Если часть этих данных отсутствует, Interpreter фиксирует DATA_GAP или принимает
+обоснованный INTERPRETER_DECISION. Отраслевые ожидания и перечисленные факторы — это
+сигналы для интерпретации, а не таблица готовых stylistic mappings.
+
+Запрещено правило вида `If industrial → gray`, `If B2B → restrained` или
+`If technical → mono`. Даже согласованные по смыслу признаки должны быть проверены на
+соответствие полной совокупности brief и constraints.
 
 ---
 
@@ -102,14 +120,24 @@ Identity reference — это принципы, которые можно пер
 - характер палитры (warm/cool/neutral, не конкретный hex);
 - режим decorative intensity.
 
-### Что такое literal implementation
+### External inspiration и authoritative brand source
 
-Literal implementation — это конкретные значения, которые нельзя копировать:
-- конкретные hex-коды бренда reference;
-- конкретный proprietary font;
-- конкретные photography или иллюстрации reference;
-- site-specific декоративные механики;
-- brand-специфичные surface treatments.
+Нужно различать происхождение reference и степень его авторитетности.
+
+**External inspiration** — чужой сайт, дизайн или reference для вдохновения. Из него
+извлекаются visual principles: сетка, типографическая иерархия, ритм, contrast mode,
+цветовой характер и decorative intensity. Его literal brand tokens не копируются
+автоматически: конкретные HEX, proprietary fonts, photography, site-specific mechanics
+и brand-specific surface treatments требуют отдельного обоснования.
+
+**Owned / authoritative brand source** — собственный brand guide или явно заданные
+`Brand_constraints`, `Existing_brand_colors`, `Existing_fonts`. Такие значения могут
+быть обязательными design constraints. Например, `Existing_brand_colors.primary =
+#e31e24` не заменяется только потому, что это concrete HEX. После принятия значение
+нормализуется по правилу `lowercase #RRGGBB`.
+
+Reference сам по себе не считается authoritative brand source, если это прямо не
+указано во входе.
 
 ### Правило адаптации
 
@@ -120,9 +148,11 @@ Literal implementation — это конкретные значения, кот�
 4. Полученные значения выразить через универсальные theme capabilities ANWE.
 
 Пример: reference — playful pastel SaaS; business — industrial electronics manufacturing.
-- Сохраняем: clean grid, large typography, simple surfaces.
-- Изменяем: palette (нейтральная, с техническим акцентом), density (compact-friendly),
-  shape (square-to-soft, без pill), decorative intensity (minimal).
+Interpreter сначала определяет, какие принципы reference поддерживают задачу (например,
+clean grid, large typography, simple surfaces), а затем сопоставляет их с полной
+совокупностью brief. Palette, density, shape и decorative intensity меняются только при
+явном обосновании через audience, desired/avoid character, brand constraints и контекст
+покупки; отрасль сама по себе не является причиной конкретной замены.
 
 ---
 
@@ -131,11 +161,11 @@ Literal implementation — это конкретные значения, кот�
 ### Что определяется
 
 1. **Display stack** — характер заголовков:
-   - geometric sans — современный, нейтральный;
-   - grotesque sans — технический, уверенный;
-   - humanist sans — мягкий, доступный;
-   - serif — editorial, premium;
-   - mono — technical, technical-confident.
+   - geometric sans — один из возможных современных геометрических характеров;
+   - grotesque sans — один из возможных нейтральных или уверенных характеров;
+   - humanist sans — один из возможных более мягких и читабельных характеров;
+   - serif — один из возможных editorial или контрастных характеров;
+   - mono — один из возможных акцентных или технических характеров.
 2. **Body stack** — читаемость, x-height, line-height-mode (через density).
 3. **Mono stack** (если нужен) — технический, neutral.
 4. **Weight scale** — набор весов, доступных в production-стеке.
@@ -265,10 +295,14 @@ Alpha не кодируется внутрь базового semantic color. П
 
 ### Density-modes
 
-- **Compact** — высокая плотность информации; expert audience, technical.
-- **Balanced** — универсальный; B2B services, B2C, SMB.
-- **Airy** — низкая плотность; emotional, premium, beauty, editorial.
-- **Editorial** — экстремально большое свободное пространство; magazine-like, premium expressive.
+- **Compact** — высокая плотность информации; применима, когда она поддерживает сценарий,
+  читаемость и visual character.
+- **Balanced** — умеренная плотность; применима, когда ни compact, ни airy не дают
+  лучшего обоснованного результата.
+- **Airy** — низкая плотность информации; применима, когда пространство поддерживает
+  восприятие, иерархию и задачу без ущерба для содержательности.
+- **Editorial** — выраженный композиционный ритм и большие паузы; применим, когда это
+  обосновано visual character и не мешает целевому сценарию.
 
 ### Связь с типографикой
 
@@ -282,10 +316,14 @@ Alpha не кодируется внутрь базового semantic color. П
 
 ### Corner language
 
-- **Square** (0–2px) — strict, technical, dense.
-- **Slightly rounded** (4–6px) — modern, neutral.
-- **Soft rounded** (8–16px) — friendly, contemporary.
-- **Pill** (full radius) — playful, expressive; редко уместен в B2B-technical.
+- **Square** (0–2px) — строгий геометрический характер, который может поддерживать
+  разные visual characters при достаточном обосновании.
+- **Slightly rounded** (4–6px) — умеренный геометрический характер без сильного
+  стилевого утверждения.
+- **Soft rounded** (8–16px) — заметная мягкость формы, применимая при любом business
+  type, если она согласована с полным brief.
+- **Pill** (full radius) — сильный формальный акцент; может использоваться не только
+  в expressive-сценариях и требует явного решения о своей роли.
 
 ### Button shape
 
@@ -296,8 +334,9 @@ Alpha не кодируется внутрь базового semantic color. П
 ### Surface treatment
 
 - Flat — без теней, только border или tonal shift.
-- Subtle — мягкие тени; используется в layered hierarchy.
-- Pronounced — выраженные тени; уместны в premium или expressive, но не в technical.
+- Subtle — мягкие тени; один из возможных способов выразить layered hierarchy.
+- Pronounced — выраженные тени; используются только если их вклад в visual character,
+  контраст и hierarchy обоснован, независимо от ярлыков premium, technical или expressive.
 
 ---
 
@@ -305,9 +344,13 @@ Alpha не кодируется внутрь базового semantic color. П
 
 ### Border-led vs shadow-led vs flat
 
-- **Border-led** — структура держится на тонких границах; technical, B2B.
-- **Shadow-led** — структура держится на тенях; layered, premium.
-- **Flat** — без границ и теней; только tonal shift; minimal, editorial.
+- **Border-led** — структура держится на тонких границах.
+- **Shadow-led** — структура держится на тенях.
+- **Flat** — без границ и теней; только tonal shift.
+
+Ни один effect mode не закреплён за business type, positioning или character label.
+Выбор делается по его роли в hierarchy, контрасту, desired/avoid character, constraints
+и reference evidence.
 
 ### Контраст
 
