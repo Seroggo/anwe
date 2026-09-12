@@ -1,0 +1,317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anwe.dev/contracts/theme-spec.schema.json",
+  "title": "ANWE ThemeSpec",
+  "description": "Strict normalized runtime contract between Theme Interpreter and a future deterministic Theme Compiler.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "theme_id",
+    "metadata",
+    "colors",
+    "typography",
+    "spacing",
+    "shape",
+    "effects",
+    "decisions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "theme_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 1
+    },
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+    "colors": {
+      "$ref": "#/$defs/Colors"
+    },
+    "typography": {
+      "$ref": "#/$defs/Typography"
+    },
+    "spacing": {
+      "$ref": "#/$defs/Spacing"
+    },
+    "shape": {
+      "$ref": "#/$defs/Shape"
+    },
+    "effects": {
+      "$ref": "#/$defs/Effects"
+    },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Decision"
+      }
+    }
+  },
+  "$defs": {
+    "NonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "Color": {
+      "type": "string",
+      "pattern": "^#[0-9a-f]{6}$"
+    },
+    "SimpleLength": {
+      "type": "string",
+      "pattern": "^(?:0|(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem|em|vw|vh))$"
+    },
+    "SignedSimpleLength": {
+      "type": "string",
+      "pattern": "^(?:0|-?(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem|em|vw|vh))$"
+    },
+    "TrackingLength": {
+      "type": "string",
+      "pattern": "^(?:0|-?(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem|em))$"
+    },
+    "ResponsiveLength": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SimpleLength"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "preferred",
+            "max"
+          ],
+          "properties": {
+            "min": {
+              "$ref": "#/$defs/SimpleLength"
+            },
+            "preferred": {
+              "$ref": "#/$defs/SimpleLength"
+            },
+            "max": {
+              "$ref": "#/$defs/SimpleLength"
+            }
+          }
+        }
+      ]
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "interpreter_skill",
+        "interpreter_version"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "description": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "interpreter_skill": {
+          "const": "designer.theme.interpret"
+        },
+        "interpreter_version": {
+          "$ref": "#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "Colors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canvas",
+        "surface",
+        "surface_muted",
+        "text",
+        "text_muted",
+        "primary",
+        "primary_hover",
+        "on_primary",
+        "accent",
+        "on_accent",
+        "inverse",
+        "inverse_text",
+        "line",
+        "focus",
+        "accent_palette"
+      ],
+      "properties": {
+        "canvas": { "$ref": "#/$defs/Color" },
+        "surface": { "$ref": "#/$defs/Color" },
+        "surface_muted": { "$ref": "#/$defs/Color" },
+        "text": { "$ref": "#/$defs/Color" },
+        "text_muted": { "$ref": "#/$defs/Color" },
+        "primary": { "$ref": "#/$defs/Color" },
+        "primary_hover": { "$ref": "#/$defs/Color" },
+        "on_primary": { "$ref": "#/$defs/Color" },
+        "accent": { "$ref": "#/$defs/Color" },
+        "on_accent": { "$ref": "#/$defs/Color" },
+        "inverse": { "$ref": "#/$defs/Color" },
+        "inverse_text": { "$ref": "#/$defs/Color" },
+        "line": { "$ref": "#/$defs/Color" },
+        "focus": { "$ref": "#/$defs/Color" },
+        "accent_palette": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/Color" }
+        }
+      }
+    },
+    "TypographyRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "size",
+        "weight",
+        "line_height",
+        "tracking"
+      ],
+      "properties": {
+        "size": { "$ref": "#/$defs/ResponsiveLength" },
+        "weight": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 900
+        },
+        "line_height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "tracking": { "$ref": "#/$defs/TrackingLength" }
+      }
+    },
+    "Typography": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "font_display",
+        "font_body",
+        "font_mono",
+        "display",
+        "heading",
+        "body",
+        "eyebrow"
+      ],
+      "properties": {
+        "font_display": { "$ref": "#/$defs/NonEmptyString" },
+        "font_body": { "$ref": "#/$defs/NonEmptyString" },
+        "font_mono": { "$ref": "#/$defs/NonEmptyString" },
+        "display": { "$ref": "#/$defs/TypographyRole" },
+        "heading": { "$ref": "#/$defs/TypographyRole" },
+        "body": { "$ref": "#/$defs/TypographyRole" },
+        "eyebrow": { "$ref": "#/$defs/TypographyRole" }
+      }
+    },
+    "Spacing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "density",
+        "section",
+        "content",
+        "block_gap"
+      ],
+      "properties": {
+        "density": {
+          "type": "string",
+          "enum": ["compact", "balanced", "airy", "editorial"]
+        },
+        "section": { "$ref": "#/$defs/ResponsiveLength" },
+        "content": { "$ref": "#/$defs/ResponsiveLength" },
+        "block_gap": { "$ref": "#/$defs/ResponsiveLength" }
+      }
+    },
+    "Shape": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "card_radius",
+        "panel_radius",
+        "button_radius"
+      ],
+      "properties": {
+        "card_radius": { "$ref": "#/$defs/SimpleLength" },
+        "panel_radius": { "$ref": "#/$defs/SimpleLength" },
+        "button_radius": { "$ref": "#/$defs/SimpleLength" }
+      }
+    },
+    "CardBorder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "color_role"],
+      "properties": {
+        "width": { "$ref": "#/$defs/SimpleLength" },
+        "color_role": { "const": "line" }
+      }
+    },
+    "CardShadow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "blur", "spread", "color", "opacity"],
+      "properties": {
+        "x": { "$ref": "#/$defs/SignedSimpleLength" },
+        "y": { "$ref": "#/$defs/SignedSimpleLength" },
+        "blur": { "$ref": "#/$defs/SimpleLength" },
+        "spread": { "$ref": "#/$defs/SignedSimpleLength" },
+        "color": { "$ref": "#/$defs/Color" },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "Effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["card_border", "card_shadow"],
+      "properties": {
+        "card_border": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/CardBorder" }
+          ]
+        },
+        "card_shadow": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/CardShadow" }
+          ]
+        }
+      }
+    },
+    "Decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source_type", "decision", "evidence", "reason"],
+      "properties": {
+        "id": { "$ref": "#/$defs/NonEmptyString" },
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "SOURCE_DERIVED",
+            "CONTEXT_DERIVED",
+            "INTERPRETER_DECISION",
+            "FALLBACK"
+          ]
+        },
+        "decision": { "$ref": "#/$defs/NonEmptyString" },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/NonEmptyString" }
+        },
+        "reason": { "$ref": "#/$defs/NonEmptyString" }
+      }
+    }
+  }
+}
