@@ -1,0 +1,21 @@
+---
+import { icons } from '@lucide/astro';
+
+interface Props {
+  name: string;
+  size?: number | string;
+  class?: string;
+}
+
+const { name, size = 24 } = Astro.props;
+const className = ['icon', Astro.props.class].filter(Boolean).join(' ');
+const IconComponent = Object.prototype.hasOwnProperty.call(icons, name)
+  ? icons[name as keyof typeof icons]
+  : undefined;
+
+if (!IconComponent) {
+  throw new Error(`Unknown Lucide icon "${name}"`);
+}
+---
+
+<IconComponent size={size} class={className} aria-hidden="true" />
