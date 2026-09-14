@@ -1,0 +1,357 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anwe.dev/schemas/output/site.context.build.json",
+  "title": "site.context.build output",
+  "description": "Standalone strict output schema for the site.context.build skill. Mirrors the SiteContext v0.1 contract one-to-one and is intentionally self-contained (no external $ref) so it can be validated without a JSON Schema resolver.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "context_id",
+    "business",
+    "offers",
+    "audiences",
+    "demand_situations",
+    "positioning",
+    "proof",
+    "objections",
+    "conversion",
+    "content",
+    "brand",
+    "constraints",
+    "semantic_identity",
+    "decisions",
+    "data_gaps"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "context_id": {"$ref": "#/$defs/Slug"},
+    "business": {"$ref": "#/$defs/Business"},
+    "offers": {"$ref": "#/$defs/Offers"},
+    "audiences": {"$ref": "#/$defs/Audiences"},
+    "demand_situations": {"$ref": "#/$defs/DemandSituations"},
+    "positioning": {"$ref": "#/$defs/Positioning"},
+    "proof": {"$ref": "#/$defs/Proofs"},
+    "objections": {"$ref": "#/$defs/Objections"},
+    "conversion": {"$ref": "#/$defs/Conversion"},
+    "content": {"$ref": "#/$defs/Content"},
+    "brand": {"$ref": "#/$defs/Brand"},
+    "constraints": {"$ref": "#/$defs/Constraints"},
+    "semantic_identity": {"$ref": "#/$defs/SemanticIdentity"},
+    "decisions": {"$ref": "#/$defs/Decisions"},
+    "data_gaps": {"$ref": "#/$defs/DataGaps"}
+  },
+  "$defs": {
+    "Slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 1
+    },
+    "NonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "NullableString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "StringOrNull": {"type": ["string", "null"]},
+    "Geography": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/NonEmptyString"},
+      "uniqueItems": true
+    },
+    "StringArray": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/NonEmptyString"},
+      "uniqueItems": true
+    },
+    "Business": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "entity_type", "category", "summary", "geography"],
+      "properties": {
+        "name": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/NullableString"}
+          ]
+        },
+        "entity_type": {"$ref": "#/$defs/NonEmptyString"},
+        "category": {"$ref": "#/$defs/NonEmptyString"},
+        "summary": {"$ref": "#/$defs/NonEmptyString"},
+        "geography": {"$ref": "#/$defs/Geography"}
+      }
+    },
+    "Offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "description", "category", "priority"],
+      "properties": {
+        "id": {"$ref": "#/$defs/Slug"},
+        "name": {"$ref": "#/$defs/NonEmptyString"},
+        "description": {"$ref": "#/$defs/NonEmptyString"},
+        "category": {"$ref": "#/$defs/StringOrNull"},
+        "priority": {"enum": ["primary", "secondary", "supporting"]}
+      }
+    },
+    "Offers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/Offer"},
+      "uniqueItems": true
+    },
+    "Audience": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "segment", "description", "needs", "problems", "selection_criteria"],
+      "properties": {
+        "id": {"$ref": "#/$defs/Slug"},
+        "segment": {"$ref": "#/$defs/NonEmptyString"},
+        "description": {"$ref": "#/$defs/NonEmptyString"},
+        "needs": {"$ref": "#/$defs/StringArray"},
+        "problems": {"$ref": "#/$defs/StringArray"},
+        "selection_criteria": {"$ref": "#/$defs/StringArray"}
+      }
+    },
+    "Audiences": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/Audience"},
+      "uniqueItems": true
+    },
+    "DemandSituation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "trigger", "job", "audience_ids", "offer_ids"],
+      "properties": {
+        "id": {"$ref": "#/$defs/Slug"},
+        "trigger": {"$ref": "#/$defs/NonEmptyString"},
+        "job": {"$ref": "#/$defs/NonEmptyString"},
+        "audience_ids": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/Slug"},
+          "uniqueItems": true
+        },
+        "offer_ids": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/Slug"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "DemandSituations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/DemandSituation"},
+      "uniqueItems": true
+    },
+    "Positioning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value_proposition", "differentiators", "alternatives", "do_not_claim"],
+      "properties": {
+        "value_proposition": {"$ref": "#/$defs/StringOrNull"},
+        "differentiators": {"$ref": "#/$defs/StringArray"},
+        "alternatives": {"$ref": "#/$defs/StringArray"},
+        "do_not_claim": {"$ref": "#/$defs/StringArray"}
+      }
+    },
+    "Proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "claim", "evidence", "source_ref"],
+      "properties": {
+        "id": {"$ref": "#/$defs/Slug"},
+        "type": {
+          "enum": [
+            "metric",
+            "case",
+            "client",
+            "certification",
+            "experience",
+            "asset",
+            "process",
+            "other"
+          ]
+        },
+        "claim": {"$ref": "#/$defs/NonEmptyString"},
+        "evidence": {"$ref": "#/$defs/NonEmptyString"},
+        "source_ref": {"$ref": "#/$defs/StringOrNull"}
+      }
+    },
+    "Proofs": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/Proof"},
+      "uniqueItems": true
+    },
+    "Objection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "objection", "supported_response"],
+      "properties": {
+        "id": {"$ref": "#/$defs/Slug"},
+        "objection": {"$ref": "#/$defs/NonEmptyString"},
+        "supported_response": {"$ref": "#/$defs/StringOrNull"}
+      }
+    },
+    "Objections": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/Objection"},
+      "uniqueItems": true
+    },
+    "Cta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "action"],
+      "properties": {
+        "label": {"$ref": "#/$defs/NonEmptyString"},
+        "action": {"$ref": "#/$defs/NonEmptyString"}
+      }
+    },
+    "PrimaryCta": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/Cta"}
+      ]
+    },
+    "Conversion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_goal", "primary_cta", "secondary_ctas", "contact_methods"],
+      "properties": {
+        "primary_goal": {"$ref": "#/$defs/StringOrNull"},
+        "primary_cta": {"$ref": "#/$defs/PrimaryCta"},
+        "secondary_ctas": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/Cta"},
+          "uniqueItems": true
+        },
+        "contact_methods": {"$ref": "#/$defs/StringArray"}
+      }
+    },
+    "FaqCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question", "answer"],
+      "properties": {
+        "question": {"$ref": "#/$defs/NonEmptyString"},
+        "answer": {"$ref": "#/$defs/StringOrNull"}
+      }
+    },
+    "Content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_messages", "required_terms", "forbidden_messages", "faq_candidates"],
+      "properties": {
+        "required_messages": {"$ref": "#/$defs/StringArray"},
+        "required_terms": {"$ref": "#/$defs/StringArray"},
+        "forbidden_messages": {"$ref": "#/$defs/StringArray"},
+        "faq_candidates": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/FaqCandidate"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "Brand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "desired_character",
+        "tone",
+        "avoid",
+        "constraints",
+        "existing_colors",
+        "existing_fonts",
+        "reference"
+      ],
+      "properties": {
+        "desired_character": {"$ref": "#/$defs/StringArray"},
+        "tone": {"$ref": "#/$defs/StringArray"},
+        "avoid": {"$ref": "#/$defs/StringArray"},
+        "constraints": {"$ref": "#/$defs/StringArray"},
+        "existing_colors": {"$ref": "#/$defs/StringArray"},
+        "existing_fonts": {"$ref": "#/$defs/StringArray"},
+        "reference": {"$ref": "#/$defs/StringOrNull"}
+      }
+    },
+    "Constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["legal", "commercial", "geographic", "technical", "content"],
+      "properties": {
+        "legal": {"$ref": "#/$defs/StringArray"},
+        "commercial": {"$ref": "#/$defs/StringArray"},
+        "geographic": {"$ref": "#/$defs/StringArray"},
+        "technical": {"$ref": "#/$defs/StringArray"},
+        "content": {"$ref": "#/$defs/StringArray"}
+      }
+    },
+    "SemanticIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_entity",
+        "entity_type",
+        "categories",
+        "services_or_products",
+        "audiences",
+        "use_cases",
+        "locations"
+      ],
+      "properties": {
+        "primary_entity": {"$ref": "#/$defs/NonEmptyString"},
+        "entity_type": {"$ref": "#/$defs/NonEmptyString"},
+        "categories": {"$ref": "#/$defs/StringArray"},
+        "services_or_products": {"$ref": "#/$defs/StringArray"},
+        "audiences": {"$ref": "#/$defs/StringArray"},
+        "use_cases": {"$ref": "#/$defs/StringArray"},
+        "locations": {"$ref": "#/$defs/StringArray"}
+      }
+    },
+    "Decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field_path", "source_type", "evidence", "reason"],
+      "properties": {
+        "field_path": {"$ref": "#/$defs/NonEmptyString"},
+        "source_type": {"enum": ["SOURCE_EXPLICIT", "SOURCE_INFERRED"]},
+        "evidence": {"$ref": "#/$defs/NonEmptyString"},
+        "reason": {"$ref": "#/$defs/NonEmptyString"}
+      }
+    },
+    "Decisions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/Decision"}
+    },
+    "DataGap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "area", "missing", "impact", "question"],
+      "properties": {
+        "id": {"$ref": "#/$defs/Slug"},
+        "area": {
+          "enum": [
+            "business",
+            "offer",
+            "audience",
+            "demand",
+            "positioning",
+            "proof",
+            "conversion",
+            "content",
+            "brand",
+            "constraint",
+            "other"
+          ]
+        },
+        "missing": {"$ref": "#/$defs/NonEmptyString"},
+        "impact": {"enum": ["critical", "important", "minor"]},
+        "question": {"$ref": "#/$defs/StringOrNull"}
+      }
+    },
+    "DataGaps": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/DataGap"},
+      "uniqueItems": true
+    }
+  }
+}

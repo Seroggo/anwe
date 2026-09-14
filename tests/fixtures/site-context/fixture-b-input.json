@@ -1,0 +1,14 @@
+{
+  "sources": [
+    {
+      "source_id": "notes-001",
+      "source_type": "notes",
+      "title": null,
+      "content": "Digital-агентство, делаем сайты для малого бизнеса. Помогаем компаниям быстро запуститься онлайн. Работаем в Москве."
+    }
+  ],
+  "context_hint": {
+    "business_name": null,
+    "purpose": "website"
+  }
+}

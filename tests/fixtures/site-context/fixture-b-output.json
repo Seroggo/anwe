@@ -1,0 +1,165 @@
+{
+  "schema_version": "0.1",
+  "context_id": "digital-agency",
+  "business": {
+    "name": null,
+    "entity_type": "digital agency",
+    "category": "website development",
+    "summary": "Digital-агентство, которое создаёт сайты для малого бизнеса и помогает компаниям быстро запуститься онлайн.",
+    "geography": ["Москва"]
+  },
+  "offers": [
+    {
+      "id": "website-development",
+      "name": "Разработка сайтов",
+      "description": "Создание сайтов для малого бизнеса для быстрого запуска онлайн-присутствия.",
+      "category": null,
+      "priority": "primary"
+    }
+  ],
+  "audiences": [
+    {
+      "id": "small-business",
+      "segment": "Малый бизнес",
+      "description": "Компании малого бизнеса, которым нужно запуститься онлайн.",
+      "needs": [],
+      "problems": [],
+      "selection_criteria": []
+    }
+  ],
+  "demand_situations": [],
+  "positioning": {
+    "value_proposition": null,
+    "differentiators": [],
+    "alternatives": [],
+    "do_not_claim": []
+  },
+  "proof": [],
+  "objections": [],
+  "conversion": {
+    "primary_goal": null,
+    "primary_cta": null,
+    "secondary_ctas": [],
+    "contact_methods": []
+  },
+  "content": {
+    "required_messages": [
+      "Помогаем компаниям малого бизнеса быстро запуститься онлайн"
+    ],
+    "required_terms": [],
+    "forbidden_messages": [],
+    "faq_candidates": []
+  },
+  "brand": {
+    "desired_character": [],
+    "tone": [],
+    "avoid": [],
+    "constraints": [],
+    "existing_colors": [],
+    "existing_fonts": [],
+    "reference": null
+  },
+  "constraints": {
+    "legal": [],
+    "commercial": [],
+    "geographic": [
+      "Работаем в Москве"
+    ],
+    "technical": [],
+    "content": []
+  },
+  "semantic_identity": {
+    "primary_entity": "digital agency",
+    "entity_type": "digital agency",
+    "categories": [
+      "website development",
+      "digital services"
+    ],
+    "services_or_products": [
+      "разработка сайтов",
+      "создание сайтов для малого бизнеса"
+    ],
+    "audiences": [
+      "малый бизнес"
+    ],
+    "use_cases": [
+      "запуск онлайн-присутствия"
+    ],
+    "locations": [
+      "Москва"
+    ]
+  },
+  "decisions": [],
+  "data_gaps": [
+    {
+      "id": "business-name",
+      "area": "business",
+      "missing": "Название компании",
+      "impact": "important",
+      "question": "Как называется агентство?"
+    },
+    {
+      "id": "audience-needs",
+      "area": "audience",
+      "missing": "Конкретные потребности целевой аудитории",
+      "impact": "important",
+      "question": "Какие конкретные потребности малого бизнеса вы решаете (нужен первый сайт, обновление устаревшего, интеграция с системами)?"
+    },
+    {
+      "id": "demand-situations",
+      "area": "demand",
+      "missing": "Ситуации возникновения спроса",
+      "impact": "important",
+      "question": "Когда и почему компании обращаются к вам (запуск нового бизнеса, неудовлетворённость текущим сайтом, выход онлайн)?"
+    },
+    {
+      "id": "value-proposition",
+      "area": "positioning",
+      "missing": "Ценностное предложение",
+      "impact": "important",
+      "question": "Чем вы отличаетесь от других агентств, создающих сайты для малого бизнеса?"
+    },
+    {
+      "id": "proof",
+      "area": "proof",
+      "missing": "Доказательства компетенции",
+      "impact": "important",
+      "question": "Какие у вас есть доказательства качества работы (кейсы, клиенты, опыт, портфолио)?"
+    },
+    {
+      "id": "conversion-goal",
+      "area": "conversion",
+      "missing": "Главная цель конверсии",
+      "impact": "important",
+      "question": "Какое действие должен совершить посетитель сайта (оставить заявку, позвонить, заполнить бриф)?"
+    },
+    {
+      "id": "contact-methods",
+      "area": "conversion",
+      "missing": "Способы связи",
+      "impact": "important",
+      "question": "Как с вами можно связаться (телефон, email, мессенджеры, форма)?"
+    },
+    {
+      "id": "offer-details",
+      "area": "offer",
+      "missing": "Детали предложения",
+      "impact": "important",
+      "question": "Какие типы сайтов вы создаёте (лендинги, корпоративные сайты, интернет-магазины)?"
+    },
+    {
+      "id": "brand-character",
+      "area": "brand",
+      "missing": "Визуальный характер",
+      "impact": "minor",
+      "question": "Какой визуальный характер должен быть у вашего сайта?"
+    },
+    {
+      "id": "constraints",
+      "area": "constraint",
+      "missing": "Ограничения",
+      "impact": "minor",
+      "question": "Есть ли ограничения (отрасли, с которыми не работаете, технические требования)?"
+    }
+  ]
+}

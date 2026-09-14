@@ -10,10 +10,12 @@
     "check:json": "node scripts/check-json.mjs",
     "check:blueprints": "node scripts/check-blueprints.mjs",
     "check:blocks": "node scripts/check-block-fixtures.mjs",
-    "check": "npm run check:json && npm run check:blueprints && npm run check:blocks"
+    "check:schemas": "node scripts/check-schemas.mjs",
+    "check": "npm run check:json && npm run check:blueprints && npm run check:blocks && npm run check:schemas"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "ajv": "^8.20.0",
     "astro": "^7.3.2",
     "typescript": "^6.0.3"
   },
