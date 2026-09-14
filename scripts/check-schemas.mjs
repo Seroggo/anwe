@@ -63,7 +63,7 @@ for (const { name, schemaPath, dataPath } of fixtures) {
   try {
     const schemaFullPath = path.join(root, schemaPath);
     const dataFullPath = path.join(root, dataPath);
-    
+
     if (!fs.existsSync(dataFullPath)) {
       console.log(`SKIP: ${name} (${dataPath} not found)`);
       continue;
@@ -71,10 +71,10 @@ for (const { name, schemaPath, dataPath } of fixtures) {
 
     const schema = JSON.parse(fs.readFileSync(schemaFullPath, 'utf8'));
     const data = JSON.parse(fs.readFileSync(dataFullPath, 'utf8'));
-    
+
     const validate = compiledSchemas.get(schemaPath) || ajv.compile(schema);
     const valid = validate(data);
-    
+
     if (!valid) {
       failed = true;
       console.error(`FIXTURE VALIDATION ERROR: ${name} (${dataPath})`);
