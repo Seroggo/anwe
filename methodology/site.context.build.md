@@ -13,6 +13,12 @@ inference handling, conflict handling, data gap classification.
 Все правила ниже применяются для построения SiteContext v0.1, который оптимизирован
 под автоматическую сборку AI-first сайта, а не как полноценная CRM или knowledge base.
 
+`context_id` — стабильный kebab-case slug, выбираемый по цепочке:
+`business.name` → `business.entity_type` → `offers[0].name` →
+`insufficient input`. Не подменяй название business entity названием offer в
+`semantic_identity.primary_entity`; эта цепочка относится только к идентификатору
+контекста.
+
 ---
 
 ## 1. Business identification
@@ -570,10 +576,14 @@ Inference допустим, если:
 Если sources[] противоречат друг другу:
 1. Не выбирай молча одно значение.
 2. Зафиксируй конфликт в `data_gaps[]` с описанием противоречия.
-3. Если более authoritative source можно установить только из явного контекста
-   sources[] (например, `source_type=brief` против `source_type=notes`) —
-   используй его и запиши `decision` с `source_type=SOURCE_EXPLICIT`.
-4. Не выдумывай source authority. Если приоритет неясен — DATA_GAP.
+3. Более authoritative source можно выбрать только по явной маркировке в
+   title/content/metadata источника: «утверждённый», «актуальный», «финальный»,
+   «официальный», «заменяет другой источник» либо «черновик», «устаревший»,
+   «архивный», «предварительный». Если такая маркировка присутствует, выбери
+   источник и запиши `decision` с `source_type=SOURCE_EXPLICIT`.
+4. Сам по себе `source_type` (например, `brief` vs `notes`) не является основанием
+   для выбора authoritative source. Это правило едино для всех source_type.
+5. Не выдумывай source authority. Если приоритет неясен — DATA_GAP.
 
 ### Примеры
 
@@ -651,9 +661,10 @@ Inference допустим, если:
 
 ### Input содержит только название
 
-Если input содержит только название компании без описания деятельности —
-попытаться определить хотя бы `business.name` и `context_id`, но зафиксировать
-critical DATA_GAP для `business.entity_type` и `offers[]`.
+Если input содержит только название компании, но не сообщает
+`business.entity_type` и `offers[0].name`, верни error / `insufficient input`.
+Само по себе название компании не определяет сущность для дальнейших стадий
+ANWE и не позволяет вернуть SiteContext.
 
 ### Input содержит только offer без business
 
@@ -667,9 +678,18 @@ critical DATA_GAP для `business.entity_type` и `offers[]`.
 
 ### Input противоречив по всем полям
 
-Если все поля противоречивы и authoritative source не определён —
-вернуть максимально пустой SiteContext с массивом `data_gaps[]`, описывающим
-все конфликты.
+Если все поля противоречивы и authoritative source не определён, обработка
+возвращается к минимальному условию возврата:
+
+```text
+остался известным хотя бы business.entity_type ИЛИ offers[0].name
+ → вернуть SiteContext с массивом data_gaps[], описывающим все конфликты
+иначе
+ → insufficient input
+```
+
+Конфликтное утверждение никогда не помещается в canonical-поля (например,
+`constraints.commercial[]`); оно фиксируется только в `data_gaps[]`.
 
 ---
 

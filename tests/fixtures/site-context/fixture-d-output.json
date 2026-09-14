@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "context_id": "unknown-business",
+  "context_id": "smd-montazh",
   "business": {
     "name": null,
     "entity_type": null,
@@ -8,7 +8,15 @@
     "summary": null,
     "geography": []
   },
-  "offers": [],
+  "offers": [
+    {
+      "id": "smd-montazh",
+      "name": "SMD-монтаж",
+      "description": null,
+      "category": null,
+      "priority": null
+    }
+  ],
   "audiences": [],
   "demand_situations": [],
   "positioning": {
@@ -42,7 +50,7 @@
   },
   "constraints": {
     "legal": [],
-    "commercial": ["Минимальная партия указана противоречиво: 50 или 10"],
+    "commercial": [],
     "geographic": [],
     "technical": [],
     "content": []
@@ -51,7 +59,7 @@
     "primary_entity": null,
     "entity_type": null,
     "categories": [],
-    "services_or_products": [],
+    "services_or_products": ["SMD-монтаж"],
     "audiences": [],
     "use_cases": [],
     "locations": []
@@ -69,15 +77,15 @@
       "id": "business-identity",
       "area": "business",
       "missing": "Тип бизнес-сущности и название бизнеса",
-      "impact": "critical",
+      "impact": "important",
       "question": "Что это за бизнес и как он называется?"
     },
     {
-      "id": "offer",
+      "id": "business-details",
       "area": "offer",
-      "missing": "Предложение бизнеса",
-      "impact": "critical",
-      "question": "Что именно предлагает или продаёт бизнес?"
+      "missing": "Описание и приоритет предложения",
+      "impact": "important",
+      "question": "Что входит в SMD-монтаж и является ли он основным предложением?"
     }
   ]
 }

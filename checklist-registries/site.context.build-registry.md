@@ -42,7 +42,7 @@ Registry используется SiteContext Builder как каноничес�
 | C003 | Category | Рыночная категория/специализация | sources[].content | CAPTURED / DATA_GAP | Неизвестно → business.category=null + DATA_GAP important |
 | C004 | Summary | Нормализованное описание (1–3 предложения, без рекламной воды) | sources[].content | CAPTURED / DATA_GAP | Недостаточно фактов → business.summary=null + DATA_GAP important; не сочинять generic summary |
 | C005 | Geography | Страны, города, регионы | sources[].content | CAPTURED / N_A | География не упомянута → N_A; пустой массив [] |
-| C006 | Context ID | Kebab-case slug из названия или entity_type+category | business.name / entity_type / category | CAPTURED | Всегда можно сгенерировать из доступных данных |
+| C006 | Context ID | Kebab-case slug по цепочке business.name → business.entity_type → offers[0].name | business.name / entity_type / offers[0].name | CAPTURED / DATA_GAP | Нет ни одного значения → insufficient input; не использовать offer name как entity name |
 | C007 | Name conflict | Противоречие между sources по названию | sources[] comparison | CAPTURED / CONFLICT | Разные названия в разных sources → CONFLICT → DATA_GAP |
 | C008 | Entity type conflict | Противоречие между sources по entity_type | sources[] comparison | CAPTURED / CONFLICT | Разные entity_type в разных sources → CONFLICT → DATA_GAP |
 | C009 | Geography conflict | Противоречие между sources по географии | sources[] comparison | CAPTURED / CONFLICT / N_A | Разная география в разных sources → CONFLICT → DATA_GAP |

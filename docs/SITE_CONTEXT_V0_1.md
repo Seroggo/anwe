@@ -85,6 +85,9 @@ data_gaps
 Каждый фиксированный объект использует `additionalProperties: false`.
 `context_id` — это lowercase kebab-case slug, соответствующий
 `^[a-z0-9]+(?:-[a-z0-9]+)*$`.
+Источник значения выбирается по цепочке: `business.name` →
+`business.entity_type` → `offers[0].name` → `insufficient input`. Если ни одно
+значение не известно, SiteContext не возвращается.
 
 ## Principle: fact vs inference vs gap
 
