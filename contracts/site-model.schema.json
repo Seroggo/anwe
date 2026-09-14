@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anwe.dev/contracts/site-model.schema.json",
+  "title": "ANWE SiteModel",
+  "description": "Strict render-ready site structure produced from SiteContext by site.model.build.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "site_id", "source_context_id", "title", "description", "status", "pages", "decisions", "issues"],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "site_id": {"$ref": "#/$defs/Slug"},
+    "source_context_id": {"$ref": "#/$defs/Slug"},
+    "title": {"$ref": "#/$defs/NonEmptyString"},
+    "description": {"$ref": "#/$defs/StringOrNull"},
+    "status": {"enum": ["ready", "partial", "blocked"]},
+    "pages": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/Page"}},
+    "decisions": {"type": "array", "items": {"$ref": "#/$defs/Decision"}},
+    "issues": {"type": "array", "items": {"$ref": "#/$defs/Issue"}}
+  },
+  "$defs": {
+    "NonEmptyString": {"type": "string", "minLength": 1},
+    "StringOrNull": {"type": ["string", "null"]},
+    "Slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "Path": {"type": "string", "pattern": "^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$"},
+    "Action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "href", "style"],
+      "properties": {
+        "label": {"$ref": "#/$defs/NonEmptyString"},
+        "href": {"type": "string", "minLength": 1, "not": {"const": "#"}},
+        "style": {"enum": ["primary", "secondary", "text"]}
+      }
+    },
+    "Actions": {"type": "array", "items": {"$ref": "#/$defs/Action"}},
+    "Media": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["src", "alt", "aspect", "fit"],
+      "properties": {
+        "src": {"type": "null"},
+        "alt": {"const": ""},
+        "aspect": {"enum": ["4:3", "1:1", "3:4"]},
+        "fit": {"const": "cover"}
+      }
+    },
+    "NavLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "href"],
+      "properties": {"label": {"$ref": "#/$defs/NonEmptyString"}, "href": {"type": "string", "minLength": 1, "not": {"const": "#"}}}
+    },
+    "HeaderContent": {
+      "type": "object", "additionalProperties": false, "required": ["brand", "nav", "actions"],
+      "properties": {"brand": {"$ref": "#/$defs/StringOrNull"}, "nav": {"type": "array", "items": {"$ref": "#/$defs/NavLink"}}, "actions": {"allOf": [{"$ref": "#/$defs/Actions"}, {"type": "array", "maxItems": 1}]}}
+    },
+    "HeroContent": {
+      "type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "body", "actions", "note", "media"],
+      "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "body": {"$ref": "#/$defs/StringOrNull"}, "actions": {"allOf": [{"$ref": "#/$defs/Actions"}, {"type": "array", "maxItems": 2}]}, "note": {"$ref": "#/$defs/StringOrNull"}, "media": {"anyOf": [{"$ref": "#/$defs/Media"}, {"type": "null"}]}}
+    },
+    "TextContent": {
+      "type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "lead", "paragraphs", "actions"],
+      "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "lead": {"$ref": "#/$defs/StringOrNull"}, "paragraphs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/NonEmptyString"}}, "actions": {"$ref": "#/$defs/Actions"}}
+    },
+    "Point": {"type": "object", "additionalProperties": false, "required": ["title", "body"], "properties": {"title": {"$ref": "#/$defs/NonEmptyString"}, "body": {"$ref": "#/$defs/StringOrNull"}}},
+    "SplitContent": {
+      "type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "body", "points", "media", "actions"],
+      "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "body": {"$ref": "#/$defs/StringOrNull"}, "points": {"type": "array", "items": {"$ref": "#/$defs/Point"}}, "media": {"$ref": "#/$defs/Media"}, "actions": {"$ref": "#/$defs/Actions"}}
+    },
+    "CardItem": {
+      "type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "body", "media", "icon", "actions"],
+      "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "body": {"$ref": "#/$defs/StringOrNull"}, "media": {"type": "null"}, "icon": {"type": "null"}, "actions": {"$ref": "#/$defs/Actions"}}
+    },
+    "CardsContent": {
+      "type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "lead", "columns", "items", "actions"],
+      "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "lead": {"$ref": "#/$defs/StringOrNull"}, "columns": {"type": "integer", "minimum": 1, "maximum": 4}, "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/CardItem"}}, "actions": {"$ref": "#/$defs/Actions"}}
+    },
+    "StepItem": {"type": "object", "additionalProperties": false, "required": ["title", "body", "icon"], "properties": {"title": {"$ref": "#/$defs/NonEmptyString"}, "body": {"$ref": "#/$defs/StringOrNull"}, "icon": {"type": "null"}}},
+    "StepsContent": {"type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "lead", "items"], "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "lead": {"$ref": "#/$defs/StringOrNull"}, "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/StepItem"}}}},
+    "StatItem": {"type": "object", "additionalProperties": false, "required": ["value", "label", "note"], "properties": {"value": {"$ref": "#/$defs/NonEmptyString"}, "label": {"$ref": "#/$defs/NonEmptyString"}, "note": {"$ref": "#/$defs/StringOrNull"}}},
+    "StatsContent": {"type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "lead", "items"], "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "lead": {"$ref": "#/$defs/StringOrNull"}, "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/StatItem"}}}},
+    "GalleryItem": {"type": "object", "additionalProperties": false, "required": ["title", "caption", "media"], "properties": {"title": {"$ref": "#/$defs/NonEmptyString"}, "caption": {"$ref": "#/$defs/StringOrNull"}, "media": {"$ref": "#/$defs/Media"}}},
+    "GalleryContent": {"type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "lead", "items"], "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "lead": {"$ref": "#/$defs/StringOrNull"}, "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/GalleryItem"}}}},
+    "FAQItem": {"type": "object", "additionalProperties": false, "required": ["question", "answer"], "properties": {"question": {"$ref": "#/$defs/NonEmptyString"}, "answer": {"$ref": "#/$defs/NonEmptyString"}}},
+    "FAQContent": {"type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "lead", "items"], "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "lead": {"$ref": "#/$defs/StringOrNull"}, "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/FAQItem"}}}},
+    "CTAContent": {"type": "object", "additionalProperties": false, "required": ["eyebrow", "title", "body", "actions", "media"], "properties": {"eyebrow": {"$ref": "#/$defs/StringOrNull"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "body": {"$ref": "#/$defs/StringOrNull"}, "actions": {"$ref": "#/$defs/Actions"}, "media": {"anyOf": [{"$ref": "#/$defs/Media"}, {"type": "null"}]}}},
+    "FooterColumn": {"type": "object", "additionalProperties": false, "required": ["title", "links"], "properties": {"title": {"$ref": "#/$defs/NonEmptyString"}, "links": {"type": "array", "items": {"$ref": "#/$defs/NavLink"}}}},
+    "FooterContent": {"type": "object", "additionalProperties": false, "required": ["brand", "description", "columns", "note", "actions"], "properties": {"brand": {"$ref": "#/$defs/StringOrNull"}, "description": {"$ref": "#/$defs/StringOrNull"}, "columns": {"type": "array", "items": {"$ref": "#/$defs/FooterColumn"}}, "note": {"$ref": "#/$defs/StringOrNull"}, "actions": {"$ref": "#/$defs/Actions"}}},
+    "HeaderBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "header"}, "variant": {"enum": ["default", "transparent"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/HeaderContent"}}},
+    "HeroBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "hero"}, "variant": {"enum": ["centered", "split"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/HeroContent"}}, "allOf": [{"if": {"properties": {"variant": {"const": "split"}}}, "then": {"properties": {"content": {"type": "object", "properties": {"media": {"$ref": "#/$defs/Media"}}}}}}, {"if": {"properties": {"variant": {"const": "centered"}}}, "then": {"properties": {"content": {"type": "object", "properties": {"media": {"type": "null"}}}}}}]},
+    "TextBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "text"}, "variant": {"enum": ["narrow", "wide"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/TextContent"}}},
+    "SplitBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "split"}, "variant": {"enum": ["media-left", "media-right"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/SplitContent"}}},
+    "CardsBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "cards"}, "variant": {"enum": ["grid", "horizontal"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/CardsContent"}}},
+    "StepsBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "steps"}, "variant": {"enum": ["vertical", "horizontal"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/StepsContent"}}},
+    "StatsBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "stats"}, "variant": {"enum": ["inline", "grid"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/StatsContent"}}},
+    "GalleryBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "gallery"}, "variant": {"enum": ["grid", "featured"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/GalleryContent"}}},
+    "FAQBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "faq"}, "variant": {"const": "stacked"}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/FAQContent"}}},
+    "CTABlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "cta"}, "variant": {"enum": ["centered", "split"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/CTAContent"}}, "allOf": [{"if": {"properties": {"variant": {"const": "split"}}}, "then": {"properties": {"content": {"type": "object", "properties": {"media": {"$ref": "#/$defs/Media"}}}}}}, {"if": {"properties": {"variant": {"const": "centered"}}}, "then": {"properties": {"content": {"type": "object", "properties": {"media": {"type": "null"}}}}}}]},
+    "FooterBlock": {"type": "object", "additionalProperties": false, "required": ["id", "type", "variant", "surface", "content"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"const": "footer"}, "variant": {"enum": ["simple", "columns"]}, "surface": {"$ref": "#/$defs/Surface"}, "content": {"$ref": "#/$defs/FooterContent"}}},
+    "Block": {"oneOf": [{"$ref": "#/$defs/HeaderBlock"}, {"$ref": "#/$defs/HeroBlock"}, {"$ref": "#/$defs/TextBlock"}, {"$ref": "#/$defs/SplitBlock"}, {"$ref": "#/$defs/CardsBlock"}, {"$ref": "#/$defs/StepsBlock"}, {"$ref": "#/$defs/StatsBlock"}, {"$ref": "#/$defs/GalleryBlock"}, {"$ref": "#/$defs/FAQBlock"}, {"$ref": "#/$defs/CTABlock"}, {"$ref": "#/$defs/FooterBlock"}]},
+    "Surface": {"enum": ["default", "muted", "accent", "inverse"]},
+    "Page": {"type": "object", "additionalProperties": false, "required": ["id", "path", "title", "description", "blocks"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "path": {"$ref": "#/$defs/Path"}, "title": {"$ref": "#/$defs/NonEmptyString"}, "description": {"$ref": "#/$defs/StringOrNull"}, "blocks": {"type": "array", "items": {"$ref": "#/$defs/Block"}}}},
+    "Decision": {"type": "object", "additionalProperties": false, "required": ["id", "decision", "reason", "context_refs"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "decision": {"$ref": "#/$defs/NonEmptyString"}, "reason": {"$ref": "#/$defs/NonEmptyString"}, "context_refs": {"type": "array", "items": {"$ref": "#/$defs/NonEmptyString"}}}},
+    "Issue": {"type": "object", "additionalProperties": false, "required": ["id", "type", "severity", "message", "context_ref", "page_id"], "properties": {"id": {"$ref": "#/$defs/Slug"}, "type": {"enum": ["DATA_GAP", "BLOCK_LIBRARY_GAP"]}, "severity": {"enum": ["critical", "important", "minor"]}, "message": {"$ref": "#/$defs/NonEmptyString"}, "context_ref": {"$ref": "#/$defs/StringOrNull"}, "page_id": {"anyOf": [{"$ref": "#/$defs/Slug"}, {"type": "null"}]}}}
+  }
+}

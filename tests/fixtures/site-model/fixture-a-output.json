@@ -1,0 +1,160 @@
+{
+  "schema_version": "0.1",
+  "site_id": "techassembly",
+  "source_context_id": "techassembly",
+  "title": "TechAssembly",
+  "description": "Контрактное производство электроники со специализацией на SMD-монтаже печатных плат.",
+  "status": "partial",
+  "pages": [
+    {
+      "id": "home",
+      "path": "/",
+      "title": "SMD-монтаж печатных плат для малых серий",
+      "description": "SMD-монтаж печатных плат от 10 штук без setup fee.",
+      "blocks": [
+        {
+          "id": "header",
+          "type": "header",
+          "variant": "default",
+          "surface": "default",
+          "content": {
+            "brand": "TechAssembly",
+            "nav": [
+              {"label": "Услуга", "href": "#smd-montazh"},
+              {"label": "Контроль", "href": "#quality-control"},
+              {"label": "Вопросы", "href": "#faq"}
+            ],
+            "actions": []
+          }
+        },
+        {
+          "id": "hero",
+          "type": "hero",
+          "variant": "centered",
+          "surface": "inverse",
+          "content": {
+            "eyebrow": "TechAssembly",
+            "title": "SMD-монтаж печатных плат для малых серий",
+            "body": "Запускаем производство малых серий электроники от 10 штук без setup fee.",
+            "actions": [],
+            "note": null,
+            "media": null
+          }
+        },
+        {
+          "id": "smd-montazh",
+          "type": "text",
+          "variant": "narrow",
+          "surface": "default",
+          "content": {
+            "eyebrow": "Услуга",
+            "title": "SMD-монтаж PCB для первой малой серии",
+            "lead": "Для hardware-стартапов, которым нужна первая небольшая партия электронного продукта для тестирования рынка.",
+            "paragraphs": [
+              "TechAssembly выполняет автоматический поверхностный монтаж компонентов на печатные платы.",
+              "Минимальный запуск производства составляет 10 штук без setup fee."
+            ],
+            "actions": []
+          }
+        },
+        {
+          "id": "quality-control",
+          "type": "cards",
+          "variant": "grid",
+          "surface": "muted",
+          "content": {
+            "eyebrow": "Контроль и производство",
+            "title": "Подтверждённые возможности производства",
+            "lead": null,
+            "columns": 3,
+            "items": [
+              {"eyebrow": null, "title": "AOI-контроль", "body": "Автоматический оптический контроль на каждом этапе производства.", "media": null, "icon": null, "actions": []},
+              {"eyebrow": null, "title": "Автоматическая линия SMD-монтажа", "body": "Линия Juki RS-1.", "media": null, "icon": null, "actions": []},
+              {"eyebrow": null, "title": "Система менеджмента качества", "body": "Сертификация ISO 9001:2015.", "media": null, "icon": null, "actions": []}
+            ],
+            "actions": []
+          }
+        },
+        {
+          "id": "minimum-batch",
+          "type": "stats",
+          "variant": "inline",
+          "surface": "accent",
+          "content": {
+            "eyebrow": "Минимальная партия",
+            "title": "Запуск от 10 штук",
+            "lead": "Без setup fee.",
+            "items": [
+              {"value": "10", "label": "штук", "note": "минимальный запуск производства"}
+            ]
+          }
+        },
+        {
+          "id": "faq",
+          "type": "faq",
+          "variant": "stacked",
+          "surface": "default",
+          "content": {
+            "eyebrow": "Вопросы",
+            "title": "Уточнения перед запуском",
+            "lead": null,
+            "items": [
+              {"question": "Подойдёт ли производство для небольшой первой партии?", "answer": "Производство запускается от 10 штук без setup fee."},
+              {"question": "Как подтверждается контроль качества?", "answer": "На каждом этапе производства выполняется AOI-контроль; система менеджмента качества сертифицирована по ISO 9001:2015."}
+            ]
+          }
+        },
+        {
+          "id": "contact",
+          "type": "cta",
+          "variant": "centered",
+          "surface": "inverse",
+          "content": {
+            "eyebrow": "Расчёт производства",
+            "title": "Запросить расчёт стоимости производства",
+            "body": null,
+            "actions": [],
+            "media": null
+          }
+        },
+        {
+          "id": "footer",
+          "type": "footer",
+          "variant": "simple",
+          "surface": "inverse",
+          "content": {
+            "brand": "TechAssembly",
+            "description": "Контрактное производство электроники в Московской области.",
+            "columns": [],
+            "note": null,
+            "actions": []
+          }
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "single-page-offer",
+      "decision": "Оставить единственное предложение и связанную ситуацию спроса на home page.",
+      "reason": "В контексте есть один offer; отдельных данных для неповторяющейся дополнительной страницы недостаточно.",
+      "context_refs": ["offers.smd-assembly", "demand_situations.mvp-production"]
+    },
+    {
+      "id": "use-stats-for-minimum-batch",
+      "decision": "Показать минимальную партию блоком Stats.",
+      "reason": "Число 10 является подтверждённым коммерческим фактом.",
+      "context_refs": ["proof.minimum-batch", "constraints.commercial"]
+    }
+  ],
+  "issues": [
+    {
+      "id": "cta-destination",
+      "type": "DATA_GAP",
+      "severity": "important",
+      "message": "Известна цель запроса расчёта, но SiteContext не содержит точного destination для действия.",
+      "context_ref": "conversion.primary_cta",
+      "page_id": "home"
+    }
+  ]
+}

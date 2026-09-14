@@ -1,0 +1,61 @@
+{
+  "schema_version": "0.1",
+  "site_id": "smd-montazh",
+  "source_context_id": "smd-montazh",
+  "title": "SMD-монтаж",
+  "description": null,
+  "status": "partial",
+  "pages": [
+    {
+      "id": "home",
+      "path": "/",
+      "title": "SMD-монтаж",
+      "description": null,
+      "blocks": [
+        {
+          "id": "header",
+          "type": "header",
+          "variant": "default",
+          "surface": "default",
+          "content": {"brand": null, "nav": [{"label": "Об услуге", "href": "#about-service"}], "actions": []}
+        },
+        {
+          "id": "hero",
+          "type": "hero",
+          "variant": "centered",
+          "surface": "default",
+          "content": {"eyebrow": null, "title": "SMD-монтаж", "body": null, "actions": [], "note": null, "media": null}
+        },
+        {
+          "id": "about-service",
+          "type": "text",
+          "variant": "narrow",
+          "surface": "default",
+          "content": {"eyebrow": "Услуга", "title": "Об услуге", "lead": null, "paragraphs": ["Доступна услуга SMD-монтажа."], "actions": []}
+        },
+        {
+          "id": "footer",
+          "type": "footer",
+          "variant": "simple",
+          "surface": "default",
+          "content": {"brand": null, "description": null, "columns": [], "note": null, "actions": []}
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "literal-single-page",
+      "decision": "Построить буквальную одностраничную структуру вокруг единственного известного предложения.",
+      "reason": "Контекст не содержит данных для аудитории, ценности, доказательств, конверсии или самостоятельных дополнительных страниц.",
+      "context_refs": ["offers.smd-montazh", "data_gaps"]
+    }
+  ],
+  "issues": [
+    {"id": "business-context", "type": "DATA_GAP", "severity": "important", "message": "Не определены бизнес-сущность, категория и описание бизнеса.", "context_ref": "data_gaps.business-entity-type", "page_id": "home"},
+    {"id": "offer-detail", "type": "DATA_GAP", "severity": "important", "message": "Не описано содержание предложения SMD-монтажа.", "context_ref": "data_gaps.offer-description", "page_id": "home"},
+    {"id": "audience-and-demand", "type": "DATA_GAP", "severity": "important", "message": "Не определены аудитория и ситуации спроса.", "context_ref": "data_gaps.audiences", "page_id": "home"},
+    {"id": "positioning-and-proof", "type": "DATA_GAP", "severity": "important", "message": "Нет подтверждённого позиционирования или доказательств.", "context_ref": "data_gaps.positioning", "page_id": "home"},
+    {"id": "conversion", "type": "DATA_GAP", "severity": "important", "message": "Не определены цель конверсии и способ связи.", "context_ref": "data_gaps.conversion", "page_id": "home"}
+  ]
+}

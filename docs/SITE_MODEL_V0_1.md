@@ -1,0 +1,80 @@
+# SiteModel v0.1
+
+`SiteModel` описывает render-ready информационную архитектуру сайта ANWE. Он получает факты из `SiteContext` и раскладывает их по страницам и существующей Block Library.
+
+```text
+SiteContext: что известно о бизнесе
+SiteModel: как этот смысл разложен по страницам и блокам
+ThemeSpec: как сайт выглядит
+Visual Skill: какие визуалы и иконки нужны
+```
+
+Формальный контракт: `contracts/site-model.schema.json`. Поле `schema_version` всегда равно `"0.1"`.
+
+## Top-Level Structure
+
+```json
+{
+  "schema_version": "0.1",
+  "site_id": "example-site",
+  "source_context_id": "example-context",
+  "title": "Example",
+  "description": null,
+  "status": "ready",
+  "pages": [],
+  "decisions": [],
+  "issues": []
+}
+```
+
+`site_id` — stable kebab-case; по умолчанию равен `SiteContext.context_id`. `source_context_id` всегда равен `SiteContext.context_id`. `title` берётся из `business.name`, затем `business.entity_type`, затем `offers[0].name`; новый бренд не придумывается. `description` — краткое фактическое описание или `null`.
+
+Статусы: `ready` означает отсутствие critical issues; `partial` — сайт честно рендерится при отсутствии важных данных; `blocked` — нельзя построить содержательный правдивый сайт либо критичная механика не выражается библиотекой.
+
+## Pages And Blocks
+
+Страница содержит `id`, `path`, `title`, `description` и `blocks`. Home всегда имеет путь `/`; другие пути имеют форму `/service-name/`. По умолчанию SiteContext становится одной home page. Дополнительная page допустима, только если отдельный offer или demand situation имеет самостоятельный смысл, не повторяет home и поддержан данными для `hero` и минимум двух substantive blocks.
+
+Каждая substantive page имеет ровно один `hero` с непустым H1. `header`, если есть, идёт первым; `footer`, если есть, последним. Идентификаторы blocks semantic и уникальны внутри page.
+
+Разрешённая vocabulary:
+
+| Type | Variants |
+| --- | --- |
+| `header` | `default`, `transparent` |
+| `hero` | `centered`, `split` |
+| `text` | `narrow`, `wide` |
+| `split` | `media-left`, `media-right` |
+| `cards` | `grid`, `horizontal` |
+| `steps` | `vertical`, `horizontal` |
+| `stats` | `inline`, `grid` |
+| `gallery` | `grid`, `featured` |
+| `faq` | `stacked` |
+| `cta` | `centered`, `split` |
+| `footer` | `simple`, `columns` |
+
+`cards.content.columns` задаёт от 1 до 4 колонок, но не является variant. Допустимые semantic surfaces: `default`, `muted`, `accent`, `inverse`. Они выражают смысловой уровень акцента, а не цвет.
+
+## Boundaries
+
+SiteModel использует только приведённые block types. Semantic roles переводятся в generic blocks: offers — `cards`/`split`, process — `steps`, numeric proof — `stats`, FAQ — `faq`, conversion — `cta`. Новый component или site-specific block не создаётся. Если нужная механика требует формы, калькулятора, карты, каталога или другого отсутствующего интерактива, фиксируется `BLOCK_LIBRARY_GAP`.
+
+Copy может быть переформулирован и организован, но каждый фактический claim должен выводиться из SiteContext. Нельзя добавлять преимущества, цифры, гарантии, клиентов, сертификаты, географию, сроки или capabilities. `positioning.do_not_claim`, `content.forbidden_messages` и `constraints` имеют приоритет. Все существенные `content.required_messages` должны быть представлены на релевантных pages; `required_terms` используются только по смыслу.
+
+## Actions, Media And Visuals
+
+Action состоит из `label`, `href`, `style`, где style: `primary`, `secondary` или `text`. Разрешены только существующий anchor на той же странице, существующий internal page path, либо подтверждённые SiteContext exact `https`, `mailto:` или `tel:` destination. `#` и придуманные контакты запрещены. Header содержит максимум одну primary action.
+
+На raw output `site.model.build` media placeholder имеет строго:
+
+```json
+{"src": null, "alt": "", "aspect": "4:3", "fit": "cover"}
+```
+
+Разрешены только aspects `4:3`, `1:1`, `3:4`. Placeholder обязателен для `hero split`, `split`, `cta split` и каждого gallery item; у `hero centered` и `cta centered` media равно `null`. У Cards media и icon равны `null`; у Steps icon равен `null`. SiteModel не выбирает Lucide names, не генерирует изображения и не определяет ThemeSpec, цвета или шрифты.
+
+## Decisions And Issues
+
+`decisions[]` фиксирует только meaningful structural choices: отдельную page, сохранение offer на home, выбор Stats вместо Cards, отказ от Gallery или осмысленный media split.
+
+`issues[]` имеет `type` (`DATA_GAP` или `BLOCK_LIBRARY_GAP`), `severity` (`critical`, `important`, `minor`), message, context reference и page reference. Неизвестные business data не заполняются отраслевым знанием: вместо этого строится буквальная структура и добавляется `DATA_GAP`.

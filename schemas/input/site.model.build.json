@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anwe.dev/schemas/input/site.model.build.json",
+  "title": "site.model.build input",
+  "description": "The site.model.build input is a canonical SiteContext JSON without a wrapper.",
+  "$ref": "https://anwe.dev/contracts/site-context.schema.json"
+}

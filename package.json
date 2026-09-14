@@ -11,7 +11,8 @@
     "check:blueprints": "node scripts/check-blueprints.mjs",
     "check:blocks": "node scripts/check-block-fixtures.mjs",
     "check:schemas": "node scripts/check-schemas.mjs",
-    "check": "npm run check:json && npm run check:blueprints && npm run check:blocks && npm run check:schemas"
+    "check:site-model": "node scripts/check-site-model.mjs",
+    "check": "npm run check:json && npm run check:blueprints && npm run check:blocks && npm run check:schemas && npm run check:site-model"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
