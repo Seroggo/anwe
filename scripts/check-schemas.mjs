@@ -41,7 +41,34 @@ const fixtures = [
     name: 'fixture B output',
     schemaPath: 'schemas/output/site.context.build.json',
     dataPath: 'tests/fixtures/site-context/fixture-b-output.json'
+  },
+  {
+    name: 'fixture C input',
+    schemaPath: 'schemas/input/site.context.build.json',
+    dataPath: 'tests/fixtures/site-context/fixture-c-input.json'
+  },
+  {
+    name: 'fixture C output',
+    schemaPath: 'schemas/output/site.context.build.json',
+    dataPath: 'tests/fixtures/site-context/fixture-c-output.json'
+  },
+  {
+    name: 'fixture D input',
+    schemaPath: 'schemas/input/site.context.build.json',
+    dataPath: 'tests/fixtures/site-context/fixture-d-input.json'
+  },
+  {
+    name: 'fixture D output',
+    schemaPath: 'schemas/output/site.context.build.json',
+    dataPath: 'tests/fixtures/site-context/fixture-d-output.json'
   }
+];
+
+const outputFixtures = [
+  'tests/fixtures/site-context/fixture-a-output.json',
+  'tests/fixtures/site-context/fixture-b-output.json',
+  'tests/fixtures/site-context/fixture-c-output.json',
+  'tests/fixtures/site-context/fixture-d-output.json'
 ];
 
 let failed = false;
@@ -90,3 +117,18 @@ for (const { name, schemaPath, dataPath } of fixtures) {
 
 if (failed) process.exit(1);
 console.log(`Schema validation OK: ${schemas.length} schemas, ${fixtures.length} fixtures`);
+
+const validateContract = compiledSchemas.get('contracts/site-context.schema.json');
+for (const dataPath of outputFixtures) {
+  const data = JSON.parse(fs.readFileSync(path.join(root, dataPath), 'utf8'));
+  if (!validateContract(data)) {
+    failed = true;
+    console.error(`CONTRACT VALIDATION ERROR: ${dataPath}`);
+    for (const err of validateContract.errors || []) {
+      console.error(`  ${err.instancePath || '/'}: ${err.message}`);
+    }
+  }
+}
+
+if (failed) process.exit(1);
+console.log(`Contract validation OK: ${outputFixtures.length} output fixtures`);

@@ -1,0 +1,20 @@
+{
+  "sources": [
+    {
+      "source_id": "source-1",
+      "source_type": "brief",
+      "title": null,
+      "content": "Минимальная партия 50"
+    },
+    {
+      "source_id": "source-2",
+      "source_type": "notes",
+      "title": null,
+      "content": "Минимальная партия 10"
+    }
+  ],
+  "context_hint": {
+    "business_name": null,
+    "purpose": "website"
+  }
+}

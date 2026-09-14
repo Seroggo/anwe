@@ -1,0 +1,83 @@
+{
+  "schema_version": "0.1",
+  "context_id": "unknown-business",
+  "business": {
+    "name": null,
+    "entity_type": null,
+    "category": null,
+    "summary": null,
+    "geography": []
+  },
+  "offers": [],
+  "audiences": [],
+  "demand_situations": [],
+  "positioning": {
+    "value_proposition": null,
+    "differentiators": [],
+    "alternatives": [],
+    "do_not_claim": []
+  },
+  "proof": [],
+  "objections": [],
+  "conversion": {
+    "primary_goal": null,
+    "primary_cta": null,
+    "secondary_ctas": [],
+    "contact_methods": []
+  },
+  "content": {
+    "required_messages": [],
+    "required_terms": [],
+    "forbidden_messages": [],
+    "faq_candidates": []
+  },
+  "brand": {
+    "desired_character": [],
+    "tone": [],
+    "avoid": [],
+    "constraints": [],
+    "existing_colors": [],
+    "existing_fonts": [],
+    "reference": null
+  },
+  "constraints": {
+    "legal": [],
+    "commercial": ["Минимальная партия указана противоречиво: 50 или 10"],
+    "geographic": [],
+    "technical": [],
+    "content": []
+  },
+  "semantic_identity": {
+    "primary_entity": null,
+    "entity_type": null,
+    "categories": [],
+    "services_or_products": [],
+    "audiences": [],
+    "use_cases": [],
+    "locations": []
+  },
+  "decisions": [],
+  "data_gaps": [
+    {
+      "id": "minimum-batch-conflict",
+      "area": "constraint",
+      "missing": "Минимальная партия: sources source-1 и source-2 противоречат друг другу (50 и 10)",
+      "impact": "important",
+      "question": "Какая минимальная партия актуальна: 50 или 10?"
+    },
+    {
+      "id": "business-identity",
+      "area": "business",
+      "missing": "Тип бизнес-сущности и название бизнеса",
+      "impact": "critical",
+      "question": "Что это за бизнес и как он называется?"
+    },
+    {
+      "id": "offer",
+      "area": "offer",
+      "missing": "Предложение бизнеса",
+      "impact": "critical",
+      "question": "Что именно предлагает или продаёт бизнес?"
+    }
+  ]
+}

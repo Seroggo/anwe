@@ -38,9 +38,9 @@ Registry используется SiteContext Builder как каноничес�
 | ID | Aspect | What to extract | Source | Status | Gap condition |
 |----|--------|-----------------|--------|--------|---------------|
 | C001 | Business name | Официальное название компании | sources[].content | CAPTURED / DATA_GAP | Название не упомянуто → DATA_GAP minor; использовать business.name=null |
-| C002 | Entity type | Что это за сущность в рыночном смысле | sources[].content | CAPTURED / DATA_GAP | Невозможно определить entity_type И offers[0].name → DATA_GAP critical |
-| C003 | Category | Рыночная категория/специализация | sources[].content | CAPTURED / DATA_GAP | Category не упомянута → DATA_GAP important |
-| C004 | Summary | Нормализованное описание (1–3 предложения, без рекламной воды) | sources[].content | CAPTURED / DATA_GAP | Описание отсутствует → DATA_GAP important |
+| C002 | Entity type | Что это за сущность в рыночном смысле | sources[].content | CAPTURED / DATA_GAP | Неизвестно → business.entity_type=null + DATA_GAP; если offer name тоже неизвестен → insufficient input |
+| C003 | Category | Рыночная категория/специализация | sources[].content | CAPTURED / DATA_GAP | Неизвестно → business.category=null + DATA_GAP important |
+| C004 | Summary | Нормализованное описание (1–3 предложения, без рекламной воды) | sources[].content | CAPTURED / DATA_GAP | Недостаточно фактов → business.summary=null + DATA_GAP important; не сочинять generic summary |
 | C005 | Geography | Страны, города, регионы | sources[].content | CAPTURED / N_A | География не упомянута → N_A; пустой массив [] |
 | C006 | Context ID | Kebab-case slug из названия или entity_type+category | business.name / entity_type / category | CAPTURED | Всегда можно сгенерировать из доступных данных |
 | C007 | Name conflict | Противоречие между sources по названию | sources[] comparison | CAPTURED / CONFLICT | Разные названия в разных sources → CONFLICT → DATA_GAP |
@@ -56,9 +56,9 @@ Registry используется SiteContext Builder как каноничес�
 | C010 | Offer identification | Что реально продаётся/предлагается | sources[].content | CAPTURED / DATA_GAP | Невозможно определить ни одного offer → DATA_GAP critical |
 | C011 | Offer vs capability | Отличить offer от capability/feature/technology | sources[].content | CAPTURED / DATA_GAP | Неясно, что является отдельным offer → DATA_GAP important |
 | C012 | Offer name | Короткое название offer | sources[].content | CAPTURED / DATA_GAP | Название не упомянуто → DATA_GAP important |
-| C013 | Offer description | Описание (1–2 предложения) | sources[].content | CAPTURED / DATA_GAP | Описание отсутствует → DATA_GAP important |
+| C013 | Offer description | Описание (1–2 предложения) | sources[].content | CAPTURED / DATA_GAP | Известно только название → description=null + DATA_GAP important; не пересказывать name |
 | C014 | Offer category | Категория offer (если применимо) | sources[].content | CAPTURED / N_A | Категория не применима → N_A; использовать null |
-| C015 | Offer priority | primary / secondary / supporting | sources[].content / inference | CAPTURED / DATA_GAP | Приоритет неясен → использовать primary для основного |
+| C015 | Offer priority | primary / secondary / supporting / null | sources[].content / inference | CAPTURED / DATA_GAP | Приоритет неясен → null + DATA_GAP; inferred priority → обязательный SOURCE_INFERRED decision |
 | C016 | Offer conflict | Противоречие между sources по составу offers | sources[] comparison | CAPTURED / CONFLICT | Разные списки offers в разных sources → CONFLICT → DATA_GAP |
 | C017 | Offer duplication | Дубли offers в разных формулировках | sources[].content | CAPTURED | Нормализовать дубли → одно canonical значение |
 | C018 | Offer completeness | Все ли offers извлечены | sources[].content | CAPTURED / DATA_GAP | Упоминания других offers без деталей → DATA_GAP minor |
@@ -72,7 +72,7 @@ Registry используется SiteContext Builder как каноничес�
 |----|--------|-----------------|--------|--------|---------------|
 | C020 | Audience identification | Кто целевая аудитория | sources[].content | CAPTURED / DATA_GAP / N_A | Аудитория не упомянута → DATA_GAP important |
 | C021 | Segment name | Операционное название сегмента | sources[].content | CAPTURED / DATA_GAP | Название не упомянуто → DATA_GAP important |
-| C022 | Segment description | Кто они (роль, тип компании) | sources[].content | CAPTURED / DATA_GAP | Описание отсутствует → DATA_GAP important |
+| C022 | Segment description | Кто они (роль, тип компании) | sources[].content | CAPTURED / DATA_GAP | Известен только segment → description=null + DATA_GAP important; не пересказывать segment |
 | C023 | Audience needs | Что им нужно | sources[].content | CAPTURED / DATA_GAP | Needs не упомянуты → DATA_GAP important; пустой массив [] |
 | C024 | Audience problems | Какие проблемы решают | sources[].content | CAPTURED / DATA_GAP | Problems не упомянуты → DATA_GAP important; пустой массив [] |
 | C025 | Selection criteria | По каким критериям выбирают | sources[].content | CAPTURED / DATA_GAP | Criteria не упомянуты → DATA_GAP important; пустой массив [] |
@@ -189,15 +189,15 @@ Registry используется SiteContext Builder как каноничес�
 
 | ID | Aspect | What to extract | Source | Status | Gap condition |
 |----|--------|-----------------|--------|--------|---------------|
-| C090 | Primary entity | Название сущности (если есть) или entity_type | business.name / entity_type | CAPTURED | Всегда можно сгенерировать из доступных данных |
-| C091 | Entity type | Нормализованный тип (повтор из business.entity_type) | business.entity_type | CAPTURED | Всегда доступен, если business.entity_type CAPTURED |
+| C090 | Primary entity | business.name, иначе business.entity_type, иначе null | business.name / business.entity_type | CAPTURED / DATA_GAP | Оба неизвестны → null + DATA_GAP; offer name как entity запрещён |
+| C091 | Entity type | Нормализованный тип (повтор из business.entity_type) | business.entity_type | CAPTURED / DATA_GAP | Неизвестно → semantic_identity.entity_type=null + DATA_GAP |
 | C092 | Categories | Рыночные категории | business.category, offers[].category | CAPTURED / DATA_GAP | Categories не упомянуты → DATA_GAP important; пустой массив [] |
 | C093 | Services or products | Нормализованный список услуг/продуктов | offers[] | CAPTURED / DATA_GAP | Offers не извлечены → DATA_GAP critical; пустой массив [] |
 | C094 | Audiences | Нормализованный список аудиторий | audiences[] | CAPTURED / DATA_GAP / N_A | Audiences не извлечены → N_A; пустой массив [] |
 | C095 | Use cases | Нормализованный список use case | demand_situations[] | CAPTURED / DATA_GAP / N_A | Demand situations не извлечены → N_A; пустой массив [] |
 | C096 | Locations | Нормализованный список локаций | business.geography | CAPTURED / N_A | Geography не упомянута → N_A; пустой массив [] |
 | C097 | Semantic normalization | Нормализация терминов без добавления новых фактов | all sections | CAPTURED | Допустима нормализация, но не добавление фактов |
-| C098 | Meaningful inference | Фиксация существенных inferred решений в decisions[] | all sections | CAPTURED / DATA_GAP | Meaningful inference не зафиксирован → DATA_GAP minor |
+| C098 | Meaningful inference | Фиксация существенных inferred решений в decisions[] | all sections | CAPTURED / DATA_GAP | Inferred offer priority, business category/entity type или value proposition без SOURCE_INFERRED decision → DATA_GAP |
 | C099 | Trivial normalization | Не фиксировать тривиальные нормализации в decisions[] | all sections | CAPTURED | Kebab-case, singular/plural, пунктуация — не фиксировать |
 
 ---
@@ -211,3 +211,10 @@ Registry используется SiteContext Builder как каноничес�
 
 Маппинг аспектов registry в поля SiteContext contract определён в
 `contracts/site-context.schema.json` и `docs/SITE_CONTEXT_V0_1.md`.
+
+При рассмотрении любого `CONFLICT` `source_type` сам по себе не определяет
+authority. В частности, `brief` не выше `notes`. Источник выбирается только при
+явной маркировке в metadata/title/content: утверждённый, актуальный, финальный,
+официальный, заменяющий другой источник, либо черновой, устаревший, архивный,
+предварительный. Без такой маркировки конфликт остаётся `CONFLICT` и создаёт
+`DATA_GAP`.

@@ -55,7 +55,16 @@
       "type": "string",
       "minLength": 1
     },
-    "StringOrNull": {"type": ["string", "null"]},
+    "StringOrNull": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/NonEmptyString"}
+      ]
+    },
+    "OfferPriority": {
+      "type": ["string", "null"],
+      "enum": ["primary", "secondary", "supporting", null]
+    },
     "Geography": {
       "type": "array",
       "items": {"$ref": "#/$defs/NonEmptyString"},
@@ -77,9 +86,9 @@
             {"$ref": "#/$defs/NullableString"}
           ]
         },
-        "entity_type": {"$ref": "#/$defs/NonEmptyString"},
-        "category": {"$ref": "#/$defs/NonEmptyString"},
-        "summary": {"$ref": "#/$defs/NonEmptyString"},
+        "entity_type": {"$ref": "#/$defs/StringOrNull"},
+        "category": {"$ref": "#/$defs/StringOrNull"},
+        "summary": {"$ref": "#/$defs/StringOrNull"},
         "geography": {"$ref": "#/$defs/Geography"}
       }
     },
@@ -90,9 +99,9 @@
       "properties": {
         "id": {"$ref": "#/$defs/Slug"},
         "name": {"$ref": "#/$defs/NonEmptyString"},
-        "description": {"$ref": "#/$defs/NonEmptyString"},
+        "description": {"$ref": "#/$defs/StringOrNull"},
         "category": {"$ref": "#/$defs/StringOrNull"},
-        "priority": {"enum": ["primary", "secondary", "supporting"]}
+        "priority": {"$ref": "#/$defs/OfferPriority"}
       }
     },
     "Offers": {
@@ -107,7 +116,7 @@
       "properties": {
         "id": {"$ref": "#/$defs/Slug"},
         "segment": {"$ref": "#/$defs/NonEmptyString"},
-        "description": {"$ref": "#/$defs/NonEmptyString"},
+        "description": {"$ref": "#/$defs/StringOrNull"},
         "needs": {"$ref": "#/$defs/StringArray"},
         "problems": {"$ref": "#/$defs/StringArray"},
         "selection_criteria": {"$ref": "#/$defs/StringArray"}
@@ -298,8 +307,8 @@
         "locations"
       ],
       "properties": {
-        "primary_entity": {"$ref": "#/$defs/NonEmptyString"},
-        "entity_type": {"$ref": "#/$defs/NonEmptyString"},
+        "primary_entity": {"$ref": "#/$defs/StringOrNull"},
+        "entity_type": {"$ref": "#/$defs/StringOrNull"},
         "categories": {"$ref": "#/$defs/StringArray"},
         "services_or_products": {"$ref": "#/$defs/StringArray"},
         "audiences": {"$ref": "#/$defs/StringArray"},
@@ -336,10 +345,12 @@
             "demand",
             "positioning",
             "proof",
+            "objection",
             "conversion",
             "content",
             "brand",
             "constraint",
+            "semantic_identity",
             "other"
           ]
         },

@@ -1,0 +1,147 @@
+{
+  "schema_version": "0.1",
+  "context_id": "smd-montazh",
+  "business": {
+    "name": null,
+    "entity_type": null,
+    "category": null,
+    "summary": null,
+    "geography": []
+  },
+  "offers": [
+    {
+      "id": "smd-montazh",
+      "name": "SMD-монтаж",
+      "description": null,
+      "category": null,
+      "priority": null
+    }
+  ],
+  "audiences": [],
+  "demand_situations": [],
+  "positioning": {
+    "value_proposition": null,
+    "differentiators": [],
+    "alternatives": [],
+    "do_not_claim": []
+  },
+  "proof": [],
+  "objections": [],
+  "conversion": {
+    "primary_goal": null,
+    "primary_cta": null,
+    "secondary_ctas": [],
+    "contact_methods": []
+  },
+  "content": {
+    "required_messages": [],
+    "required_terms": ["SMD-монтаж"],
+    "forbidden_messages": [],
+    "faq_candidates": []
+  },
+  "brand": {
+    "desired_character": [],
+    "tone": [],
+    "avoid": [],
+    "constraints": [],
+    "existing_colors": [],
+    "existing_fonts": [],
+    "reference": null
+  },
+  "constraints": {
+    "legal": [],
+    "commercial": [],
+    "geographic": [],
+    "technical": [],
+    "content": []
+  },
+  "semantic_identity": {
+    "primary_entity": null,
+    "entity_type": null,
+    "categories": [],
+    "services_or_products": ["SMD-монтаж"],
+    "audiences": [],
+    "use_cases": [],
+    "locations": []
+  },
+  "decisions": [],
+  "data_gaps": [
+    {
+      "id": "business-entity-type",
+      "area": "business",
+      "missing": "Тип бизнес-сущности",
+      "impact": "important",
+      "question": "Что это за бизнес или организация, которая делает SMD-монтаж?"
+    },
+    {
+      "id": "business-category",
+      "area": "business",
+      "missing": "Рыночная категория бизнеса",
+      "impact": "important",
+      "question": "В какой рыночной категории работает бизнес?"
+    },
+    {
+      "id": "business-summary",
+      "area": "business",
+      "missing": "Описание бизнеса",
+      "impact": "important",
+      "question": "Как кратко описать, чем занимается бизнес кроме указанной услуги?"
+    },
+    {
+      "id": "offer-description",
+      "area": "offer",
+      "missing": "Описание SMD-монтажа как предложения",
+      "impact": "important",
+      "question": "Что именно входит в услугу SMD-монтажа?"
+    },
+    {
+      "id": "offer-priority",
+      "area": "offer",
+      "missing": "Приоритет SMD-монтажа среди предложений",
+      "impact": "minor",
+      "question": "Это основная услуга или одна из нескольких?"
+    },
+    {
+      "id": "audiences",
+      "area": "audience",
+      "missing": "Целевая аудитория",
+      "impact": "important",
+      "question": "Кому предлагается SMD-монтаж?"
+    },
+    {
+      "id": "demand-situations",
+      "area": "demand",
+      "missing": "Ситуации возникновения спроса",
+      "impact": "important",
+      "question": "В каких ситуациях клиенты обращаются за SMD-монтажом?"
+    },
+    {
+      "id": "positioning",
+      "area": "positioning",
+      "missing": "Ценностное предложение и подтверждённые отличия",
+      "impact": "important",
+      "question": "Почему клиенты выбирают этот SMD-монтаж?"
+    },
+    {
+      "id": "proof",
+      "area": "proof",
+      "missing": "Доказательства компетенции",
+      "impact": "important",
+      "question": "Какие есть кейсы, метрики, сертификаты, оборудование или процессы контроля качества?"
+    },
+    {
+      "id": "conversion",
+      "area": "conversion",
+      "missing": "Главное конверсионное действие и способы связи",
+      "impact": "important",
+      "question": "Какое действие должен совершить посетитель и как с вами связаться?"
+    },
+    {
+      "id": "semantic-entity-type",
+      "area": "semantic_identity",
+      "missing": "Канонический тип сущности",
+      "impact": "important",
+      "question": "Какой тип организации оказывает услугу SMD-монтажа?"
+    }
+  ]
+}

@@ -12,16 +12,16 @@
     {
       "id": "website-development",
       "name": "Разработка сайтов",
-      "description": "Создание сайтов для малого бизнеса для быстрого запуска онлайн-присутствия.",
+      "description": null,
       "category": null,
-      "priority": "primary"
+      "priority": null
     }
   ],
   "audiences": [
     {
       "id": "small-business",
       "segment": "Малый бизнес",
-      "description": "Компании малого бизнеса, которым нужно запуститься онлайн.",
+      "description": null,
       "needs": [],
       "problems": [],
       "selection_criteria": []
@@ -146,6 +146,20 @@
       "missing": "Детали предложения",
       "impact": "important",
       "question": "Какие типы сайтов вы создаёте (лендинги, корпоративные сайты, интернет-магазины)?"
+    },
+    {
+      "id": "offer-description",
+      "area": "offer",
+      "missing": "Описание предложения",
+      "impact": "important",
+      "question": "Как вы описываете состав и результат разработки сайтов?"
+    },
+    {
+      "id": "offer-priority",
+      "area": "offer",
+      "missing": "Приоритет предложения",
+      "impact": "minor",
+      "question": "Является ли разработка сайтов вашим основным предложением?"
     },
     {
       "id": "brand-character",

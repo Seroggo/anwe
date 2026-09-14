@@ -58,6 +58,12 @@ inference handling, conflict handling, data gap classification.
 
 Не дублируй одно и то же значение в оба поля.
 
+Если `entity_type`, `category` или достаточное описание бизнеса не известны,
+используй `null`, а не пустую строку и не generic-формулировку. Каждый
+существенный пропуск отмечай в `data_gaps[]`. Не называй бизнес по имени offer:
+`semantic_identity.primary_entity` равен `business.name`, иначе
+`business.entity_type`, иначе `null`.
+
 ---
 
 ## 2. Offer extraction
@@ -93,7 +99,13 @@ Offer — это то, что компания реально может пре�
 с primary или может быть точкой входа для другой аудитории.
 `supporting` — сопутствующее предложение, которое редко покупают отдельно.
 
-Если из входа неясно — используй `primary` для основного/единственного offer.
+Если из входа неясно — используй `null` и создай DATA_GAP. Не выбирай `primary`
+только потому, что offer единственный или кажется основным. Если priority
+логически выведен, а не назван прямо, добавь meaningful decision с
+`source_type=SOURCE_INFERRED`.
+
+Если input сообщает только название offer, его `description` должен быть `null`.
+Не сочиняй generic description.
 
 ---
 
@@ -122,6 +134,9 @@ Offer — это то, что компания реально может пре�
 - `selection_criteria[]` — по каким критериям выбирают подрядчика/продукт.
 
 Если `needs`, `problems`, `selection_criteria` неизвестны — пустые массивы `[]`.
+
+Если известен только `segment`, `description` должен быть `null`, а не
+пересказом названия сегмента.
 
 ### Когда audiences[] может быть пустым
 
@@ -562,14 +577,17 @@ Inference допустим, если:
 
 ### Примеры
 
-**Хорошо (authoritative source явен):**
-- source_1 (type=brief): «Минимальная партия 50 штук»
-- source_2 (type=notes): «Минимальная партия 10 штук»
-- Решение: использовать brief (authoritative), зафиксировать в decisions[]:
+**Хорошо (authority явно указана в metadata):**
+- source_1 (type=notes, title=«Утверждённые изменения от собственника 12.09.2026»): «Минимальная партия 50 штук»
+- source_2 (type=brief, title=«Старый бриф 2025»): «Минимальная партия 10 штук»
+- Решение: использовать source_1, зафиксировать в decisions[]:
   - field_path: `constraints.commercial[0]`
   - source_type: `SOURCE_EXPLICIT`
-  - evidence: «brief указывает минимальную партию 50 штук»
-  - reason: «brief более авторитетен, чем черновые заметки»
+  - evidence: «утверждённые изменения от собственника указывают минимальную партию 50 штук»
+  - reason: «title явно маркирует source_1 как утверждённый и актуальный, а source_2 как старый»
+
+`source_type` сам по себе authority не определяет. Нельзя автоматически считать
+`brief` выше `notes` или наоборот.
 
 **Плохо (authoritative source не определён):**
 - source_1 (type=text): «Минимальная партия 50 штук»
@@ -640,7 +658,12 @@ critical DATA_GAP для `business.entity_type` и `offers[]`.
 ### Input содержит только offer без business
 
 Если input содержит только описание offer без упоминания компании —
-построить `offers[]` и зафиксировать important DATA_GAP для `business.*`.
+построить `offers[]`, оставив неизвестные `business.entity_type`,
+`business.category`, `business.summary` и `semantic_identity.entity_type`/
+`primary_entity` равными `null`, и зафиксировать соответствующие DATA_GAP.
+
+Если input содержит только название offer, оставить `offers[0].description = null`
+и `offers[0].priority = null` с соответствующими DATA_GAP.
 
 ### Input противоречив по всем полям
 
@@ -657,10 +680,11 @@ critical DATA_GAP для `business.entity_type` и `offers[]`.
 1. Все required поля присутствуют.
 2. Все id — kebab-case slugs.
 3. Все enum — валидные значения.
-4. Нет пустых строк в NonEmptyString полях.
+4. Неизвестные nullable-поля содержат `null`, а не пустые строки или догадки.
 5. Нет дублирующихся id в offers[], audiences[], demand_situations[], proof[], objections[], data_gaps[].
 6. Нет новых top-level полей вне schema.
 7. Все audience_ids и offer_ids в demand_situations[] ссылаются на существующие id.
 8. decisions[] содержит только meaningful inference, не тривиальные нормализации.
 9. data_gaps[] содержит все critical/important gaps.
 10. do_not_claim[] содержит утверждения, которые не должны быть сгенерированы автоматически.
+11. Каждое meaningful inference (включая category, entity_type, value proposition и offer priority) имеет `SOURCE_INFERRED` decision.

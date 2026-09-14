@@ -1,0 +1,14 @@
+{
+  "sources": [
+    {
+      "source_id": "minimal-001",
+      "source_type": "text",
+      "title": null,
+      "content": "Делаем SMD-монтаж."
+    }
+  ],
+  "context_hint": {
+    "business_name": null,
+    "purpose": "website"
+  }
+}

@@ -102,6 +102,32 @@ CONFLICT          — источники противоречат друг др�
 Нельзя использовать `LLM_GUESS`, `BEST_PRACTICE`, `INDUSTRY_ASSUMPTION`
 как основание факта.
 
+Неизвестные business facts представлены `null`, а не пустой строкой и не
+сгенерированным описанием:
+
+```text
+business.entity_type = null
+business.category = null
+business.summary = null
+```
+
+Каждый существенный неизвестный факт должен иметь соответствующий `DATA_GAP`.
+Аналогично `offers[].description`, `audiences[].description` и
+`offers[].priority` могут быть `null`, если input не даёт основания их заполнить.
+Неизвестный `offer priority` не превращается автоматически в `primary`.
+
+`semantic_identity.primary_entity` вычисляется только так:
+
+```text
+business.name
+else business.entity_type
+else null
+```
+
+Название offer нельзя использовать как название business entity. Если
+`business.entity_type` неизвестен, `semantic_identity.entity_type = null` и
+создаётся соответствующий `DATA_GAP`.
+
 ## Critical input fields
 
 Skill обязан попытаться определить хотя бы минимальный набор, чтобы вернуть
@@ -135,6 +161,9 @@ Skill:
 - конфликт фиксируется в `methodology/conflict handling`;
 - в `data_gaps[]` добавляется gap с описанием противоречия;
 - если более authoritative source можно установить только из явного контекста
-  `sources[]` (например, официальный brief против черновых заметок) — он
-  используется и попадает в `decisions[]` как `SOURCE_EXPLICIT`;
+  `sources[]` (например, title/content явно говорит «утверждённый», «актуальный»,
+  «финальный», «официальный», «заменяет другой источник», либо наоборот
+  «черновик», «устаревший», «архивный», «предварительный») — он используется и
+  попадает в `decisions[]` как `SOURCE_EXPLICIT`;
+- один только `source_type` не определяет authority: `brief` не выше `notes`;
 - нельзя выдумывать source authority.
