@@ -75,7 +75,7 @@ Media slot создаётся, когда он структурно необхо
 
 ## 9. DATA_GAP And BLOCK_LIBRARY_GAP
 
-`DATA_GAP` означает, что SiteContext не даёт данных для нужной copy, proof, audience, destination или другой важной части. Создай literal structure, где это возможно, и выбери `partial` при важных gaps.
+`DATA_GAP` означает, что SiteContext не даёт данных для нужной copy, proof, audience, destination или другой важной части. Создай literal structure, где это возможно. Status всегда определяется максимальной severity: любой `critical` → `blocked`; иначе любой `important` → `partial`; только `minor` issues или отсутствие issues → `ready`.
 
 `BLOCK_LIBRARY_GAP` означает, что известная необходимая функция не выражается 11 blocks: contact form, calculator, interactive configurator, map, complex table, catalog или site-specific mechanic. Не добавляй component/registry entry и не маскируй interactive feature prose-блоком. Если gap делает сайт бессодержательным или критичная функция обязательна, выбери `blocked`.
 
@@ -92,4 +92,4 @@ Media slot создаётся, когда он структурно необхо
 5. Stats и FAQ имеют подтверждённую основу.
 6. Media and icons соблюдают Visual boundary.
 7. Все factual claims выводятся из SiteContext, required messages сохранены, forbidden claims отсутствуют.
-8. Status и issues честно отражают gaps.
+8. Status детерминированно соответствует максимальной severity issues: `critical` → `blocked`, иначе `important` → `partial`, иначе `ready`.

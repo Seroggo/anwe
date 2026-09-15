@@ -38,6 +38,10 @@ function checkMedia(fixture, media, owner, required) {
 }
 
 function checkLink(fixture, href, page, pagesByPath, owner) {
+  if (typeof href !== 'string' || !/^(?:#[a-z0-9]+(?:-[a-z0-9]+)*|\/(?:[a-z0-9]+(?:-[a-z0-9]+)*)*\/|https:\/\/[^\s]+|mailto:[^\s]+|tel:[^\s]+)$/.test(href)) {
+    fail(fixture, `${owner} uses invalid href ${String(href)}`);
+    return;
+  }
   if (href.startsWith('#')) {
     const target = href.slice(1);
     if (!target || !page.blocks.some((block) => block.id === target)) fail(fixture, `${owner} links to missing same-page anchor ${href}`);
@@ -52,6 +56,15 @@ function checkActions(fixture, actions, page, pagesByPath, owner) {
 
 for (const relPath of fixtures) {
   const model = JSON.parse(fs.readFileSync(path.join(root, relPath), 'utf8'));
+  const severities = new Set((model.issues ?? []).map((issue) => issue.severity));
+  const expectedStatus = severities.has('critical')
+    ? 'blocked'
+    : severities.has('important')
+      ? 'partial'
+      : 'ready';
+  if (model.status !== expectedStatus) {
+    fail(relPath, `status must be ${expectedStatus} for its issue severities`);
+  }
   const pageIds = new Set();
   const pagePaths = new Set();
   let homeCount = 0;

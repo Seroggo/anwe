@@ -22,13 +22,14 @@
     "StringOrNull": {"type": ["string", "null"]},
     "Slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
     "Path": {"type": "string", "pattern": "^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$"},
+    "Href": {"type": "string", "oneOf": [{"pattern": "^#[a-z0-9]+(?:-[a-z0-9]+)*$"}, {"pattern": "^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$"}, {"pattern": "^https://[^\\s]+$"}, {"pattern": "^mailto:[^\\s]+$"}, {"pattern": "^tel:[^\\s]+$"}]},
     "Action": {
       "type": "object",
       "additionalProperties": false,
       "required": ["label", "href", "style"],
       "properties": {
         "label": {"$ref": "#/$defs/NonEmptyString"},
-        "href": {"type": "string", "minLength": 1, "not": {"const": "#"}},
+        "href": {"$ref": "#/$defs/Href"},
         "style": {"enum": ["primary", "secondary", "text"]}
       }
     },
@@ -48,7 +49,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["label", "href"],
-      "properties": {"label": {"$ref": "#/$defs/NonEmptyString"}, "href": {"type": "string", "minLength": 1, "not": {"const": "#"}}}
+      "properties": {"label": {"$ref": "#/$defs/NonEmptyString"}, "href": {"$ref": "#/$defs/Href"}}
     },
     "HeaderContent": {
       "type": "object", "additionalProperties": false, "required": ["brand", "nav", "actions"],

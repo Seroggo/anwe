@@ -29,7 +29,7 @@ Visual Skill: какие визуалы и иконки нужны
 
 `site_id` — stable kebab-case; по умолчанию равен `SiteContext.context_id`. `source_context_id` всегда равен `SiteContext.context_id`. `title` берётся из `business.name`, затем `business.entity_type`, затем `offers[0].name`; новый бренд не придумывается. `description` — краткое фактическое описание или `null`.
 
-Статусы: `ready` означает отсутствие critical issues; `partial` — сайт честно рендерится при отсутствии важных данных; `blocked` — нельзя построить содержательный правдивый сайт либо критичная механика не выражается библиотекой.
+Статус детерминированно следует максимальной severity из `issues[]`: хотя бы один `critical` требует `blocked`; при отсутствии `critical`, но наличии `important` требуется `partial`; только `minor` issues или пустой `issues[]` требуют `ready`.
 
 ## Pages And Blocks
 
@@ -63,7 +63,7 @@ Copy может быть переформулирован и организов�
 
 ## Actions, Media And Visuals
 
-Action состоит из `label`, `href`, `style`, где style: `primary`, `secondary` или `text`. Разрешены только существующий anchor на той же странице, существующий internal page path, либо подтверждённые SiteContext exact `https`, `mailto:` или `tel:` destination. `#` и придуманные контакты запрещены. Header содержит максимум одну primary action.
+Action состоит из `label`, `href`, `style`, где style: `primary`, `secondary` или `text`. Contract допускает только `#existing-anchor`, `/existing-page/`, `https://...`, `mailto:...` или `tel:...`; произвольные strings и неизвестные URI schemes запрещены. Semantic validation проверяет target internal links, а provenance external destination остаётся обязанностью skill. `#` и придуманные контакты запрещены. Header содержит максимум одну primary action.
 
 На raw output `site.model.build` media placeholder имеет строго:
 

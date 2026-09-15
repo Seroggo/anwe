@@ -117,6 +117,6 @@
 | M090 | Schema conformance | RESOLVED before output |
 | M091 | Unique page ids and paths | RESOLVED before output |
 | M092 | Unique page block ids | RESOLVED before output |
-| M093 | Status matches issue severity | ready, partial or blocked honestly selected |
+| M093 | Status matches issue severity | any critical → blocked; otherwise any important → partial; only minor or no issues → ready |
 | M094 | Meaningful structural decisions only | Omit CSS-like details |
 | M095 | Final factual self-check | Remove any untraceable claim |
