@@ -16,7 +16,7 @@ const surfaceClass = `surface--${block.surface}`;
 const variantClass = `hero--${block.variant}`;
 ---
 
-<section class:list={['block', 'block--hero', surfaceClass, 'hero', variantClass]}>
+<section id={block.id} class:list={['block', 'block--hero', surfaceClass, 'hero', variantClass]}>
   <div class="hero__copy">
     {content.eyebrow && <p class="eyebrow">{asString(content.eyebrow)}</p>}
     <h1>{asString(content.title)}</h1>

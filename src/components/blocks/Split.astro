@@ -17,7 +17,7 @@ const surfaceClass = `surface--${block.surface}`;
 const variantClass = `split-block--${block.variant}`;
 ---
 
-<section class:list={['block', 'block--split', surfaceClass, 'split-block', variantClass]}>
+<section id={block.id} class:list={['block', 'block--split', surfaceClass, 'split-block', variantClass]}>
   {media && <MediaFrame media={media} class="split-block__media" label="Визуальный placeholder" />}
   <div class="split-block__copy">
     {content.eyebrow && <p class="eyebrow">{asString(content.eyebrow)}</p>}

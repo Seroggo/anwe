@@ -18,7 +18,7 @@ const surfaceClass = `surface--${block.surface}`;
 const variantClass = `site-header--${block.variant}`;
 ---
 
-<header class:list={['block', 'block--header', surfaceClass, 'site-header', variantClass]}>
+<header id={block.id} class:list={['block', 'block--header', surfaceClass, 'site-header', variantClass]}>
   {brand && (
     <a class="site-header__brand" href="#top" aria-label={brandAriaLabel}>
       {brandMark && <span class="brand-mark" aria-hidden="true">{brandMark}</span>}

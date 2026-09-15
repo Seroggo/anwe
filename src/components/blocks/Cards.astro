@@ -34,7 +34,7 @@ const surfaceClass = `surface--${block.surface}`;
 const variantClass = `cards-block--${block.variant}`;
 ---
 
-<section class:list={['block', 'block--cards', surfaceClass, 'cards-block', variantClass]}>
+<section id={block.id} class:list={['block', 'block--cards', surfaceClass, 'cards-block', variantClass]}>
   <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
   <div class="cards-block__list" style={cardColumnsStyle}>
     {cardViews.map((card) => (

@@ -1,0 +1,20 @@
+---
+import siteModel from '../../../sites/smd/SITE_MODEL.json';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import BlockRenderer from '../../renderer/BlockRenderer.astro';
+import type { PageFixture } from '../../renderer/types';
+
+const homePage = siteModel.pages.find((page) => page.id === 'home');
+
+if (!homePage) {
+  throw new Error('SMD SiteModel does not contain the required home page.');
+}
+
+const page = homePage as PageFixture;
+---
+
+<SiteLayout title={page.title} description={page.description}>
+  <main id="top">
+    {page.blocks.map((block) => <BlockRenderer block={block} />)}
+  </main>
+</SiteLayout>

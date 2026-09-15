@@ -14,7 +14,7 @@ const surfaceClass = `surface--${block.surface}`;
 const variantClass = `faq-block--${block.variant}`;
 ---
 
-<section class:list={['block', 'block--faq', surfaceClass, 'faq-block', variantClass]}>
+<section id={block.id} class:list={['block', 'block--faq', surfaceClass, 'faq-block', variantClass]}>
   <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
   <div class="faq-block__list">
     {items.map((item, index) => <details class="faq-item" open={index === 0}><summary><span>{asString(item.question)}</span><span class="faq-item__icon" aria-hidden="true">+</span></summary><p>{asString(item.answer)}</p></details>)}

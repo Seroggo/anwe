@@ -16,7 +16,7 @@ const surfaceClass = `surface--${block.surface}`;
 const variantClass = `text-block--${block.variant}`;
 ---
 
-<section class:list={['block', 'block--text', surfaceClass, 'text-block', variantClass]}>
+<section id={block.id} class:list={['block', 'block--text', surfaceClass, 'text-block', variantClass]}>
   <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
   <div class="text-block__body">
     {paragraphs.map((paragraph) => <p>{paragraph}</p>)}

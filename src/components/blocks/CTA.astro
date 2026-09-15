@@ -16,7 +16,7 @@ const surfaceClass = `surface--${block.surface}`;
 const variantClass = `cta-block--${block.variant}`;
 ---
 
-<section class:list={['block', 'block--cta', surfaceClass, 'cta-block', variantClass]}>
+<section id={block.id} class:list={['block', 'block--cta', surfaceClass, 'cta-block', variantClass]}>
   <div class="cta-block__copy">
     {content.eyebrow && <p class="eyebrow">{asString(content.eyebrow)}</p>}
     <h2>{asString(content.title)}</h2>

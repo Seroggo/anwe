@@ -15,7 +15,7 @@ const surfaceClass = `surface--${block.surface}`;
 const variantClass = `steps-block--${block.variant}`;
 ---
 
-<section class:list={['block', 'block--steps', surfaceClass, 'steps-block', variantClass]}>
+<section id={block.id} class:list={['block', 'block--steps', surfaceClass, 'steps-block', variantClass]}>
   <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
   <ol class="steps-block__list">
     {items.map((item, index) => <li class="step"><span class="step__number">{String(index + 1).padStart(2, '0')}</span><div>{asString(item.icon) && <Icon name={asString(item.icon)} class="step__icon" size={24} />}<h3>{asString(item.title)}</h3><p>{asString(item.body)}</p></div></li>)}

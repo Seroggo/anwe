@@ -21,7 +21,7 @@ const surfaceClass = `surface--${block.surface}`;
 const variantClass = `gallery-block--${block.variant}`;
 ---
 
-<section class:list={['block', 'block--gallery', surfaceClass, 'gallery-block', variantClass]}>
+<section id={block.id} class:list={['block', 'block--gallery', surfaceClass, 'gallery-block', variantClass]}>
   <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
   <div class="gallery-block__list">
     {galleryViews.map((gItem) => (
