@@ -80,6 +80,10 @@
 | M053 | External destination provenance | Exact SiteContext destination only |
 | M054 | No fake `#` or invented contacts | DATA_GAP when destination missing |
 | M055 | CTA conversion handling | Action only when honest |
+| M056 | Form shell for lead conversion | RESOLVED when CTA contains form for lead/quote/contact goal |
+| M057 | Form transport unwired | RESOLVED when transport_status: unwired on raw output |
+| M058 | Form field uniqueness | RESOLVED when field names unique within form |
+| M059 | Form minimum requirements | At least one field and non-empty submit_label |
 
 ## Proof / FAQ (M060–M069)
 
@@ -89,6 +93,12 @@
 | M061 | Numeric proof discipline | No decorative metrics |
 | M062 | Objection response fidelity | Use supported_response only |
 | M063 | Generated visual not used as proof | RESOLVED by separating visual placeholder from evidence |
+| M064 | Contacts block production shell | RESOLVED when contacts present for commercial site |
+| M065 | Contact placeholder vs confirmed | Use canonical placeholders when real data unavailable |
+| M066 | Phone placeholder canonical | +7 (000) 000-00-00 with status: placeholder |
+| M067 | Email placeholder canonical | example@mail.test with status: placeholder |
+| M068 | Legal data null when unknown | No fake INN/OGRN; null if unavailable |
+| M069 | Messenger confirmed only | Real URLs only; empty array when unknown |
 
 ## Media / Visual Boundary (M070–M079)
 
@@ -105,10 +115,15 @@
 
 | ID | Check | Status guide |
 | --- | --- | --- |
-| M080 | Only 11 registered block types | BLOCK_LIBRARY_GAP for unmet mechanic |
+| M080 | Only 12 registered block types | BLOCK_LIBRARY_GAP for unmet mechanic |
 | M081 | Only existing variants | Never invent variant |
 | M082 | Semantic surfaces only | No color/design assumptions |
 | M083 | Missing interactive mechanic surfaced | BLOCK_LIBRARY_GAP, not custom component |
+| M084 | Contacts block for commercial site | RESOLVED when present with valid placeholders or confirmed data |
+| M085 | Form shell for lead conversion | RESOLVED when CTA contains valid form for lead/quote/contact goal |
+| M086 | Contacts placeholder structure | RESOLVED when placeholders use canonical values and status |
+| M087 | Form transport boundary | RESOLVED when raw form has transport_status: unwired |
+| M088 | Unique form field names | RESOLVED when field names unique within form |
 
 ## Validation / Traceability (M090–M099)
 

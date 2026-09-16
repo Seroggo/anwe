@@ -6,7 +6,8 @@ const root = path.resolve(process.cwd());
 // Discover test fixtures
 const fixtures = [
   'tests/fixtures/site-model/fixture-a-output.json',
-  'tests/fixtures/site-model/fixture-c-output.json'
+  'tests/fixtures/site-model/fixture-c-output.json',
+  'tests/fixtures/site-model/fixture-production-shell.json'
 ];
 
 // Discover production SITE_MODEL.json files
@@ -34,10 +35,14 @@ const variants = {
   gallery: new Set(['grid', 'featured']),
   faq: new Set(['stacked']),
   cta: new Set(['centered', 'split']),
+  contacts: new Set(['default']),
   footer: new Set(['simple', 'columns'])
 };
 const surfaces = new Set(['default', 'muted', 'accent', 'inverse']);
 const aspects = new Set(['4:3', '1:1', '3:4']);
+const contactStatuses = new Set(['confirmed', 'placeholder']);
+const formFieldTypes = new Set(['text', 'email', 'tel', 'textarea']);
+const transportStatuses = new Set(['unwired', 'wired']);
 let failed = false;
 
 function fail(fixture, message) {
@@ -75,6 +80,85 @@ function checkLink(fixture, href, page, pagesByPath, owner) {
 function checkActions(fixture, actions, page, pagesByPath, owner) {
   for (const action of actions ?? []) checkLink(fixture, action.href, page, pagesByPath, owner);
 }
+
+function checkContactInfo(fixture, contactInfo, fieldName, owner) {
+  if (!contactInfo) return;
+  if (!contactInfo.value || typeof contactInfo.value !== 'string') {
+    fail(fixture, `${owner} ${fieldName}.value must be non-empty string`);
+  }
+  if (!contactInfo.href || typeof contactInfo.href !== 'string') {
+    fail(fixture, `${owner} ${fieldName}.href must be non-empty string`);
+  }
+  if (!contactInfo.status || !contactStatuses.has(contactInfo.status)) {
+    fail(fixture, `${owner} ${fieldName}.status must be 'confirmed' or 'placeholder'`);
+  }
+  // Check canonical placeholder values
+  if (contactInfo.status === 'placeholder') {
+    if (fieldName === 'phone') {
+      if (contactInfo.value !== '+7 (000) 000-00-00') {
+        fail(fixture, `${owner} phone placeholder must use canonical value '+7 (000) 000-00-00'`);
+      }
+      if (contactInfo.href !== 'tel:+70000000000') {
+        fail(fixture, `${owner} phone placeholder href must be 'tel:+70000000000'`);
+      }
+    }
+    if (fieldName === 'email') {
+      if (contactInfo.value !== 'example@mail.test') {
+        fail(fixture, `${owner} email placeholder must use canonical value 'example@mail.test'`);
+      }
+      if (contactInfo.href !== 'mailto:example@mail.test') {
+        fail(fixture, `${owner} email placeholder href must be 'mailto:example@mail.test'`);
+      }
+    }
+  }
+}
+
+function checkForm(fixture, form, owner) {
+  if (!form) return;
+  
+  if (!form.id || typeof form.id !== 'string') {
+    fail(fixture, `${owner} form.id must be non-empty string`);
+  }
+  
+  if (!form.transport_status || !transportStatuses.has(form.transport_status)) {
+    fail(fixture, `${owner} form.transport_status must be 'unwired' or 'wired'`);
+  }
+  
+  if (!Array.isArray(form.fields) || form.fields.length === 0) {
+    fail(fixture, `${owner} form must have at least one field`);
+  }
+  
+  if (!form.submit_label || typeof form.submit_label !== 'string' || form.submit_label.trim() === '') {
+    fail(fixture, `${owner} form.submit_label must be non-empty string`);
+  }
+  
+  // Check field uniqueness and validity
+  const fieldNames = new Set();
+  for (const [index, field] of (form.fields ?? []).entries()) {
+    if (!field.name || typeof field.name !== 'string') {
+      fail(fixture, `${owner} form field ${index} must have non-empty name`);
+      continue;
+    }
+    
+    if (fieldNames.has(field.name)) {
+      fail(fixture, `${owner} form has duplicate field name '${field.name}'`);
+    }
+    fieldNames.add(field.name);
+    
+    if (!field.type || !formFieldTypes.has(field.type)) {
+      fail(fixture, `${owner} form field '${field.name}' has invalid type '${field.type}' (allowed: text, email, tel, textarea)`);
+    }
+    
+    if (!field.label || typeof field.label !== 'string') {
+      fail(fixture, `${owner} form field '${field.name}' must have non-empty label`);
+    }
+    
+    if (typeof field.required !== 'boolean') {
+      fail(fixture, `${owner} form field '${field.name}' must have boolean required`);
+    }
+  }
+}
+
 
 for (const relPath of fixtures) {
   const model = JSON.parse(fs.readFileSync(path.join(root, relPath), 'utf8'));
@@ -143,6 +227,27 @@ for (const relPath of fixtures) {
       if (block.type === 'cta') {
         checkMedia(relPath, content.media, `cta ${block.id}`, block.variant === 'split');
         if (block.variant === 'centered' && content.media !== null) fail(relPath, `centered cta ${block.id} must have media:null`);
+        checkForm(relPath, content.form, `cta ${block.id}`);
+      }
+      if (block.type === 'contacts') {
+        checkContactInfo(relPath, content.phone, 'phone', `contacts ${block.id}`);
+        checkContactInfo(relPath, content.email, 'email', `contacts ${block.id}`);
+        // Check messengers
+        for (const [index, messenger] of (content.messengers ?? []).entries()) {
+          if (!messenger.label || typeof messenger.label !== 'string') {
+            fail(relPath, `contacts ${block.id} messenger ${index} must have non-empty label`);
+          }
+          if (!messenger.href || typeof messenger.href !== 'string') {
+            fail(relPath, `contacts ${block.id} messenger ${index} must have non-empty href`);
+          }
+          if (messenger.status && !contactStatuses.has(messenger.status)) {
+            fail(relPath, `contacts ${block.id} messenger ${index} status must be 'confirmed' or 'placeholder'`);
+          }
+        }
+        // Legal can be null or object with nullable fields - just check structure if present
+        if (content.legal && typeof content.legal !== 'object') {
+          fail(relPath, `contacts ${block.id} legal must be object or null`);
+        }
       }
       if (block.type === 'gallery') {
         for (const [index, item] of (content.items ?? []).entries()) checkMedia(relPath, item.media, `gallery ${block.id} item ${index}`, true);

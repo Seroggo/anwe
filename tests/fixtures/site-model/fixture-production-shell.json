@@ -1,0 +1,163 @@
+{
+  "schema_version": "0.1",
+  "site_id": "production-shell-test",
+  "source_context_id": "production-shell-context",
+  "title": "Production Shell Test Site",
+  "description": "Synthetic fixture demonstrating contacts placeholder and form shell",
+  "status": "partial",
+  "pages": [
+    {
+      "id": "home",
+      "path": "/",
+      "title": "Production Shell Test",
+      "description": "Test page for contacts and form validation",
+      "blocks": [
+        {
+          "id": "hero",
+          "type": "hero",
+          "variant": "centered",
+          "surface": "inverse",
+          "content": {
+            "eyebrow": "Test Site",
+            "title": "Production Shell Capabilities",
+            "body": "Demonstrating contacts placeholder and form shell structure.",
+            "actions": [
+              {
+                "label": "Request Quote",
+                "href": "#request",
+                "style": "primary"
+              }
+            ],
+            "note": null,
+            "media": null
+          }
+        },
+        {
+          "id": "request",
+          "type": "cta",
+          "variant": "centered",
+          "surface": "accent",
+          "content": {
+            "eyebrow": "Get Started",
+            "title": "Request a Quote",
+            "body": "Fill out the form and we'll get back to you.",
+            "form": {
+              "id": "quote-request",
+              "transport_status": "unwired",
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "text",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "autocomplete": "name"
+                },
+                {
+                  "name": "company",
+                  "type": "text",
+                  "label": "Company",
+                  "placeholder": "Your Company",
+                  "required": false,
+                  "autocomplete": "organization"
+                },
+                {
+                  "name": "email",
+                  "type": "email",
+                  "label": "Email",
+                  "placeholder": "john@example.com",
+                  "required": true,
+                  "autocomplete": "email"
+                },
+                {
+                  "name": "phone",
+                  "type": "tel",
+                  "label": "Phone",
+                  "placeholder": "+1 234 567-8900",
+                  "required": false,
+                  "autocomplete": "tel"
+                },
+                {
+                  "name": "message",
+                  "type": "textarea",
+                  "label": "Project Details",
+                  "placeholder": "Describe your project requirements",
+                  "required": false,
+                  "autocomplete": null
+                }
+              ],
+              "submit_label": "Submit Quote Request"
+            },
+            "actions": [],
+            "media": null
+          }
+        },
+        {
+          "id": "contacts",
+          "type": "contacts",
+          "variant": "default",
+          "surface": "default",
+          "content": {
+            "title": "Contact Information",
+            "phone": {
+              "value": "+7 (000) 000-00-00",
+              "href": "tel:+70000000000",
+              "status": "placeholder"
+            },
+            "email": {
+              "value": "example@mail.test",
+              "href": "mailto:example@mail.test",
+              "status": "placeholder"
+            },
+            "address": null,
+            "messengers": [],
+            "legal": {
+              "name": null,
+              "inn": null,
+              "ogrn": null
+            }
+          }
+        },
+        {
+          "id": "footer",
+          "type": "footer",
+          "variant": "simple",
+          "surface": "inverse",
+          "content": {
+            "brand": "Production Shell Test",
+            "description": "Synthetic fixture for production shell validation",
+            "columns": [],
+            "note": "ANWE SiteModel v0.1",
+            "actions": []
+          }
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "production-shell-demo",
+      "decision": "Include contacts and form shell with placeholders",
+      "reason": "Demonstrating production shell capabilities for validation testing",
+      "context_refs": ["contacts placeholder", "form unwired transport"]
+    }
+  ],
+  "issues": [
+    {
+      "id": "contact-data-gap",
+      "type": "DATA_GAP",
+      "severity": "important",
+      "message": "Real contact data unavailable; using canonical placeholders",
+      "context_ref": "contacts",
+      "page_id": "home"
+    },
+    {
+      "id": "form-transport-gap",
+      "type": "DATA_GAP",
+      "severity": "important",
+      "message": "Form transport/destination unavailable; form shell created with unwired status",
+      "context_ref": "request form",
+      "page_id": "home"
+    }
+  ]
+}

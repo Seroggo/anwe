@@ -51,13 +51,14 @@ Visual Skill: какие визуалы и иконки нужны
 | `gallery` | `grid`, `featured` |
 | `faq` | `stacked` |
 | `cta` | `centered`, `split` |
+| `contacts` | `default` |
 | `footer` | `simple`, `columns` |
 
 `cards.content.columns` задаёт от 1 до 4 колонок, но не является variant. Допустимые semantic surfaces: `default`, `muted`, `accent`, `inverse`. Они выражают смысловой уровень акцента, а не цвет.
 
 ## Boundaries
 
-SiteModel использует только приведённые block types. Semantic roles переводятся в generic blocks: offers — `cards`/`split`, process — `steps`, numeric proof — `stats`, FAQ — `faq`, conversion — `cta`. Новый component или site-specific block не создаётся. Если нужная механика требует формы, калькулятора, карты, каталога или другого отсутствующего интерактива, фиксируется `BLOCK_LIBRARY_GAP`.
+SiteModel использует только приведённые block types. Semantic roles переводятся в generic blocks: offers — `cards`/`split`, process — `steps`, numeric proof — `stats`, FAQ — `faq`, conversion — `cta`, public contacts — `contacts`. Новый component или site-specific block не создаётся. Если нужная механика требует калькулятора, карты, каталога или другого отсутствующего интерактива, фиксируется `BLOCK_LIBRARY_GAP`.
 
 Copy может быть переформулирован и организован, но каждый фактический claim должен выводиться из SiteContext. Нельзя добавлять преимущества, цифры, гарантии, клиентов, сертификаты, географию, сроки или capabilities. `positioning.do_not_claim`, `content.forbidden_messages` и `constraints` имеют приоритет. Все существенные `content.required_messages` должны быть представлены на релевантных pages; `required_terms` используются только по смыслу.
 
@@ -78,3 +79,88 @@ Action состоит из `label`, `href`, `style`, где style: `primary`, `s
 `decisions[]` фиксирует только meaningful structural choices: отдельную page, сохранение offer на home, выбор Stats вместо Cards, отказ от Gallery или осмысленный media split.
 
 `issues[]` имеет `type` (`DATA_GAP` или `BLOCK_LIBRARY_GAP`), `severity` (`critical`, `important`, `minor`), message, context reference и page reference. Неизвестные business data не заполняются отраслевым знанием: вместо этого строится буквальная структура и добавляется `DATA_GAP`.
+
+## Contacts Block
+
+`contacts` block описывает public contact information с поддержкой structural placeholders для production shell.
+
+Минимальная структура:
+
+```json
+{
+  "id": "contacts",
+  "type": "contacts",
+  "variant": "default",
+  "surface": "default",
+  "content": {
+    "title": "Контакты",
+    "phone": {
+      "value": "+7 (000) 000-00-00",
+      "href": "tel:+70000000000",
+      "status": "placeholder"
+    },
+    "email": {
+      "value": "example@mail.test",
+      "href": "mailto:example@mail.test",
+      "status": "placeholder"
+    },
+    "address": null,
+    "messengers": [],
+    "legal": {
+      "name": null,
+      "inn": null,
+      "ogrn": null
+    }
+  }
+}
+```
+
+Phone и email имеют `status`: `confirmed` (real value from SiteContext) или `placeholder` (scaffold). Canonical placeholder values: `+7 (000) 000-00-00` для phone, `example@mail.test` для email. Unknown address остаётся `null`; fake placeholder address не создаётся. Legal INN/OGRN неизвестны → `null`; fake values запрещены.
+
+Messengers array содержит confirmed external messenger links. Placeholder messenger URL не создаётся.
+
+Для commercial site builder создаёт Contacts scaffold по умолчанию даже при отсутствии real contact data; отсутствие данных фиксируется `DATA_GAP`, а не удалением block.
+
+## CTA Form Shell
+
+CTA может содержать optional `form` для lead/quote/consultation conversion. Form либо `null`, либо valid shell:
+
+```json
+{
+  "form": {
+    "id": "request",
+    "transport_status": "unwired",
+    "fields": [
+      {
+        "name": "name",
+        "type": "text",
+        "label": "Имя",
+        "placeholder": "Иван",
+        "required": true,
+        "autocomplete": "name"
+      },
+      {
+        "name": "contact",
+        "type": "text",
+        "label": "Телефон или email",
+        "placeholder": "+7 900 000-00-00 или name@company.ru",
+        "required": true,
+        "autocomplete": null
+      },
+      {
+        "name": "message",
+        "type": "textarea",
+        "label": "Сообщение",
+        "placeholder": "Опишите задачу",
+        "required": false,
+        "autocomplete": null
+      }
+    ],
+    "submit_label": "Отправить"
+  }
+}
+```
+
+Supported field types: `text`, `email`, `tel`, `textarea`. Raw SiteModel form всегда имеет `transport_status: "unwired"`; backend подключается на QA/Final Assembly stage. Field names должны быть unique внутри form. Form обязательно содержит минимум одно field и non-empty `submit_label`.
+
+Если conversion goal связан с получением lead/quote/contact/request, builder создаёт form shell независимо от наличия backend/destination; отсутствие transport фиксируется `DATA_GAP`, а не удалением form UI.

@@ -39,6 +39,7 @@
 | real visual portfolio or visual narrative | `gallery` |
 | supported objections and answers | `faq` |
 | known conversion purpose | `cta` |
+| public contact information | `contacts` |
 | navigation | `header`, `footer` |
 
 Не создавай `services`, `features`, `cases`, `contact`, `pricing` или другой semantic component type. Это роли content, а не renderer components.
@@ -61,9 +62,36 @@ Copy можно сокращать, объединять, переформули
 
 ## 7. Conversion And Navigation
 
-CTA полезен, только когда известна conversion purpose. Action создаётся только с реальным destination: existing same-page anchor, existing internal page, exact `https`, `mailto:` или `tel:` из SiteContext. Известный goal без destination означает CTA без action и `DATA_GAP`, не `href: "#"`.
+CTA полезен, только когда известна conversion purpose. Если conversion связан с lead, quote, consultation, contact или request, создай form shell внутри CTA независимо от наличия backend/destination. Form всегда имеет `transport_status: "unwired"` на raw output; backend подключается на QA stage. Если conversion informational/outbound, `form` остаётся `null`.
+
+Action создаётся только с реальным destination: existing same-page anchor, existing internal page, exact `https`, `mailto:` или `tel:` из SiteContext. Известный goal без destination означает CTA с form shell без action и `DATA_GAP`, не `href: "#"` или fake action.
 
 Header и footer связывают только existing blocks/pages. Header содержит не более одной action. Anchor никогда не пересекает pages: `#proof` должен существовать на той же page.
+
+## 7a. Contacts Production Shell
+
+Для обычного commercial/business site создавай `contacts` block по умолчанию. Если real contact data неизвестны, используй structural placeholders:
+
+- phone: `{"value": "+7 (000) 000-00-00", "href": "tel:+70000000000", "status": "placeholder"}`
+- email: `{"value": "example@mail.test", "href": "mailto:example@mail.test", "status": "placeholder"}`
+- address: `null` если неизвестен (не создавай fake address)
+- legal INN/OGRN: `null` если неизвестны (не создавай fake numbers)
+- messengers: `[]` если неизвестны (не создавай placeholder URLs)
+
+Если real values подтверждены в SiteContext, используй их с `status: "confirmed"`. Отсутствие real data фиксируется `DATA_GAP` important, но не удаляет Contacts block. Contacts обычно располагается перед Footer.
+
+## 7b. Form Shell Structure
+
+Form требует минимум одно field и non-empty `submit_label`. Supported field types: `text`, `email`, `tel`, `textarea`. Field names должны быть unique. Типичный lead form:
+
+```text
+name (text, required)
+company (text, optional) — для B2B
+contact (text/email/tel, required)
+message (textarea, optional)
+```
+
+Не создавай select, checkbox, radio, file upload, date picker, multi-step или conditional fields без явной задачи. Отсутствие form destination/transport фиксируется `DATA_GAP` important, но не удаляет form shell.
 
 ## 8. Media, Icons, Variants And Surfaces
 
@@ -75,9 +103,9 @@ Media slot создаётся, когда он структурно необхо
 
 ## 9. DATA_GAP And BLOCK_LIBRARY_GAP
 
-`DATA_GAP` означает, что SiteContext не даёт данных для нужной copy, proof, audience, destination или другой важной части. Создай literal structure, где это возможно. Status всегда определяется максимальной severity: любой `critical` → `blocked`; иначе любой `important` → `partial`; только `minor` issues или отсутствие issues → `ready`.
+`DATA_GAP` означает, что SiteContext не даёт данных для нужной copy, proof, audience, destination или другой важной части. Создай literal structure с placeholders, где это допустимо (contacts, form shell). Status всегда определяется максимальной severity: любой `critical` → `blocked`; иначе любой `important` → `partial`; только `minor` issues или отсутствие issues → `ready`.
 
-`BLOCK_LIBRARY_GAP` означает, что известная необходимая функция не выражается 11 blocks: contact form, calculator, interactive configurator, map, complex table, catalog или site-specific mechanic. Не добавляй component/registry entry и не маскируй interactive feature prose-блоком. Если gap делает сайт бессодержательным или критичная функция обязательна, выбери `blocked`.
+`BLOCK_LIBRARY_GAP` означает, что известная необходимая функция не выражается 12 blocks: calculator, interactive configurator, map, complex table, catalog или site-specific mechanic. Не добавляй component/registry entry и не маскируй interactive feature prose-блоком. Если gap делает сайт бессодержательным или критичная функция обязательна, выбери `blocked`.
 
 ## 10. Duplicate Prevention And Final Validation
 
