@@ -5,12 +5,19 @@ const root = path.resolve(process.cwd());
 const fixturesRoot = path.join(root, 'tests', 'fixtures');
 const matrixPath = path.join(fixturesRoot, 'demo-matrix.json');
 const matrix = JSON.parse(fs.readFileSync(matrixPath, 'utf8'));
+
+let failed = false;
+
+function fail(message) {
+  failed = true;
+  console.error(`BLOCK FIXTURE ERROR: ${message}`);
+}
+
 const pagesByLayout = new Map();
 for (const layout of matrix.layouts ?? []) {
   const fixturePath = path.join(fixturesRoot, 'pages', `${layout.fixture}.json`);
   if (!fs.existsSync(fixturePath)) {
-    failed = true;
-    console.error(`BLOCK FIXTURE ERROR: missing page fixture ${layout.fixture}`);
+    fail(`missing page fixture ${layout.fixture}`);
     continue;
   }
   pagesByLayout.set(layout.id, JSON.parse(fs.readFileSync(fixturePath, 'utf8')));
@@ -36,12 +43,6 @@ const requiredOrders = {
   b: ['header', 'hero', 'stats', 'text', 'gallery', 'cards', 'split', 'cta', 'footer'],
   c: ['header', 'hero', 'stats', 'split', 'cards', 'steps', 'gallery', 'faq', 'cta', 'footer']
 };
-let failed = false;
-
-function fail(message) {
-  failed = true;
-  console.error(`BLOCK FIXTURE ERROR: ${message}`);
-}
 
 if (!Array.isArray(matrix.layouts) || matrix.layouts.length !== 3) {
   fail('demo-matrix.json must define exactly three layouts');
@@ -87,26 +88,39 @@ for (const theme of matrix.themes ?? []) {
 const combinations = matrix.layouts.flatMap((layout) => matrix.themes.map((theme) => `${layout.id}/${theme}`));
 if (combinations.length !== 9) fail(`expected 9 layout/theme combinations, found ${combinations.length}`);
 
+function validateHref(href, owner, blockIds) {
+  if (typeof href === 'string' && href.startsWith('#')) {
+    const target = href.slice(1);
+    if (target !== 'top' && !blockIds.has(target)) {
+      fail(`${owner} links to missing anchor ${href}`);
+    }
+  }
+}
+
 function validateActions(value, owner, blockIds) {
   if (!value || typeof value !== 'object') return;
+  
+  // Validate action structure (label, href, style)
   if (Array.isArray(value.actions)) {
     for (const action of value.actions) {
       if (!action.label || !action.href || !allowedActionStyles.has(action.style)) {
         fail(`invalid action in ${owner}`);
       }
-      // Validate internal anchors reference existing blocks or #top
-      if (typeof action.href === 'string' && action.href.startsWith('#')) {
-        const target = action.href.slice(1);
-        if (target !== 'top' && !blockIds.has(target)) {
-          fail(`${owner} links to missing anchor ${action.href}`);
-        }
-      }
+      validateHref(action.href, owner, blockIds);
     }
   }
+  
+  // Recursively validate all href in nested objects
   for (const nested of Object.values(value)) {
     if (Array.isArray(nested)) {
-      for (const item of nested) validateActions(item, owner, blockIds);
+      for (const item of nested) {
+        if (item && typeof item === 'object') {
+          if (item.href) validateHref(item.href, owner, blockIds);
+          validateActions(item, owner, blockIds);
+        }
+      }
     } else if (nested && typeof nested === 'object') {
+      if (nested.href) validateHref(nested.href, owner, blockIds);
       validateActions(nested, owner, blockIds);
     }
   }
