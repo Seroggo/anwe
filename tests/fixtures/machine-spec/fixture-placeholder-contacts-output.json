@@ -1,0 +1,67 @@
+{
+  "schema_version": "0.1",
+  "machine_id": "placeholder-contacts-demo-machine",
+  "site_id": "placeholder-contacts-demo",
+  "source_context_id": "placeholder-contacts-demo",
+  "source_model_id": "placeholder-contacts-demo",
+  "status": "partial",
+  "primary_entity": {
+    "id": "organization",
+    "schema_type": "Organization",
+    "name": "Placeholder Demo Co",
+    "description": "Demo company с неподтверждёнными контактами для проверки placeholder exclusion.",
+    "home_path": "/",
+    "contacts": {
+      "phone": null,
+      "email": null
+    },
+    "context_refs": ["business.name", "business.summary", "semantic_identity.primary_entity"]
+  },
+  "services": [],
+  "pages": [
+    {
+      "page_id": "home",
+      "path": "/",
+      "semantic_role": "home",
+      "meta": {
+        "title": "Placeholder Demo Co",
+        "description": "Demo company page."
+      },
+      "canonical": {"path": "/"},
+      "robots": {"index": true, "follow": true},
+      "open_graph": {
+        "type": "website",
+        "title": "Placeholder Demo Co",
+        "description": "Demo company page."
+      },
+      "breadcrumbs": [],
+      "primary_entity_id": "organization",
+      "service_ids": [],
+      "sitemap": true
+    }
+  ],
+  "decisions": [
+    {
+      "id": "placeholder-contacts-excluded",
+      "decision": "Оставить primary_entity.contacts phone/email null.",
+      "reason": "SiteModel contacts имеют status placeholder; placeholder значения никогда не попадают как factual machine contacts.",
+      "context_refs": ["data_gaps.contacts", "pages.home.contacts"]
+    },
+    {
+      "id": "no-service-from-demo",
+      "decision": "Не создавать Service.",
+      "reason": "Единственный offer demo-service не имеет самостоятельной коммерческой сущности для machine representation в demo-сценарии.",
+      "context_refs": ["offers.demo-service"]
+    }
+  ],
+  "issues": [
+    {
+      "id": "confirmed-contacts-gap",
+      "type": "DATA_GAP",
+      "severity": "important",
+      "message": "SiteModel содержит только placeholder контакты; primary_entity.contacts остались null для machine factual representation.",
+      "context_ref": "data_gaps.contacts",
+      "page_id": "home"
+    }
+  ]
+}

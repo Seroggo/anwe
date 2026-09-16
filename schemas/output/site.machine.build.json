@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anwe.dev/schemas/output/site.machine.build.json",
+  "title": "site.machine.build output",
+  "description": "The site.machine.build output is a canonical MachineSpec JSON without duplicated contract definitions.",
+  "$ref": "https://anwe.dev/contracts/machine-spec.schema.json"
+}

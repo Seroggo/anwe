@@ -1,0 +1,101 @@
+{
+  "site_context": {
+    "schema_version": "0.1",
+    "context_id": "placeholder-contacts-demo",
+    "business": {
+      "name": "Placeholder Demo Co",
+      "entity_type": "service company",
+      "category": "demo services",
+      "summary": "Demo company с неподтверждёнными контактами для проверки placeholder exclusion.",
+      "geography": []
+    },
+    "offers": [
+      {
+        "id": "demo-service",
+        "name": "Demo Service",
+        "description": "Демонстрационная услуга.",
+        "category": "demo",
+        "priority": "primary"
+      }
+    ],
+    "audiences": [],
+    "demand_situations": [],
+    "positioning": {
+      "value_proposition": "Demo service.",
+      "differentiators": [],
+      "alternatives": [],
+      "do_not_claim": []
+    },
+    "proof": [],
+    "objections": [],
+    "conversion": {
+      "primary_goal": "Запрос",
+      "primary_cta": {"label": "Запросить", "action": "Отправить запрос"},
+      "secondary_ctas": [],
+      "contact_methods": []
+    },
+    "content": {
+      "required_messages": [],
+      "required_terms": [],
+      "forbidden_messages": [],
+      "faq_candidates": []
+    },
+    "brand": {
+      "desired_character": [],
+      "tone": [],
+      "avoid": [],
+      "constraints": [],
+      "existing_colors": [],
+      "existing_fonts": [],
+      "reference": null
+    },
+    "constraints": {
+      "legal": [],
+      "commercial": [],
+      "geographic": [],
+      "technical": [],
+      "content": []
+    },
+    "semantic_identity": {
+      "primary_entity": "Placeholder Demo Co",
+      "entity_type": "service company",
+      "categories": ["demo services"],
+      "services_or_products": ["Demo Service"],
+      "audiences": [],
+      "use_cases": [],
+      "locations": []
+    },
+    "decisions": [],
+    "data_gaps": [
+      {"id": "contacts", "area": "business", "missing": "Подтверждённые контакты", "impact": "important", "question": "Какие контакты использовать?"}
+    ]
+  },
+  "site_model": {
+    "schema_version": "0.1",
+    "site_id": "placeholder-contacts-demo",
+    "source_context_id": "placeholder-contacts-demo",
+    "title": "Placeholder Demo Co",
+    "description": "Demo company для проверки placeholder exclusion.",
+    "status": "partial",
+    "pages": [
+      {
+        "id": "home",
+        "path": "/",
+        "title": "Placeholder Demo Co",
+        "description": "Demo page.",
+        "blocks": [
+          {"id": "header", "type": "header", "variant": "default", "surface": "default", "content": {"brand": "Placeholder Demo Co", "nav": [], "actions": []}},
+          {"id": "hero", "type": "hero", "variant": "centered", "surface": "default", "content": {"eyebrow": null, "title": "Placeholder Demo Co", "body": "Demo page.", "actions": [], "note": null, "media": null}},
+          {"id": "contacts", "type": "contacts", "variant": "default", "surface": "default", "content": {"title": "Контакты", "phone": {"value": "+7 (000) 000-00-00", "href": "tel:+70000000000", "status": "placeholder"}, "email": {"value": "example@mail.test", "href": "mailto:example@mail.test", "status": "placeholder"}, "address": null, "messengers": [], "legal": {"name": null, "inn": null, "ogrn": null}}},
+          {"id": "footer", "type": "footer", "variant": "simple", "surface": "default", "content": {"brand": "Placeholder Demo Co", "description": null, "columns": [], "note": null, "actions": []}}
+        ]
+      }
+    ],
+    "decisions": [
+      {"id": "placeholder-contacts-scaffold", "decision": "Сохранить contacts scaffold с placeholder значениями.", "reason": "Подтверждённых контактов нет; scaffold нужен review UI.", "context_refs": ["data_gaps.contacts"]}
+    ],
+    "issues": [
+      {"id": "contact-data-gap", "type": "DATA_GAP", "severity": "important", "message": "Real contact data unavailable; using canonical placeholders.", "context_ref": "contacts", "page_id": "home"}
+    ]
+  }
+}

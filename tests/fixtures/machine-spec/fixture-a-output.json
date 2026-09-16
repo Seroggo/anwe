@@ -1,0 +1,88 @@
+{
+  "schema_version": "0.1",
+  "machine_id": "techassembly-machine",
+  "site_id": "techassembly",
+  "source_context_id": "techassembly",
+  "source_model_id": "techassembly",
+  "status": "partial",
+  "primary_entity": {
+    "id": "organization",
+    "schema_type": "Organization",
+    "name": "TechAssembly",
+    "description": "Контрактное производство электроники, специализирующееся на SMD-монтаже печатных плат для малых серий от 10 штук без setup fee.",
+    "home_path": "/",
+    "contacts": {
+      "phone": null,
+      "email": null
+    },
+    "context_refs": ["business.name", "business.summary", "semantic_identity.primary_entity"]
+  },
+  "services": [
+    {
+      "id": "smd-assembly",
+      "name": "SMD-монтаж печатных плат",
+      "description": "Автоматический поверхностный монтаж компонентов на печатные платы с AOI-контролем на каждом этапе; запуск производства малых серий от 10 штук без setup fee.",
+      "provider_entity_id": "organization",
+      "page_ids": ["home"],
+      "context_refs": ["offers.smd-assembly"]
+    }
+  ],
+  "pages": [
+    {
+      "page_id": "home",
+      "path": "/",
+      "semantic_role": "home",
+      "meta": {
+        "title": "SMD-монтаж печатных плат для малых серий — TechAssembly",
+        "description": "Контрактное производство электроники: SMD-монтаж печатных плат от 10 штук без setup fee с AOI-контролем на каждом этапе."
+      },
+      "canonical": {"path": "/"},
+      "robots": {"index": true, "follow": true},
+      "open_graph": {
+        "type": "website",
+        "title": "SMD-монтаж печатных плат для малых серий — TechAssembly",
+        "description": "Контрактное производство электроники: SMD-монтаж печатных плат от 10 штук без setup fee с AOI-контролем на каждом этапе."
+      },
+      "breadcrumbs": [],
+      "primary_entity_id": "organization",
+      "service_ids": ["smd-assembly"],
+      "sitemap": true
+    }
+  ],
+  "decisions": [
+    {
+      "id": "organization-generic-schema-type",
+      "decision": "Использовать schema_type Organization без ложной precision.",
+      "reason": "Бизнес существует как компания, но подтверждённого subtype LocalBusiness/ProfessionalService без публичной локации и специализированной сервисной модели недостаточно.",
+      "context_refs": ["business.entity_type", "semantic_identity.entity_type"]
+    },
+    {
+      "id": "single-service-from-primary-offer",
+      "decision": "Создать один Service из основного offer smd-assembly.",
+      "reason": "Единственный подтверждённый коммерческий offer; cards/stats/FAQ не являются самостоятельными услугами.",
+      "context_refs": ["offers.smd-assembly"]
+    },
+    {
+      "id": "contacts-null-no-confirmed",
+      "decision": "Оставить primary_entity.contacts phone/email null.",
+      "reason": "SiteModel не содержит contacts block с confirmed данными; placeholder значения не попадают как factual.",
+      "context_refs": ["conversion.contact_methods", "data_gaps"]
+    },
+    {
+      "id": "home-empty-breadcrumbs",
+      "decision": "Home page имеет пустые breadcrumbs.",
+      "reason": "Корневая страница не имеет родительских страниц в SiteModel.",
+      "context_refs": ["pages.home"]
+    }
+  ],
+  "issues": [
+    {
+      "id": "confirmed-contacts-gap",
+      "type": "DATA_GAP",
+      "severity": "important",
+      "message": "SiteModel не содержит confirmed контактов; primary_entity.contacts остались null для machine factual representation.",
+      "context_ref": "conversion.contact_methods",
+      "page_id": "home"
+    }
+  ]
+}

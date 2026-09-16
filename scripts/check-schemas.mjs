@@ -12,7 +12,10 @@ const schemas = [
   { name: 'site.context.build input', path: 'schemas/input/site.context.build.json' },
   { name: 'site.context.build output', path: 'schemas/output/site.context.build.json' },
   { name: 'site.model.build input', path: 'schemas/input/site.model.build.json' },
-  { name: 'site.model.build output', path: 'schemas/output/site.model.build.json' }
+  { name: 'site.model.build output', path: 'schemas/output/site.model.build.json' },
+  { name: 'machine-spec contract', path: 'contracts/machine-spec.schema.json' },
+  { name: 'site.machine.build input', path: 'schemas/input/site.machine.build.json' },
+  { name: 'site.machine.build output', path: 'schemas/output/site.machine.build.json' }
 ];
 
 const fixtures = [
@@ -28,7 +31,13 @@ const fixtures = [
   { name: 'fixture C SiteModel input', schemaPath: 'schemas/input/site.model.build.json', dataPath: 'tests/fixtures/site-context/fixture-c-output.json' },
   { name: 'fixture A SiteModel output', schemaPath: 'schemas/output/site.model.build.json', dataPath: 'tests/fixtures/site-model/fixture-a-output.json' },
   { name: 'fixture C SiteModel output', schemaPath: 'schemas/output/site.model.build.json', dataPath: 'tests/fixtures/site-model/fixture-c-output.json' },
-  { name: 'production-shell SiteModel output', schemaPath: 'schemas/output/site.model.build.json', dataPath: 'tests/fixtures/site-model/fixture-production-shell.json' }
+  { name: 'production-shell SiteModel output', schemaPath: 'schemas/output/site.model.build.json', dataPath: 'tests/fixtures/site-model/fixture-production-shell.json' },
+  { name: 'fixture A MachineSpec input', schemaPath: 'schemas/input/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-a-input.json' },
+  { name: 'fixture confirmed-contacts MachineSpec input', schemaPath: 'schemas/input/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-confirmed-contacts-input.json' },
+  { name: 'fixture placeholder-contacts MachineSpec input', schemaPath: 'schemas/input/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-placeholder-contacts-input.json' },
+  { name: 'fixture A MachineSpec output', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-a-output.json' },
+  { name: 'fixture confirmed-contacts MachineSpec output', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-confirmed-contacts-output.json' },
+  { name: 'fixture placeholder-contacts MachineSpec output', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json' }
 ];
 
 const outputFixtures = new Map([
@@ -37,7 +46,10 @@ const outputFixtures = new Map([
   ['tests/fixtures/site-context/fixture-c-output.json', 'contracts/site-context.schema.json'],
   ['tests/fixtures/site-context/fixture-d-output.json', 'contracts/site-context.schema.json'],
   ['tests/fixtures/site-model/fixture-a-output.json', 'contracts/site-model.schema.json'],
-  ['tests/fixtures/site-model/fixture-c-output.json', 'contracts/site-model.schema.json']
+  ['tests/fixtures/site-model/fixture-c-output.json', 'contracts/site-model.schema.json'],
+  ['tests/fixtures/machine-spec/fixture-a-output.json', 'contracts/machine-spec.schema.json'],
+  ['tests/fixtures/machine-spec/fixture-confirmed-contacts-output.json', 'contracts/machine-spec.schema.json'],
+  ['tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json', 'contracts/machine-spec.schema.json']
 ]);
 
 let failed = false;
@@ -47,7 +59,7 @@ for (const { path: relPath } of schemas) {
 }
 
 // Register canonical contracts first so wrappers can use their canonical $id refs.
-for (const relPath of ['contracts/site-context.schema.json', 'contracts/site-model.schema.json']) {
+for (const relPath of ['contracts/site-context.schema.json', 'contracts/site-model.schema.json', 'contracts/machine-spec.schema.json']) {
   ajv.addSchema(rawSchemas.get(relPath));
 }
 
@@ -104,6 +116,7 @@ if (fs.existsSync(sitesDir)) {
   for (const siteId of siteIds) {
     const contextPath = path.join('sites', siteId, 'SITE_CONTEXT.json');
     const modelPath = path.join('sites', siteId, 'SITE_MODEL.json');
+    const machinePath = path.join('sites', siteId, 'MACHINE_SPEC.json');
 
     if (fs.existsSync(path.join(root, contextPath))) {
       productionArtifacts.push({ name: `${siteId} SITE_CONTEXT`, dataPath: contextPath, contractPath: 'contracts/site-context.schema.json' });
@@ -111,6 +124,10 @@ if (fs.existsSync(sitesDir)) {
 
     if (fs.existsSync(path.join(root, modelPath))) {
       productionArtifacts.push({ name: `${siteId} SITE_MODEL`, dataPath: modelPath, contractPath: 'contracts/site-model.schema.json' });
+    }
+
+    if (fs.existsSync(path.join(root, machinePath))) {
+      productionArtifacts.push({ name: `${siteId} MACHINE_SPEC`, dataPath: machinePath, contractPath: 'contracts/machine-spec.schema.json' });
     }
   }
 }

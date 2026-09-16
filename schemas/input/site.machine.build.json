@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anwe.dev/schemas/input/site.machine.build.json",
+  "title": "site.machine.build input",
+  "description": "The site.machine.build input is a wrapper holding a canonical SiteContext and SiteModel pair. Cross-document identity (site_model.source_context_id == site_context.context_id) is enforced by the semantic validator, not by JSON Schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["site_context", "site_model"],
+  "properties": {
+    "site_context": {"$ref": "https://anwe.dev/contracts/site-context.schema.json"},
+    "site_model": {"$ref": "https://anwe.dev/contracts/site-model.schema.json"}
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "site_context": {
+    "schema_version": "0.1",
+    "context_id": "techassembly",
+    "business": {
+      "name": "TechAssembly",
+      "entity_type": "contract electronics manufacturer",
+      "category": "SMD PCB assembly",
+      "summary": "Contract manufacturer электроники, специализирующийся на SMD-монтаже печатных плат для электронных компаний. Работает с малыми сериями от 10 штук без setup fee.",
+      "geography": ["Московская область"]
+    },
+    "offers": [
+      {
+        "id": "smd-assembly",
+        "name": "SMD-монтаж печатных плат",
+        "description": "Автоматический поверхностный монтаж компонентов на печатные платы с AOI-контролем на каждом этапе. Запуск производства малых серий от 10 штук без setup fee.",
+        "category": "PCB assembly",
+        "priority": "primary"
+      }
+    ],
+    "audiences": [
+      {
+        "id": "hardware-startups",
+        "segment": "Hardware-стартапы",
+        "description": "Компании, которые запускают новый электронный продукт и нуждаются в производстве первой небольшой партии для тестирования рынка.",
+        "needs": ["Производство малых серий", "Быстрый запуск производства", "Низкий порог входа"],
+        "problems": ["Крупные производители требуют минимум 500–1000 штук", "Высокие setup fee для малых партий"],
+        "selection_criteria": ["Минимальная партия", "Качество монтажа", "Наличие контроля качества"]
+      }
+    ],
+    "demand_situations": [
+      {
+        "id": "mvp-production",
+        "trigger": "Стартап разработал прототип электроники и нужно произвести первую небольшую партию для тестирования рынка",
+        "job": "Найти подрядчика для мелкосерийного производства PCB с SMD-монтажом без высоких минимальных партий",
+        "audience_ids": ["hardware-startups"],
+        "offer_ids": ["smd-assembly"]
+      }
+    ],
+    "positioning": {
+      "value_proposition": "Запускаем производство малых серий электроники от 10 штук без setup fee, что критично для стартапов на этапе MVP",
+      "differentiators": [
+        "Запуск производства от 10 штук без минимальной партии и setup fee",
+        "AOI-контроль на каждом этапе производства"
+      ],
+      "alternatives": ["Крупные contract manufacturers с высокими минимальными партиями"],
+      "do_not_claim": ["Производство медицинских изделий (нет специальной сертификации)"]
+    },
+    "proof": [
+      {"id": "aoi-equipment", "type": "asset", "claim": "Автоматический оптический контроль на каждом этапе", "evidence": "Установка AOI Mirtec MV-7Xi", "source_ref": "brief-001"},
+      {"id": "smd-line", "type": "asset", "claim": "Автоматическая линия SMD-монтажа", "evidence": "Juki RS-1", "source_ref": "brief-001"},
+      {"id": "reflow-oven", "type": "asset", "claim": "Печь оплавления с контролируемой атмосферой", "evidence": "Печь оплавления с контролируемой атмосферой", "source_ref": "brief-001"},
+      {"id": "iso-9001", "type": "certification", "claim": "Сертификация системы менеджмента качества", "evidence": "ISO 9001:2015", "source_ref": "brief-001"},
+      {"id": "minimum-batch", "type": "process", "claim": "Производство малых серий без setup fee", "evidence": "Запуск от 10 штук без setup fee", "source_ref": "brief-001"}
+    ],
+    "objections": [
+      {"id": "minimum-order-concern", "objection": "Боимся, что минимальная партия слишком большая для нас", "supported_response": "Запускаем производство от 10 штук без setup fee"},
+      {"id": "quality-concern", "objection": "Сомневаемся в качестве мелких производителей", "supported_response": "AOI-контроль на каждом этапе производства, сертификация ISO 9001:2015"}
+    ],
+    "conversion": {
+      "primary_goal": "Запрос расчёта стоимости производства",
+      "primary_cta": {"label": "Запросить расчёт", "action": "Отправить запрос на расчёт стоимости производства"},
+      "secondary_ctas": [],
+      "contact_methods": ["телефон", "email", "форма обратной связи"]
+    },
+    "content": {
+      "required_messages": ["Запускаем производство малых серий от 10 штук без setup fee", "AOI-контроль на каждом этапе производства"],
+      "required_terms": ["SMD-монтаж", "AOI-контроль", "печатная плата", "PCB"],
+      "forbidden_messages": ["Производство медицинских изделий"],
+      "faq_candidates": []
+    },
+    "brand": {
+      "desired_character": [],
+      "tone": [],
+      "avoid": [],
+      "constraints": [],
+      "existing_colors": [],
+      "existing_fonts": [],
+      "reference": null
+    },
+    "constraints": {
+      "legal": ["Не производим медицинские изделия (нет специальной сертификации)"],
+      "commercial": ["Минимальная партия от 10 штук"],
+      "geographic": ["Производство в Московской области"],
+      "technical": [],
+      "content": []
+    },
+    "semantic_identity": {
+      "primary_entity": "TechAssembly",
+      "entity_type": "contract electronics manufacturer",
+      "categories": ["SMD PCB assembly", "electronic manufacturing services", "contract manufacturing"],
+      "services_or_products": ["SMD-монтаж печатных плат", "PCB assembly", "малосерийное производство электроники"],
+      "audiences": ["hardware-стартапы", "электронные компании"],
+      "use_cases": ["мелкосерийное производство PCB", "производство первой партии для MVP"],
+      "locations": ["Московская область"]
+    },
+    "decisions": [
+      {
+        "field_path": "positioning.value_proposition",
+        "source_type": "SOURCE_INFERRED",
+        "evidence": "Запуск от 10 штук без setup fee, что критично для стартапов на этапе MVP",
+        "reason": "Нормализация ключевого ценностного предложения из описания главного отличия и типичной ситуации"
+      }
+    ],
+    "data_gaps": [
+      {"id": "brand-visual-character", "area": "brand", "missing": "Желаемый визуальный характер сайта", "impact": "minor", "question": "Какой визуальный характер должен быть у сайта?"},
+      {"id": "secondary-offers", "area": "offer", "missing": "Дополнительные услуги помимо SMD-монтажа", "impact": "minor", "question": "Предлагаете ли вы дополнительные услуги?"}
+    ]
+  },
+  "site_model": {
+    "schema_version": "0.1",
+    "site_id": "techassembly",
+    "source_context_id": "techassembly",
+    "title": "TechAssembly",
+    "description": "Контрактное производство электроники со специализацией на SMD-монтаже печатных плат.",
+    "status": "partial",
+    "pages": [
+      {
+        "id": "home",
+        "path": "/",
+        "title": "SMD-монтаж печатных плат для малых серий",
+        "description": "SMD-монтаж печатных плат от 10 штук без setup fee.",
+        "blocks": [
+          {"id": "header", "type": "header", "variant": "default", "surface": "default", "content": {"brand": "TechAssembly", "nav": [{"label": "Услуга", "href": "#smd-montazh"}, {"label": "Контроль", "href": "#quality-control"}, {"label": "Вопросы", "href": "#faq"}], "actions": []}},
+          {"id": "hero", "type": "hero", "variant": "centered", "surface": "inverse", "content": {"eyebrow": "TechAssembly", "title": "SMD-монтаж печатных плат для малых серий", "body": "Запускаем производство малых серий электроники от 10 штук без setup fee.", "actions": [], "note": null, "media": null}},
+          {"id": "smd-montazh", "type": "text", "variant": "narrow", "surface": "default", "content": {"eyebrow": "Услуга", "title": "SMD-монтаж PCB для первой малой серии", "lead": "Для hardware-стартапов, которым нужна первая небольшая партия электронного продукта для тестирования рынка.", "paragraphs": ["TechAssembly выполняет автоматический поверхностный монтаж компонентов на печатные платы.", "Минимальный запуск производства составляет 10 штук без setup fee."], "actions": []}},
+          {"id": "quality-control", "type": "cards", "variant": "grid", "surface": "muted", "content": {"eyebrow": "Контроль и производство", "title": "Подтверждённые возможности производства", "lead": null, "columns": 3, "items": [{"eyebrow": null, "title": "AOI-контроль", "body": "Автоматический оптический контроль на каждом этапе производства.", "media": null, "icon": null, "actions": []}, {"eyebrow": null, "title": "Автоматическая линия SMD-монтажа", "body": "Линия Juki RS-1.", "media": null, "icon": null, "actions": []}, {"eyebrow": null, "title": "Система менеджмента качества", "body": "Сертификация ISO 9001:2015.", "media": null, "icon": null, "actions": []}], "actions": []}},
+          {"id": "minimum-batch", "type": "stats", "variant": "inline", "surface": "accent", "content": {"eyebrow": "Минимальная партия", "title": "Запуск от 10 штук", "lead": "Без setup fee.", "items": [{"value": "10", "label": "штук", "note": "минимальный запуск производства"}]}},
+          {"id": "faq", "type": "faq", "variant": "stacked", "surface": "default", "content": {"eyebrow": "Вопросы", "title": "Уточнения перед запуском", "lead": null, "items": [{"question": "Подойдёт ли производство для небольшой первой партии?", "answer": "Производство запускается от 10 штук без setup fee."}, {"question": "Как подтверждается контроль качества?", "answer": "На каждом этапе производства выполняется AOI-контроль; система менеджмента качества сертифицирована по ISO 9001:2015."}]}},
+          {"id": "contact", "type": "cta", "variant": "centered", "surface": "inverse", "content": {"eyebrow": "Расчёт производства", "title": "Запросить расчёт стоимости производства", "body": null, "actions": [], "media": null}},
+          {"id": "footer", "type": "footer", "variant": "simple", "surface": "inverse", "content": {"brand": "TechAssembly", "description": "Контрактное производство электроники в Московской области.", "columns": [], "note": null, "actions": []}}
+        ]
+      }
+    ],
+    "decisions": [
+      {"id": "single-page-offer", "decision": "Оставить единственное предложение и связанную ситуацию спроса на home page.", "reason": "В контексте есть один offer; отдельных данных для неповторяющейся дополнительной страницы недостаточно.", "context_refs": ["offers.smd-assembly", "demand_situations.mvp-production"]},
+      {"id": "use-stats-for-minimum-batch", "decision": "Показать минимальную партию блоком Stats.", "reason": "Число 10 является подтверждённым коммерческим фактом.", "context_refs": ["proof.minimum-batch", "constraints.commercial"]}
+    ],
+    "issues": [
+      {"id": "cta-destination", "type": "DATA_GAP", "severity": "important", "message": "Известна цель запроса расчёта, но SiteContext не содержит точного destination для действия.", "context_ref": "conversion.primary_cta", "page_id": "home"}
+    ]
+  }
+}

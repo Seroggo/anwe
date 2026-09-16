@@ -1,0 +1,127 @@
+{
+  "site_context": {
+    "schema_version": "0.1",
+    "context_id": "confirmed-contacts-demo",
+    "business": {
+      "name": "Example Service Co",
+      "entity_type": "professional service company",
+      "category": "professional consulting",
+      "summary": "Example Service Co оказывает профессиональные консультационные услуги для B2B клиентов.",
+      "geography": ["Москва"]
+    },
+    "offers": [
+      {
+        "id": "consulting",
+        "name": "Профессиональная консультация",
+        "description": "Оказание профессиональных консультационных услуг по проекту заказчика.",
+        "category": "consulting",
+        "priority": "primary"
+      }
+    ],
+    "audiences": [
+      {
+        "id": "b2b-clients",
+        "segment": "B2B клиенты",
+        "description": "Компании, которым нужны профессиональные консультации.",
+        "needs": ["Профессиональная консультация"],
+        "problems": ["Нет внутренней экспертизы"],
+        "selection_criteria": ["Подтверждённая экспертиза"]
+      }
+    ],
+    "demand_situations": [
+      {
+        "id": "project-consulting",
+        "trigger": "Компании нужна профессиональная консультация по проекту",
+        "job": "Получить профессиональную консультацию",
+        "audience_ids": ["b2b-clients"],
+        "offer_ids": ["consulting"]
+      }
+    ],
+    "positioning": {
+      "value_proposition": "Профессиональные консультации для B2B клиентов.",
+      "differentiators": ["Подтверждённая экспертиза"],
+      "alternatives": ["Другие консультанты"],
+      "do_not_claim": []
+    },
+    "proof": [
+      {"id": "expertise", "type": "experience", "claim": "Подтверждённая экспертиза", "evidence": "Опыт проектов", "source_ref": "brief-001"}
+    ],
+    "objections": [],
+    "conversion": {
+      "primary_goal": "Запрос консультации",
+      "primary_cta": {"label": "Запросить консультацию", "action": "Отправить запрос на консультацию"},
+      "secondary_ctas": [],
+      "contact_methods": ["телефон", "email"]
+    },
+    "content": {
+      "required_messages": ["Профессиональные консультации для B2B"],
+      "required_terms": ["консультация"],
+      "forbidden_messages": [],
+      "faq_candidates": []
+    },
+    "brand": {
+      "desired_character": [],
+      "tone": [],
+      "avoid": [],
+      "constraints": [],
+      "existing_colors": [],
+      "existing_fonts": [],
+      "reference": null
+    },
+    "constraints": {
+      "legal": [],
+      "commercial": [],
+      "geographic": ["Работа в Москве"],
+      "technical": [],
+      "content": []
+    },
+    "semantic_identity": {
+      "primary_entity": "Example Service Co",
+      "entity_type": "professional service company",
+      "categories": ["professional consulting"],
+      "services_or_products": ["Профессиональная консультация"],
+      "audiences": ["B2B клиенты"],
+      "use_cases": ["проектная консультация"],
+      "locations": ["Москва"]
+    },
+    "decisions": [],
+    "data_gaps": []
+  },
+  "site_model": {
+    "schema_version": "0.1",
+    "site_id": "confirmed-contacts-demo",
+    "source_context_id": "confirmed-contacts-demo",
+    "title": "Example Service Co",
+    "description": "Профессиональные консультационные услуги для B2B клиентов.",
+    "status": "ready",
+    "pages": [
+      {
+        "id": "home",
+        "path": "/",
+        "title": "Профессиональные консультации для B2B",
+        "description": "Example Service Co оказывает профессиональные консультационные услуги.",
+        "blocks": [
+          {"id": "header", "type": "header", "variant": "default", "surface": "default", "content": {"brand": "Example Service Co", "nav": [{"label": "Услуга", "href": "/services/consulting/"}], "actions": []}},
+          {"id": "hero", "type": "hero", "variant": "centered", "surface": "inverse", "content": {"eyebrow": "Example Service Co", "title": "Профессиональные консультации для B2B", "body": "Оказываем профессиональные консультационные услуги.", "actions": [], "note": null, "media": null}},
+          {"id": "footer", "type": "footer", "variant": "simple", "surface": "inverse", "content": {"brand": "Example Service Co", "description": "Профессиональные консультационные услуги.", "columns": [], "note": null, "actions": []}}
+        ]
+      },
+      {
+        "id": "services-consulting",
+        "path": "/services/consulting/",
+        "title": "Профессиональная консультация",
+        "description": "Описание услуги профессиональной консультации.",
+        "blocks": [
+          {"id": "header", "type": "header", "variant": "default", "surface": "default", "content": {"brand": "Example Service Co", "nav": [{"label": "Услуга", "href": "/services/consulting/"}], "actions": []}},
+          {"id": "hero", "type": "hero", "variant": "centered", "surface": "inverse", "content": {"eyebrow": "Услуга", "title": "Профессиональная консультация", "body": "Оказание профессиональных консультационных услуг по проекту заказчика.", "actions": [], "note": null, "media": null}},
+          {"id": "contacts", "type": "contacts", "variant": "default", "surface": "default", "content": {"title": "Контакты", "phone": {"value": "+7 495 123-45-67", "href": "tel:+74951234567", "status": "confirmed"}, "email": {"value": "hello@example-service.test", "href": "mailto:hello@example-service.test", "status": "confirmed"}, "address": null, "messengers": [], "legal": {"name": null, "inn": null, "ogrn": null}}},
+          {"id": "footer", "type": "footer", "variant": "simple", "surface": "inverse", "content": {"brand": "Example Service Co", "description": "Профессиональные консультационные услуги.", "columns": [], "note": null, "actions": []}}
+        ]
+      }
+    ],
+    "decisions": [
+      {"id": "two-pages", "decision": "Создать home и отдельную страницу услуги.", "reason": "Услуга имеет самостоятельный предмет и поддержана hero.", "context_refs": ["offers.consulting"]}
+    ],
+    "issues": []
+  }
+}
