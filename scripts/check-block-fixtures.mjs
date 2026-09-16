@@ -9,6 +9,7 @@ const pagesByLayout = new Map();
 for (const layout of matrix.layouts ?? []) {
   const fixturePath = path.join(fixturesRoot, 'pages', `${layout.fixture}.json`);
   if (!fs.existsSync(fixturePath)) {
+    failed = true;
     console.error(`BLOCK FIXTURE ERROR: missing page fixture ${layout.fixture}`);
     continue;
   }
@@ -72,7 +73,10 @@ for (const matrixLayout of matrix.layouts ?? []) {
     if (!allowedTypes.has(block.type)) fail(`layout ${layout.id} uses unknown block type ${block.type}`);
     if (!block.variant) fail(`block ${block.id} is missing a structural variant`);
     if (!allowedSurfaces.has(block.surface)) fail(`block ${block.id} uses unknown surface ${block.surface}`);
-    validateActions(block.content, block.id);
+  }
+  // Validate actions after all block IDs are collected
+  for (const block of layout.blocks) {
+    validateActions(block.content, block.id, ids);
   }
 }
 
@@ -83,20 +87,27 @@ for (const theme of matrix.themes ?? []) {
 const combinations = matrix.layouts.flatMap((layout) => matrix.themes.map((theme) => `${layout.id}/${theme}`));
 if (combinations.length !== 9) fail(`expected 9 layout/theme combinations, found ${combinations.length}`);
 
-function validateActions(value, owner) {
+function validateActions(value, owner, blockIds) {
   if (!value || typeof value !== 'object') return;
   if (Array.isArray(value.actions)) {
     for (const action of value.actions) {
       if (!action.label || !action.href || !allowedActionStyles.has(action.style)) {
         fail(`invalid action in ${owner}`);
       }
+      // Validate internal anchors reference existing blocks or #top
+      if (typeof action.href === 'string' && action.href.startsWith('#')) {
+        const target = action.href.slice(1);
+        if (target !== 'top' && !blockIds.has(target)) {
+          fail(`${owner} links to missing anchor ${action.href}`);
+        }
+      }
     }
   }
   for (const nested of Object.values(value)) {
     if (Array.isArray(nested)) {
-      for (const item of nested) validateActions(item, owner);
+      for (const item of nested) validateActions(item, owner, blockIds);
     } else if (nested && typeof nested === 'object') {
-      validateActions(nested, owner);
+      validateActions(nested, owner, blockIds);
     }
   }
 }

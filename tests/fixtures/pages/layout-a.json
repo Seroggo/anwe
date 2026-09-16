@@ -11,11 +11,11 @@
       "content": {
         "brand": "Красивые ноготочки",
         "nav": [
-          { "label": "Услуги", "href": "#services" },
-          { "label": "Работы", "href": "#gallery" },
-          { "label": "Как записаться", "href": "#steps" }
+          { "label": "Услуги", "href": "#a-cards" },
+          { "label": "Работы", "href": "#a-gallery" },
+          { "label": "Как записаться", "href": "#a-steps" }
         ],
-        "actions": [{ "label": "Записаться", "href": "#contact", "style": "primary" }]
+        "actions": [{ "label": "Записаться", "href": "#a-cta", "style": "primary" }]
       }
     },
     {
@@ -28,8 +28,8 @@
         "title": "Маникюр, который остаётся с вами",
         "body": "Спокойное пространство для аккуратного ухода, нового цвета и маленьких ритуалов, которые делают день лучше.",
         "actions": [
-          { "label": "Выбрать время", "href": "#contact", "style": "primary" },
-          { "label": "Посмотреть работы", "href": "#gallery", "style": "text" }
+          { "label": "Выбрать время", "href": "#a-cta", "style": "primary" },
+          { "label": "Посмотреть работы", "href": "#a-gallery", "style": "text" }
         ],
         "note": "Синтетический контент · layout A",
         "media": { "src": null, "alt": "", "aspect": "4:5", "fit": "cover" }
@@ -126,7 +126,7 @@
         "eyebrow": "Ваш следующий цвет",
         "title": "Оставьте место для маленькой радости",
         "body": "Выберите услугу и удобный день — дальше мы всё уточним лично.",
-        "actions": [{ "label": "Записаться в студию", "href": "#contact", "style": "primary" }]
+        "actions": [{ "label": "Записаться в студию", "href": "#a-cta", "style": "primary" }]
       }
     },
     {
@@ -138,7 +138,7 @@
         "brand": "Красивые ноготочки",
         "description": "Синтетический fixture для проверки сборки страницы из reusable blocks.",
         "note": "ANWE Block Library Alpha",
-        "actions": [{ "label": "Написать студии", "href": "#contact", "style": "secondary" }]
+        "actions": [{ "label": "Написать студии", "href": "#a-cta", "style": "secondary" }]
       }
     }
   ]

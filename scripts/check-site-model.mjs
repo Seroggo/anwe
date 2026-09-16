@@ -2,10 +2,27 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = path.resolve(process.cwd());
+
+// Discover test fixtures
 const fixtures = [
   'tests/fixtures/site-model/fixture-a-output.json',
   'tests/fixtures/site-model/fixture-c-output.json'
 ];
+
+// Discover production SITE_MODEL.json files
+const sitesDir = path.join(root, 'sites');
+if (fs.existsSync(sitesDir)) {
+  const siteIds = fs.readdirSync(sitesDir, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name);
+
+  for (const siteId of siteIds) {
+    const modelPath = path.join('sites', siteId, 'SITE_MODEL.json');
+    if (fs.existsSync(path.join(root, modelPath))) {
+      fixtures.push(modelPath);
+    }
+  }
+}
 const variants = {
   header: new Set(['default', 'transparent']),
   hero: new Set(['centered', 'split']),
@@ -38,13 +55,18 @@ function checkMedia(fixture, media, owner, required) {
 }
 
 function checkLink(fixture, href, page, pagesByPath, owner) {
-  if (typeof href !== 'string' || !/^(?:#[a-z0-9]+(?:-[a-z0-9]+)*|\/(?:[a-z0-9]+(?:-[a-z0-9]+)*)*\/|https:\/\/[^\s]+|mailto:[^\s]+|tel:[^\s]+)$/.test(href)) {
+  // Path pattern matches the contract: ^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$
+  // This allows: /, /services/, /services/assembly/
+  if (typeof href !== 'string' || !/^(?:#[a-z0-9]+(?:-[a-z0-9]+)*|\/(?:[a-z0-9]+(?:-[a-z0-9]+)*\/)*|https:\/\/[^\s]+|mailto:[^\s]+|tel:[^\s]+)$/.test(href)) {
     fail(fixture, `${owner} uses invalid href ${String(href)}`);
     return;
   }
   if (href.startsWith('#')) {
     const target = href.slice(1);
-    if (!target || !page.blocks.some((block) => block.id === target)) fail(fixture, `${owner} links to missing same-page anchor ${href}`);
+    // Allow #top as a global runtime anchor
+    if (target !== 'top' && !page.blocks.some((block) => block.id === target)) {
+      fail(fixture, `${owner} links to missing same-page anchor ${href}`);
+    }
   } else if (href.startsWith('/')) {
     if (!pagesByPath.has(href)) fail(fixture, `${owner} links to missing page ${href}`);
   }

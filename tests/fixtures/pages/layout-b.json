@@ -11,11 +11,11 @@
       "content": {
         "brand": "Красивые ноготочки",
         "nav": [
-          { "label": "Услуги", "href": "#services" },
-          { "label": "Результаты", "href": "#gallery" },
-          { "label": "FAQ", "href": "#faq" }
+          { "label": "Услуги", "href": "#b-cards" },
+          { "label": "Результаты", "href": "#b-gallery" },
+          { "label": "FAQ", "href": "#top" }
         ],
-        "actions": [{ "label": "Записаться", "href": "#contact", "style": "primary" }]
+        "actions": [{ "label": "Записаться", "href": "#b-cta", "style": "primary" }]
       }
     },
     {
@@ -28,8 +28,8 @@
         "title": "Цвет, форма и немного времени для себя",
         "body": "Студия для тех, кто любит, когда уход выглядит как личный ритуал.",
         "actions": [
-          { "label": "Посмотреть услуги", "href": "#services", "style": "primary" },
-          { "label": "Задать вопрос", "href": "#faq", "style": "secondary" }
+          { "label": "Посмотреть услуги", "href": "#b-cards", "style": "primary" },
+          { "label": "Задать вопрос", "href": "#top", "style": "secondary" }
         ]
       }
     },
@@ -61,7 +61,7 @@
           "Сначала слушаем, как вы живёте и что хочется видеть на руках каждый день. Потом предлагаем форму, покрытие и детали, которые не спорят с вами.",
           "Это синтетический текст для проверки узкого текстового блока в общей системе сборки."
         ],
-        "actions": [{ "label": "Узнать больше", "href": "#services", "style": "text" }]
+        "actions": [{ "label": "Узнать больше", "href": "#b-cards", "style": "text" }]
       }
     },
     {
@@ -111,7 +111,7 @@
           { "title": "Оставляем пространство", "body": "Для вашего вкуса и маленьких изменений по ходу." }
         ],
         "media": { "src": null, "alt": "", "aspect": "4:3", "fit": "cover" },
-        "actions": [{ "label": "Познакомиться с подходом", "href": "#contact", "style": "secondary" }]
+        "actions": [{ "label": "Познакомиться с подходом", "href": "#b-cta", "style": "secondary" }]
       }
     },
     {
@@ -124,8 +124,8 @@
         "title": "Пусть в календаре появится что-то красивое",
         "body": "Выберите удобный способ связаться со студией.",
         "actions": [
-          { "label": "Записаться", "href": "#contact", "style": "primary" },
-          { "label": "Спросить о дизайне", "href": "#faq", "style": "text" }
+          { "label": "Записаться", "href": "#b-cta", "style": "primary" },
+          { "label": "Спросить о дизайне", "href": "#top", "style": "text" }
         ],
         "media": { "src": null, "alt": "", "aspect": "4:3", "fit": "cover" }
       }

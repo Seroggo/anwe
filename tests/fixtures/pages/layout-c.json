@@ -11,11 +11,11 @@
       "content": {
         "brand": "Красивые ноготочки",
         "nav": [
-          { "label": "Сценарии", "href": "#services" },
-          { "label": "Шаги", "href": "#steps" },
-          { "label": "Вопросы", "href": "#faq" }
+          { "label": "Сценарии", "href": "#c-cards" },
+          { "label": "Шаги", "href": "#c-steps" },
+          { "label": "Вопросы", "href": "#c-faq" }
         ],
-        "actions": [{ "label": "Записаться", "href": "#contact", "style": "secondary" }]
+        "actions": [{ "label": "Записаться", "href": "#c-cta", "style": "secondary" }]
       }
     },
     {
@@ -27,7 +27,7 @@
         "eyebrow": "Сделано для вашего настроения",
         "title": "Твой следующий маникюр начинается с идеи",
         "body": "Сохраняйте референсы, смешивайте цвета и приходите за тем самым ощущением «вот теперь да». ",
-        "actions": [{ "label": "Начать выбор", "href": "#services", "style": "primary" }],
+        "actions": [{ "label": "Начать выбор", "href": "#c-cards", "style": "primary" }],
         "media": { "src": null, "alt": "", "aspect": "1:1", "fit": "cover" }
       }
     },
@@ -136,7 +136,7 @@
         "eyebrow": "Финальный штрих",
         "title": "Давайте найдём ваш следующий цвет",
         "body": "Первый шаг — написать нам пару слов о том, чего хочется.",
-        "actions": [{ "label": "Написать студии", "href": "#contact", "style": "primary" }]
+        "actions": [{ "label": "Написать студии", "href": "#c-cta", "style": "primary" }]
       }
     },
     {
@@ -148,9 +148,9 @@
         "brand": "Красивые ноготочки",
         "description": "Синтетический fixture для проверки footer columns.",
         "columns": [
-          { "title": "Навигация", "links": [{ "label": "Услуги", "href": "#services" }, { "label": "Галерея", "href": "#gallery" }] },
-          { "title": "Связаться", "links": [{ "label": "Запись", "href": "#contact" }, { "label": "Вопросы", "href": "#faq" }] },
-          { "title": "Ритм", "links": [{ "label": "О студии", "href": "#about" }, { "label": "Шаги", "href": "#steps" }] }
+          { "title": "Навигация", "links": [{ "label": "Услуги", "href": "#c-cards" }, { "label": "Галерея", "href": "#c-gallery" }] },
+          { "title": "Связаться", "links": [{ "label": "Запись", "href": "#c-cta" }, { "label": "Вопросы", "href": "#c-faq" }] },
+          { "title": "Ритм", "links": [{ "label": "О студии", "href": "#c-split" }, { "label": "Шаги", "href": "#c-steps" }] }
         ],
         "note": "ANWE Block Library Alpha"
       }
