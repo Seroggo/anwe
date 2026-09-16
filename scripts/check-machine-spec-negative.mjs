@@ -1,104 +1,92 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import Ajv from 'ajv/dist/2020.js';
 import { validateSpec } from './check-machine-spec.mjs';
 
 const root = path.resolve(process.cwd());
+const loadJson = (relPath) => JSON.parse(fs.readFileSync(path.join(root, relPath), 'utf8'));
+const clone = (value) => JSON.parse(JSON.stringify(value));
 
-function loadJson(rel) {
-  return JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'));
-}
+const machineSchema = loadJson('contracts/machine-spec.schema.json');
+const ajv = new Ajv({ strict: true, allErrors: true });
+const validateSchema = ajv.compile(machineSchema);
 
-const input = loadJson('tests/fixtures/machine-spec/fixture-confirmed-contacts-input.json');
-const baseSpec = loadJson('tests/fixtures/machine-spec/fixture-confirmed-contacts-output.json');
+const confirmedInput = loadJson('tests/fixtures/machine-spec/fixture-confirmed-contacts-input.json');
+const confirmedSpec = loadJson('tests/fixtures/machine-spec/fixture-confirmed-contacts-output.json');
 const placeholderInput = loadJson('tests/fixtures/machine-spec/fixture-placeholder-contacts-input.json');
 const placeholderSpec = loadJson('tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json');
-
+const partialInput = loadJson('tests/fixtures/machine-spec/fixture-a-input.json');
+const partialSpec = loadJson('tests/fixtures/machine-spec/fixture-a-output.json');
 const cases = [];
 
-// A. Extra machine page
-{
-  const spec = JSON.parse(JSON.stringify(baseSpec));
-  spec.pages.push({
-    page_id: 'ghost-page',
-    path: '/ghost/',
-    semantic_role: 'other',
-    meta: { title: 'Ghost', description: null },
-    canonical: { path: '/ghost/' },
-    robots: { index: true, follow: true },
-    open_graph: { type: 'website', title: 'Ghost', description: null },
-    breadcrumbs: [{ label: 'Главная', path: '/' }],
-    primary_entity_id: 'organization',
-    service_ids: [],
-    sitemap: true
-  });
-  cases.push({ id: 'A extra machine page', spec, ctx: input.site_context, model: input.site_model, expectFail: true });
+function invalid(id, mutate, ctx = confirmedInput.site_context, model = confirmedInput.site_model, spec = confirmedSpec) {
+  const next = clone(spec);
+  mutate(next);
+  cases.push({ id, spec: next, ctx, model, shouldPass: false });
+}
+function positive(id, spec, ctx, model) {
+  cases.push({ id, spec: clone(spec), ctx, model, shouldPass: true });
 }
 
-// B. Missing machine page
-{
-  const spec = JSON.parse(JSON.stringify(baseSpec));
-  spec.pages = spec.pages.filter((p) => p.page_id !== 'services-consulting');
-  cases.push({ id: 'B missing machine page', spec, ctx: input.site_context, model: input.site_model, expectFail: true });
-}
-
-// C. Wrong canonical path
-{
-  const spec = JSON.parse(JSON.stringify(baseSpec));
-  const page = spec.pages.find((p) => p.page_id === 'services-consulting');
-  page.canonical.path = '/service/';
-  cases.push({ id: 'C wrong canonical path', spec, ctx: input.site_context, model: input.site_model, expectFail: true });
-}
-
-// D. Invented breadcrumb
-{
-  const spec = JSON.parse(JSON.stringify(baseSpec));
-  const page = spec.pages.find((p) => p.page_id === 'services-consulting');
-  page.breadcrumbs = [{ label: 'Главная', path: '/' }, { label: 'Услуги', path: '/fake/' }];
-  cases.push({ id: 'D invented breadcrumb', spec, ctx: input.site_context, model: input.site_model, expectFail: true });
-}
-
-// E. Placeholder contact leak
-{
-  const spec = JSON.parse(JSON.stringify(placeholderSpec));
+// A–G: retained published regression cases.
+invalid('A extra machine page', (spec) => spec.pages.push({
+  page_id: 'ghost-page', path: '/ghost/', semantic_role: 'other',
+  meta: { title: 'Ghost', description: null }, canonical: { path: '/ghost/' },
+  robots: { index: true, follow: true }, open_graph: { type: 'website', title: 'Ghost', description: null },
+  breadcrumbs: [{ label: 'Главная', path: '/' }], primary_entity_id: 'organization', service_ids: [], sitemap: true
+}));
+invalid('B missing machine page', (spec) => { spec.pages = spec.pages.filter((page) => page.page_id !== 'services-consulting'); });
+invalid('C wrong canonical path', (spec) => { spec.pages.find((page) => page.page_id === 'services-consulting').canonical.path = '/service/'; });
+invalid('D invented breadcrumb', (spec) => { spec.pages.find((page) => page.page_id === 'services-consulting').breadcrumbs = [{ label: 'Главная', path: '/' }, { label: 'Услуги', path: '/fake/' }]; });
+invalid('E placeholder contact leak', (spec) => {
   spec.primary_entity.contacts = {
     phone: { value: '+7 (000) 000-00-00', href: 'tel:+70000000000' },
     email: { value: 'example@mail.test', href: 'mailto:example@mail.test' }
   };
-  cases.push({ id: 'E placeholder contact leak', spec, ctx: placeholderInput.site_context, model: placeholderInput.site_model, expectFail: true });
-}
+}, placeholderInput.site_context, placeholderInput.site_model, placeholderSpec);
+invalid('F unknown service ref', (spec) => { spec.pages.find((page) => page.page_id === 'home').service_ids = ['missing-service']; });
+invalid('G upstream readiness escalation', (spec) => { spec.status = 'ready'; spec.issues = []; }, placeholderInput.site_context, placeholderInput.site_model, placeholderSpec);
 
-// F. Unknown service ref
-{
-  const spec = JSON.parse(JSON.stringify(baseSpec));
-  const page = spec.pages.find((p) => p.page_id === 'home');
-  page.service_ids = ['missing-service'];
-  cases.push({ id: 'F unknown service ref', spec, ctx: input.site_context, model: input.site_model, expectFail: true });
-}
+// H–S: corrective invariant regressions.
+invalid('H forbidden source_model_id', (spec) => { spec.source_model_id = 'anything'; });
+invalid('I empty Service.page_ids', (spec) => { spec.services[0].page_ids = []; });
+invalid('J unknown service page', (spec) => { spec.services[0].page_ids = ['missing-page']; });
+invalid('K reciprocal mismatch service to page', (spec) => { spec.pages.find((page) => page.page_id === 'home').service_ids = []; });
+invalid('L reciprocal mismatch page to service', (spec) => { spec.services[0].page_ids = ['services-consulting']; });
+invalid('M wrong entity home', (spec) => { spec.primary_entity.home_path = '/services/consulting/'; });
+invalid('N OpenGraph article', (spec) => { spec.pages[0].open_graph.type = 'article'; });
+invalid('O home breadcrumb present', (spec) => { spec.pages.find((page) => page.page_id === 'home').breadcrumbs = [{ label: 'Главная', path: '/' }]; });
+invalid('P non-home breadcrumb empty', (spec) => { spec.pages.find((page) => page.page_id === 'services-consulting').breadcrumbs = []; });
+invalid('Q breadcrumb contains current page', (spec) => { spec.pages.find((page) => page.page_id === 'services-consulting').breadcrumbs = [{ label: 'Главная', path: '/' }, { label: 'Консультация', path: '/services/consulting/' }]; });
+invalid('R noindex in sitemap', (spec) => { const page = spec.pages.find((item) => item.page_id === 'services-consulting'); page.robots.index = false; page.sitemap = true; });
+invalid('S embedded placeholder in metadata', (spec) => { spec.pages.find((page) => page.page_id === 'home').meta.title = 'Связаться: example@mail.test'; });
 
-// G. Upstream readiness escalation
-{
-  const spec = JSON.parse(JSON.stringify(placeholderSpec));
-  spec.status = 'ready';
-  spec.issues = [];
-  cases.push({ id: 'G upstream readiness escalation', spec, ctx: placeholderInput.site_context, model: placeholderInput.site_model, expectFail: true });
-}
+// T: upstream partial remains partial with no machine-stage issues.
+positive('T upstream partial without machine issues', partialSpec, partialInput.site_context, partialInput.site_model);
 
 let failures = 0;
-for (const { id, spec, ctx, model, expectFail } of cases) {
-  const errors = validateSpec(id, spec, ctx, model);
-  if (expectFail && errors.length === 0) {
-    console.error(`NEGATIVE TEST FAIL: ${id}: expected validation errors but got none`);
+for (const test of cases) {
+  const schemaValid = validateSchema(test.spec);
+  const schemaErrors = schemaValid ? [] : (validateSchema.errors ?? []).map((error) => `${error.instancePath || '/'}: ${error.message}`);
+  const semanticErrors = validateSpec(test.id, test.spec, test.ctx, test.model);
+  const rejectedBy = !schemaValid ? 'schema' : semanticErrors.length > 0 ? 'semantics' : null;
+
+  if (test.shouldPass) {
+    if (rejectedBy) {
+      failures += 1;
+      console.error(`REGRESSION TEST FAIL: ${test.id}: unexpectedly rejected by ${rejectedBy}: ${(rejectedBy === 'schema' ? schemaErrors : semanticErrors)[0]}`);
+    } else console.log(`REGRESSION TEST OK: ${test.id}: accepted`);
+  } else if (!rejectedBy) {
     failures += 1;
-  } else if (!expectFail && errors.length > 0) {
-    console.error(`NEGATIVE TEST FAIL: ${id}: unexpected errors:\n  - ${errors.join('\n  - ')}`);
-    failures += 1;
+    console.error(`NEGATIVE TEST FAIL: ${test.id}: expected schema or semantic rejection but got none`);
   } else {
-    console.log(`NEGATIVE TEST OK: ${id}: ${errors.length} error(s) — ${errors[0] ?? ''}`);
+    const detail = (rejectedBy === 'schema' ? schemaErrors : semanticErrors)[0];
+    console.log(`NEGATIVE TEST OK: ${test.id}: rejected by ${rejectedBy} — ${detail}`);
   }
 }
 
 if (failures > 0) {
-  console.error(`\n${failures} negative test(s) failed`);
+  console.error(`\n${failures} regression test(s) failed`);
   process.exit(1);
 }
-console.log(`\nAll ${cases.length} negative tests passed (each correctly rejected).`);
+console.log(`\nAll ${cases.length} MachineSpec regression cases passed.`);

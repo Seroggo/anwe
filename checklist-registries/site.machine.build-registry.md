@@ -14,11 +14,12 @@
 | --- | --- | --- |
 | C001 | Valid SiteContext + SiteModel pair | DATA_GAP if either invalid |
 | C002 | site_model.source_context_id == site_context.context_id | RESOLVED when matched; otherwise blocked |
-| C003 | Upstream readiness respected | Machine status never higher than SiteModel status |
-| C004 | Business/entity identity for primary entity | DATA_GAP when unknown and it blocks entity naming |
-| C005 | Offers available for services | DATA_GAP when no grounded offer exists |
-| C006 | Confirmed contacts available | N_A when placeholder-only → contacts null |
-| C007 | SiteModel pages enumerable | RESOLVED when each page has machine interpretation |
+| C003 | No extra SiteModel identity field | RESOLVED when omitted; site_id links to SiteModel |
+| C004 | Upstream readiness respected via min_readiness | RESOLVED when final status = min(SiteModel.status, machine-own-status) |
+| C005 | Business/entity identity for primary entity | DATA_GAP when unknown and it blocks entity naming |
+| C006 | Offers available for services | DATA_GAP when no grounded offer exists |
+| C007 | Confirmed contacts available | N_A when placeholder-only → contacts null (NOT a machine DATA_GAP) |
+| C008 | SiteModel pages enumerable | RESOLVED when each page has machine interpretation |
 | C008 | Forbidden claims respected | RESOLVED when metadata/entity omit them |
 | C009 | Required terms/messages reflected where grounded | RESOLVED without keyword stuffing |
 
@@ -31,8 +32,8 @@
 | C012 | Generic Organization mapping | RESOLVED when no justified subtype |
 | C013 | name grounded in SiteContext | DATA_GAP when business.name unknown |
 | C014 | description grounded, no new claims | RESOLVED when derived from business.summary |
-| C015 | home_path exists in SiteModel | RESOLVED when path present |
-| C016 | contacts use confirmed values only | RESOLVED when placeholder excluded |
+| C015 | home_path is canonical `/` | RESOLVED when SiteModel contains its required home page |
+| C016 | contacts use confirmed values only | RESOLVED when placeholder excluded; absence is not a machine DATA_GAP |
 | C017 | placeholder phone excluded | RESOLVED when null for placeholder |
 | C018 | placeholder email excluded | RESOLVED when null for placeholder |
 | C019 | context_refs present | RESOLVED when traceable to SiteContext |
@@ -44,13 +45,13 @@
 | C020 | Each service from real offer/capability | RESOLVED; no Service from decorative block |
 | C021 | No service from benefit/proof/FAQ/audience | RESOLVED when omitted |
 | C022 | provider_entity_id == primary_entity.id | RESOLVED before output |
-| C023 | page_ids reference existing SiteModel pages | RESOLVED before output |
-| C024 | Unique service ids | RESOLVED before output |
-| C025 | name/description grounded | RESOLVED; no new claims |
-| C026 | context_refs present | RESOLVED |
-| C027 | No fabricated services | RESOLVED when only SiteContext offers used |
-| C028 | Single-offer site → one Service | RESOLVED when consistent |
-| C029 | Decorative/unsupported offer omitted | RESOLVED when no Service forced |
+| C023 | page_ids are non-empty and reference existing SiteModel pages | RESOLVED before output |
+| C024 | service.page_ids ↔ page.service_ids reciprocal consistency | RESOLVED before output |
+| C025 | Unique service ids | RESOLVED before output |
+| C026 | name/description grounded | RESOLVED; no new claims |
+| C027 | context_refs present | RESOLVED |
+| C028 | No fabricated services | RESOLVED when only SiteContext offers used |
+| C029 | Single-offer site → one Service; decorative/unsupported offer omitted | RESOLVED when consistent and no Service is forced |
 
 ## Pages (C030–C044)
 
@@ -69,8 +70,8 @@
 | C040 | Unique page_ids | RESOLVED before output |
 | C041 | No fake domain / absolute canonical URL | RESOLVED; path only |
 | C042 | sitemap membership boolean | RESOLVED before output |
-| C043 | robots index/follow valid | RESOLVED before output |
-| C044 | noindex only with basis | RESOLVED when justified |
+| C043 | sitemap=true implies robots.index=true | RESOLVED before output |
+| C044 | robots index/follow valid; noindex only with basis | RESOLVED when justified |
 
 ## Metadata (C050–C059)
 
@@ -106,8 +107,8 @@
 
 | ID | Check | Status guide |
 | --- | --- | --- |
-| C070 | open_graph.type in vocabulary | RESOLVED before output |
-| C071 | type=website for business pages | RESOLVED when default |
+| C070 | open_graph.type is exactly website | RESOLVED before output |
+| C071 | Other OpenGraph type vocabulary absent in v0.1 | RESOLVED when omitted |
 | C072 | open_graph.title grounded | RESOLVED when derived from meta |
 | C073 | open_graph.description grounded | RESOLVED when derived from meta |
 | C074 | No OG image in v0.1 | RESOLVED when omitted |
@@ -121,16 +122,16 @@
 
 | ID | Check | Status guide |
 | --- | --- | --- |
-| C080 | Home breadcrumbs empty | RESOLVED when [] for / |
-| C081 | Each breadcrumb path exists in SiteModel | RESOLVED before output |
-| C082 | No invented intermediate pages | RESOLVED when omitted |
-| C083 | label non-empty | RESOLVED before output |
-| C084 | No breadcrumb to non-existent page | RESOLVED before output |
-| C085 | Hierarchy only from real pages | RESOLVED when grounded |
+| C080 | Home breadcrumbs strictly empty | RESOLVED when [] for / |
+| C081 | Non-home breadcrumb trail non-empty | RESOLVED when length >= 1 |
+| C082 | First non-home breadcrumb path is / | RESOLVED before output |
+| C083 | Each breadcrumb path exists in SiteModel and is unique in trail | RESOLVED before output |
+| C084 | No breadcrumb path equals current page path | RESOLVED before output |
+| C085 | No invented intermediate pages; hierarchy only from real pages | RESOLVED when grounded |
 | C086 | No /services/ invented when absent | RESOLVED when omitted |
 | C087 | Breadcrumb order root→leaf | RESOLVED before output |
 | C088 | label uses page title or short grounded label | RESOLVED |
-| C089 | No fake labels | RESOLVED when grounded |
+| C089 | No fake labels or embedded placeholder tokens | RESOLVED when grounded |
 
 ## Structured-data grounding (C090–C099)
 
@@ -155,8 +156,8 @@
 | C101 | Placeholder email never factual | RESOLVED when null |
 | C102 | Placeholder tel: href never factual | RESOLVED when excluded |
 | C103 | Placeholder mailto: href never factual | RESOLVED when excluded |
-| C104 | Placeholder not in OG | RESOLVED when excluded |
-| C105 | Placeholder not in metadata | RESOLVED when excluded |
+| C104 | Placeholder tokens excluded from entity/service text | RESOLVED when no substring leak |
+| C105 | Placeholder tokens excluded from metadata/OG/breadcrumb labels | RESOLVED when no substring leak |
 | C106 | Placeholder not in canonical | RESOLVED when path only |
 | C107 | Placeholder not in sitemap | RESOLVED when page.sitemap boolean |
 | C108 | Confirmed contact usable | RESOLVED when value/href copied |
@@ -183,11 +184,11 @@
 | --- | --- | --- |
 | C120 | Schema conformance | RESOLVED before output |
 | C121 | Unique ids across entities/services/pages | RESOLVED before output |
-| C122 | All refs resolve | RESOLVED before output |
+| C122 | All refs resolve and service/page refs are reciprocal | RESOLVED before output |
 | C123 | Page count matches SiteModel | RESOLVED before output |
-| C124 | Status matches issue severity | critical→blocked; important→partial; else ready |
-| C125 | Status ≤ upstream SiteModel status | RESOLVED before output |
-| C126 | No new pages | RESOLVED before output |
+| C124 | Machine-own status matches issue severity | critical→blocked; important→partial; else ready |
+| C125 | Final status = min(SiteModel.status, machine-own-status) | RESOLVED before output |
+| C126 | No extra SiteModel identity and no new pages | RESOLVED before output |
 | C127 | No new services from decorative blocks | RESOLVED before output |
-| C128 | Final factual self-check | RESOLVED when no untraceable claim |
-| C129 | Semantic validator passes | RESOLVED before output |
+| C128 | Final factual self-check including placeholder substrings | RESOLVED when no untraceable claim/leak |
+| C129 | Schema and semantic regression validators pass | RESOLVED before output |

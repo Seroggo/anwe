@@ -3,7 +3,6 @@
   "machine_id": "placeholder-contacts-demo-machine",
   "site_id": "placeholder-contacts-demo",
   "source_context_id": "placeholder-contacts-demo",
-  "source_model_id": "placeholder-contacts-demo",
   "status": "partial",
   "primary_entity": {
     "id": "organization",
@@ -54,14 +53,5 @@
       "context_refs": ["offers.demo-service"]
     }
   ],
-  "issues": [
-    {
-      "id": "confirmed-contacts-gap",
-      "type": "DATA_GAP",
-      "severity": "important",
-      "message": "SiteModel содержит только placeholder контакты; primary_entity.contacts остались null для machine factual representation.",
-      "context_ref": "data_gaps.contacts",
-      "page_id": "home"
-    }
-  ]
+  "issues": []
 }

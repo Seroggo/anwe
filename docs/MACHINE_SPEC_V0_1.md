@@ -44,7 +44,6 @@ MachineSpec **хранит**:
   "machine_id": "example-machine",
   "site_id": "example-site",
   "source_context_id": "example-context",
-  "source_model_id": "example-site",
   "status": "ready",
   "primary_entity": {},
   "services": [],
@@ -56,8 +55,8 @@ MachineSpec **хранит**:
 
 - `machine_id` — стабильный технический id этой machine-интерпретации.
 - `site_id` совпадает с `site_model.site_id`.
-- `source_context_id` совпадает с `site_context.context_id`.
-- `source_model_id` совпадает с `site_model.site_id`.
+- `source_context_id` совпадает с `site_context.context_id` и с `site_model.source_context_id`.
+- связь с SiteModel однозначна через `site_id`; отдельный идентификатор модели не нужен.
 
 ## primary_entity
 
@@ -79,8 +78,8 @@ MachineSpec **хранит**:
 ```
 
 - `schema_type` ∈ `Organization | LocalBusiness | ProfessionalService | Person`. Узкий subtype выбирается только когда он действительно поддержан входом; иначе безопасный generic — `Organization`. Не создавать ложную precision.
-- `home_path` — существующий SiteModel path (обычно `/`).
-- `contacts.phone`/`contacts.email` — только confirmed SiteModel contacts, объект `{value, href}`, либо `null`. Placeholder-значения **никогда** не попадают сюда.
+- `home_path` — канонический `/` (соответствует единственной home странице SiteModel). Не вводить альтернативный homepage concept.
+- `contacts.phone`/`contacts.email` — только confirmed SiteModel contacts, объект `{value, href}`, либо `null`. Placeholder-значения **никогда** не попадают сюда. Отсутствие confirmed контакта → `null`; это нормальная truthful representation, а не machine-stage `DATA_GAP`.
 
 ## services
 
@@ -106,7 +105,7 @@ Service возникает из реального offer/service/meaningful comm
 - audience;
 - generic capability wording.
 
-`provider_entity_id` всегда указывает на `primary_entity.id`.
+`provider_entity_id` всегда указывает на `primary_entity.id`. `page_ids` не может быть пустым: каждый Service представлен хотя бы одной реальной SiteModel page (minItems 1). `service.page_ids` и `page.service_ids` обязаны быть согласованы reciprocally — если Service ссылается на page, то и page ссылается на этот Service, и наоборот.
 
 ## pages
 
@@ -168,23 +167,24 @@ Intended production indexation. Для substantive commercial pages default:
 
 `noindex` создаётся только с основанием. Preview/Review Build может глобально ставить `noindex,nofollow` как environment policy — это не меняет MachineSpec.
 
+Invariant: `sitemap = true` влечёт `robots.index = true` (эквивалентно: `robots.index = false` влечёт `sitemap = false`). `follow` независимо.
+
 ## sitemap
 
 Хранится один source of truth: `page.sitemap: boolean`. Отдельного дублирующего списка sitemap paths нет. Физический `sitemap.xml` создаётся deterministic Human/Deploy layer позже.
 
 ## open_graph
 
-Базовые `type`, `title`, `description`. Для обычных business pages `type = "website"`. OG image не добавляется — он зависит от Visual Layer. Никаких fake/placeholder image URL.
+Базовые `type`, `title`, `description`. Для v0.1 `type` всегда `"website"`; другие OpenGraph types не входят в текущий content model. OG image не добавляется — он зависит от Visual Layer. Никаких fake/placeholder image URL.
 
 ## breadcrumbs
 
-`breadcrumbs[]` — массив `{label, path}`. Home: `[]`. Для других pages обычно:
+`breadcrumbs[]` — массив `{label, path}`.
 
-```json
-[{"label": "Главная", "path": "/"}]
-```
-
-Каждый breadcrumb path должен существовать в SiteModel. Нельзя выдумывать промежуточные страницы (например, `/services/`, если её нет).
+- Home (`path == "/"`): строго `[]`.
+- Non-home page: `breadcrumbs.length >= 1`, и первый breadcrumb обязан быть `{"path": "/"}`.
+- Каждый breadcrumb path существует в SiteModel; уникален внутри trail; не равен текущему `page.path`.
+- Нельзя выдумывать промежуточные страницы (например, `/services/`, если её нет). Hierarchy не выводится только из URL segments.
 
 ## structured data
 
@@ -219,14 +219,35 @@ service.page_ids[]
 ready | partial | blocked
 ```
 
-Readiness policy (минимальное правило):
+Readiness policy — один канонический алгоритм. Сначала вычисляется readiness собственных Machine issues:
 
 ```text
-SiteModel blocked  → MachineSpec не может быть ready/partial выше blocked
-SiteModel partial  → MachineSpec не может стать ready
-SiteModel ready    → MachineSpec может быть ready либо lower при machine gap
+critical issue → blocked
+important issue → partial
+minor / no issues → ready
 ```
 
-`issues[]` содержит только machine-stage issues. Для v0.1 используется только `DATA_GAP` — когда machine representation невозможно построить без отсутствующего factual input. Не создавать issue только потому, что domain ещё неизвестен: canonical path достаточен до deploy.
+Затем она ограничивается upstream readiness:
 
-Status детерминированно соответствует максимальной severity issues: `critical` → `blocked`; иначе `important` → `partial`; иначе `ready` — но не выше upstream SiteModel status.
+```text
+final Machine status = min_readiness(SiteModel.status, machine-own-status)
+```
+
+В ranks (`blocked = 0`, `partial = 1`, `ready = 2`):
+
+```text
+expectedRank = min(STATUS_RANK[siteModel.status], STATUS_RANK[machineOwnStatus])
+```
+
+Примеры:
+
+```text
+SiteModel partial, machine issues []        → Machine partial
+SiteModel ready,   machine issues important → Machine partial
+SiteModel blocked, machine issues []        → Machine blocked
+SiteModel partial, machine issues critical  → Machine blocked
+```
+
+Machine Layer не улучшает upstream readiness и не создаёт искусственный issue ради сохранения status. `issues[]` содержит только machine-stage issues — возникшие именно при построении machine representation (невозможно определить primary entity, невозможно grounded сформировать необходимое machine semantic field, сломана необходимая factual связь). Для v0.1 используется только `DATA_GAP`.
+
+Отсутствие confirmed контактов само по себе **не** machine-stage `DATA_GAP`: `placeholder → null` это нормальная truthful representation. Не создавать issue только потому, что domain ещё неизвестен: canonical path достаточен до deploy.

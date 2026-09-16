@@ -3,7 +3,6 @@
   "machine_id": "techassembly-machine",
   "site_id": "techassembly",
   "source_context_id": "techassembly",
-  "source_model_id": "techassembly",
   "status": "partial",
   "primary_entity": {
     "id": "organization",
@@ -75,14 +74,5 @@
       "context_refs": ["pages.home"]
     }
   ],
-  "issues": [
-    {
-      "id": "confirmed-contacts-gap",
-      "type": "DATA_GAP",
-      "severity": "important",
-      "message": "SiteModel не содержит confirmed контактов; primary_entity.contacts остались null для machine factual representation.",
-      "context_ref": "conversion.contact_methods",
-      "page_id": "home"
-    }
-  ]
+  "issues": []
 }

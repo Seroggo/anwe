@@ -3,7 +3,6 @@
   "machine_id": "confirmed-contacts-demo-machine",
   "site_id": "confirmed-contacts-demo",
   "source_context_id": "confirmed-contacts-demo",
-  "source_model_id": "confirmed-contacts-demo",
   "status": "ready",
   "primary_entity": {
     "id": "organization",

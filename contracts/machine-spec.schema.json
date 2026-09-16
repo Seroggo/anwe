@@ -10,7 +10,6 @@
     "machine_id",
     "site_id",
     "source_context_id",
-    "source_model_id",
     "status",
     "primary_entity",
     "services",
@@ -23,7 +22,6 @@
     "machine_id": {"$ref": "#/$defs/Slug"},
     "site_id": {"$ref": "#/$defs/Slug"},
     "source_context_id": {"$ref": "#/$defs/Slug"},
-    "source_model_id": {"$ref": "#/$defs/Slug"},
     "status": {"enum": ["ready", "partial", "blocked"]},
     "primary_entity": {"$ref": "#/$defs/PrimaryEntity"},
     "services": {"type": "array", "items": {"$ref": "#/$defs/Service"}},
@@ -38,7 +36,7 @@
     "Path": {"type": "string", "pattern": "^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$"},
     "SchemaType": {"enum": ["Organization", "LocalBusiness", "ProfessionalService", "Person"]},
     "SemanticRole": {"enum": ["home", "offer", "demand", "contact", "about", "other"]},
-    "OpenGraphType": {"enum": ["website", "article", "profile"]},
+    "OpenGraphType": {"const": "website"},
     "Contacts": {
       "type": "object",
       "additionalProperties": false,
@@ -66,7 +64,7 @@
         "schema_type": {"$ref": "#/$defs/SchemaType"},
         "name": {"$ref": "#/$defs/NonEmptyString"},
         "description": {"$ref": "#/$defs/StringOrNull"},
-        "home_path": {"$ref": "#/$defs/Path"},
+        "home_path": {"const": "/"},
         "contacts": {"$ref": "#/$defs/Contacts"},
         "context_refs": {"type": "array", "items": {"$ref": "#/$defs/NonEmptyString"}}
       }
@@ -80,7 +78,7 @@
         "name": {"$ref": "#/$defs/NonEmptyString"},
         "description": {"$ref": "#/$defs/StringOrNull"},
         "provider_entity_id": {"$ref": "#/$defs/Slug"},
-        "page_ids": {"type": "array", "items": {"$ref": "#/$defs/Slug"}, "uniqueItems": true},
+        "page_ids": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/Slug"}, "uniqueItems": true},
         "context_refs": {"type": "array", "items": {"$ref": "#/$defs/NonEmptyString"}}
       }
     },
