@@ -22,6 +22,10 @@ const fixtures = [
   { name: 'fixture B output', schemaPath: 'schemas/output/site.context.build.json', dataPath: 'tests/fixtures/site-context/fixture-b-output.json' },
   { name: 'fixture C input', schemaPath: 'schemas/input/site.context.build.json', dataPath: 'tests/fixtures/site-context/fixture-c-input.json' },
   { name: 'fixture C output', schemaPath: 'schemas/output/site.context.build.json', dataPath: 'tests/fixtures/site-context/fixture-c-output.json' },
+  { name: 'fixture D input', schemaPath: 'schemas/input/site.context.build.json', dataPath: 'tests/fixtures/site-context/fixture-d-input.json' },
+  { name: 'fixture D output', schemaPath: 'schemas/output/site.context.build.json', dataPath: 'tests/fixtures/site-context/fixture-d-output.json' },
+  { name: 'fixture A SiteModel input', schemaPath: 'schemas/input/site.model.build.json', dataPath: 'tests/fixtures/site-context/fixture-a-output.json' },
+  { name: 'fixture C SiteModel input', schemaPath: 'schemas/input/site.model.build.json', dataPath: 'tests/fixtures/site-context/fixture-c-output.json' },
   { name: 'fixture A SiteModel output', schemaPath: 'schemas/output/site.model.build.json', dataPath: 'tests/fixtures/site-model/fixture-a-output.json' },
   { name: 'fixture C SiteModel output', schemaPath: 'schemas/output/site.model.build.json', dataPath: 'tests/fixtures/site-model/fixture-c-output.json' },
   { name: 'production-shell SiteModel output', schemaPath: 'schemas/output/site.model.build.json', dataPath: 'tests/fixtures/site-model/fixture-production-shell.json' }

@@ -139,7 +139,7 @@ function checkForm(fixture, form, owner) {
   }
   
   if (form.transport_status !== 'unwired') {
-    fail(fixture, `${owner} form.transport_status must be 'unwired' (raw SiteModel))`);
+    fail(fixture, `${owner} form.transport_status must be 'unwired' (raw SiteModel)`);
   }
   
   if (!Array.isArray(form.fields) || form.fields.length === 0) {
@@ -260,6 +260,10 @@ for (const relPath of fixtures) {
           }
           if (!messenger.status || messenger.status !== 'confirmed') {
             fail(relPath, `contacts ${block.id} messenger ${index} status must be 'confirmed' (placeholder messengers not allowed)`);
+          }
+          // Messenger must be confirmed external https URL
+          if (!messenger.href.startsWith('https://')) {
+            fail(relPath, `contacts ${block.id} messenger ${index} href must be external https:// URL, got '${messenger.href}'`);
           }
         }
         // Legal can be null or object with nullable fields - just check structure if present
