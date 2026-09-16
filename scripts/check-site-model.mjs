@@ -42,7 +42,6 @@ const surfaces = new Set(['default', 'muted', 'accent', 'inverse']);
 const aspects = new Set(['4:3', '1:1', '3:4']);
 const contactStatuses = new Set(['confirmed', 'placeholder']);
 const formFieldTypes = new Set(['text', 'email', 'tel', 'textarea']);
-const transportStatuses = new Set(['unwired', 'wired']);
 let failed = false;
 
 function fail(fixture, message) {
@@ -92,6 +91,7 @@ function checkContactInfo(fixture, contactInfo, fieldName, owner) {
   if (!contactInfo.status || !contactStatuses.has(contactInfo.status)) {
     fail(fixture, `${owner} ${fieldName}.status must be 'confirmed' or 'placeholder'`);
   }
+  
   // Check canonical placeholder values
   if (contactInfo.status === 'placeholder') {
     if (fieldName === 'phone') {
@@ -111,6 +111,24 @@ function checkContactInfo(fixture, contactInfo, fieldName, owner) {
       }
     }
   }
+  
+  // Check confirmed value integrity
+  if (contactInfo.status === 'confirmed') {
+    if (fieldName === 'email') {
+      const expectedHref = 'mailto:' + contactInfo.value;
+      if (contactInfo.href !== expectedHref) {
+        fail(fixture, `${owner} confirmed email href must be 'mailto:${contactInfo.value}' but got '${contactInfo.href}'`);
+      }
+    }
+    if (fieldName === 'phone') {
+      // Normalize phone: keep leading +, remove spaces, parentheses, dashes
+      const normalized = contactInfo.value.replace(/[\s()\-]/g, '');
+      const expectedHref = 'tel:' + normalized;
+      if (contactInfo.href !== expectedHref) {
+        fail(fixture, `${owner} confirmed phone href must be 'tel:${normalized}' but got '${contactInfo.href}'`);
+      }
+    }
+  }
 }
 
 function checkForm(fixture, form, owner) {
@@ -120,8 +138,8 @@ function checkForm(fixture, form, owner) {
     fail(fixture, `${owner} form.id must be non-empty string`);
   }
   
-  if (!form.transport_status || !transportStatuses.has(form.transport_status)) {
-    fail(fixture, `${owner} form.transport_status must be 'unwired' or 'wired'`);
+  if (form.transport_status !== 'unwired') {
+    fail(fixture, `${owner} form.transport_status must be 'unwired' (raw SiteModel))`);
   }
   
   if (!Array.isArray(form.fields) || form.fields.length === 0) {
@@ -240,8 +258,8 @@ for (const relPath of fixtures) {
           if (!messenger.href || typeof messenger.href !== 'string') {
             fail(relPath, `contacts ${block.id} messenger ${index} must have non-empty href`);
           }
-          if (messenger.status && !contactStatuses.has(messenger.status)) {
-            fail(relPath, `contacts ${block.id} messenger ${index} status must be 'confirmed' or 'placeholder'`);
+          if (!messenger.status || messenger.status !== 'confirmed') {
+            fail(relPath, `contacts ${block.id} messenger ${index} status must be 'confirmed' (placeholder messengers not allowed)`);
           }
         }
         // Legal can be null or object with nullable fields - just check structure if present
