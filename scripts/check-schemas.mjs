@@ -37,7 +37,9 @@ const fixtures = [
   { name: 'fixture placeholder-contacts MachineSpec input', schemaPath: 'schemas/input/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-placeholder-contacts-input.json' },
   { name: 'fixture A MachineSpec output', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-a-output.json' },
   { name: 'fixture confirmed-contacts MachineSpec output', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-confirmed-contacts-output.json' },
-  { name: 'fixture placeholder-contacts MachineSpec output', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json' }
+  { name: 'fixture placeholder-contacts MachineSpec output', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json' },
+  { name: 'Human Layer fixture SiteModel', schemaPath: 'schemas/output/site.model.build.json', dataPath: 'tests/fixtures/human-layer/SITE_MODEL.json' },
+  { name: 'Human Layer fixture MachineSpec', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/human-layer/MACHINE_SPEC.json' }
 ];
 
 const outputFixtures = new Map([
@@ -49,7 +51,9 @@ const outputFixtures = new Map([
   ['tests/fixtures/site-model/fixture-c-output.json', 'contracts/site-model.schema.json'],
   ['tests/fixtures/machine-spec/fixture-a-output.json', 'contracts/machine-spec.schema.json'],
   ['tests/fixtures/machine-spec/fixture-confirmed-contacts-output.json', 'contracts/machine-spec.schema.json'],
-  ['tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json', 'contracts/machine-spec.schema.json']
+  ['tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json', 'contracts/machine-spec.schema.json'],
+  ['tests/fixtures/human-layer/SITE_MODEL.json', 'contracts/site-model.schema.json'],
+  ['tests/fixtures/human-layer/MACHINE_SPEC.json', 'contracts/machine-spec.schema.json']
 ]);
 
 let failed = false;

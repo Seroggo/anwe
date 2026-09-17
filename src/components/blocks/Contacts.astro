@@ -1,0 +1,146 @@
+---
+import { asRecord, asString } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+interface ContactValue {
+  value: string;
+  href: string;
+  status: 'confirmed' | 'placeholder';
+}
+
+interface Messenger {
+  label: string;
+  href: string;
+  status: 'confirmed';
+}
+
+interface LegalInfo {
+  name: string | null;
+  inn: string | null;
+  ogrn: string | null;
+}
+
+interface ContactsContent {
+  title: string;
+  phone: ContactValue;
+  email: ContactValue;
+  address: string | null;
+  messengers: Messenger[];
+  legal: LegalInfo;
+}
+
+const { block } = Astro.props;
+const raw = asRecord(block.content);
+
+const content: ContactsContent = {
+  title: asString(raw.title, 'Контакты'),
+  phone: parseContactValue(raw.phone),
+  email: parseContactValue(raw.email),
+  address: raw.address == null ? null : asString(raw.address) || null,
+  messengers: parseMessengers(raw.messengers),
+  legal: parseLegal(raw.legal)
+};
+
+function parseContactValue(value: unknown): ContactValue {
+  const rec = asRecord(value);
+  return {
+    value: asString(rec.value),
+    href: asString(rec.href),
+    status: rec.status === 'confirmed' ? 'confirmed' : 'placeholder'
+  };
+}
+
+function parseMessengers(value: unknown): Messenger[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    const rec = asRecord(item);
+    const label = asString(rec.label);
+    const href = asString(rec.href);
+    if (!label || !href) return [];
+    return [{ label, href, status: 'confirmed' as const }];
+  });
+}
+
+function parseLegal(value: unknown): LegalInfo {
+  const rec = asRecord(value);
+  return {
+    name: legalString(rec.name),
+    inn: legalString(rec.inn),
+    ogrn: legalString(rec.ogrn)
+  };
+}
+
+function legalString(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+const surfaceClass = `surface--${block.surface}`;
+---
+
+<section id={block.id} class:list={['block', 'block--contacts', surfaceClass, 'contacts-block']}>
+  <div class="contacts-block__inner">
+    <h2>{content.title}</h2>
+
+    <address class="contacts-block__address">
+      {content.phone.value && (
+        <a
+          class="contacts-block__link contacts-block__link--phone"
+          href={content.phone.href}
+          data-contact-status={content.phone.status}
+        >
+          {content.phone.value}
+        </a>
+      )}
+      {content.email.value && (
+        <a
+          class="contacts-block__link contacts-block__link--email"
+          href={content.email.href}
+          data-contact-status={content.email.status}
+        >
+          {content.email.value}
+        </a>
+      )}
+      {content.address && (
+        <span class="contacts-block__address-line">{content.address}</span>
+      )}
+      {content.messengers.length > 0 && (
+        <span class="contacts-block__messengers">
+          {content.messengers.map((m) => (
+            <a class="contacts-block__link contacts-block__link--messenger" href={m.href} data-contact-status={m.status}>
+              {m.label}
+            </a>
+          ))}
+        </span>
+      )}
+    </address>
+
+    {(content.legal.name || content.legal.inn || content.legal.ogrn) && (
+      <dl class="contacts-block__legal">
+        {content.legal.name && (
+          <div class="contacts-block__legal-row">
+            <dt>Юридическое лицо</dt>
+            <dd>{content.legal.name}</dd>
+          </div>
+        )}
+        {content.legal.inn && (
+          <div class="contacts-block__legal-row">
+            <dt>ИНН</dt>
+            <dd>{content.legal.inn}</dd>
+          </div>
+        )}
+        {content.legal.ogrn && (
+          <div class="contacts-block__legal-row">
+            <dt>ОГРН</dt>
+            <dd>{content.legal.ogrn}</dd>
+          </div>
+        )}
+      </dl>
+    )}
+  </div>
+</section>

@@ -1,12 +1,30 @@
 ---
 import '../styles/base.css';
+import type { MachinePage } from '../machine/structured-data';
 
 interface Props {
   title: string;
-  description: string;
+  description: string | null;
+  machinePage?: MachinePage;
 }
 
-const { title, description } = Astro.props;
+const { title, description, machinePage } = Astro.props;
+
+// Machine metadata wins when present; existing demo pages without MachineSpec
+// keep using the plain title/description props (backward compatibility).
+const pageTitle = machinePage ? machinePage.meta.title : title;
+const pageDescription = machinePage ? machinePage.meta.description : description;
+
+const robotsContent = machinePage
+  ? `${machinePage.robots.index ? '' : 'no'}index,${machinePage.robots.follow ? '' : 'no'}follow`
+  : null;
+
+const canonicalHref = machinePage ? machinePage.canonical.path : null;
+
+const og = machinePage ? machinePage.open_graph : null;
+const ogType = og ? og.type : null;
+const ogTitle = og ? og.title : null;
+const ogDescription = og ? og.description : null;
 ---
 
 <!doctype html>
@@ -14,8 +32,13 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <title>{title}</title>
+    {pageDescription != null && <meta name="description" content={pageDescription} />}
+    {robotsContent && <meta name="robots" content={robotsContent} />}
+    {canonicalHref && <link rel="canonical" href={canonicalHref} />}
+    {ogType && <meta property="og:type" content={ogType} />}
+    {ogTitle && <meta property="og:title" content={ogTitle} />}
+    {ogDescription != null && <meta property="og:description" content={ogDescription} />}
+    <title>{pageTitle}</title>
   </head>
   <body>
     <div class="site-shell">

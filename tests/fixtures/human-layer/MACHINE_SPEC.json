@@ -1,0 +1,94 @@
+{
+  "schema_version": "0.1",
+  "machine_id": "human-layer-fixture-machine",
+  "site_id": "human-layer-fixture",
+  "source_context_id": "human-layer-fixture-context",
+  "status": "ready",
+  "primary_entity": {
+    "id": "organization",
+    "schema_type": "ProfessionalService",
+    "name": "Human Layer Fixture",
+    "description": "Синтетическая сервисная компания для proof generic Human Layer runtime.",
+    "home_path": "/",
+    "contacts": {
+      "phone": {"value": "+7 495 000-00-00", "href": "tel:+74950000000"},
+      "email": {"value": "hello@human-layer-fixture.test", "href": "mailto:hello@human-layer-fixture.test"}
+    },
+    "context_refs": ["business.name", "business.summary", "semantic_identity.primary_entity"]
+  },
+  "services": [
+    {
+      "id": "consulting",
+      "name": "Профессиональная консультация",
+      "description": "Синтетическая услуга профессиональной консультации для proof service JSON-LD.",
+      "provider_entity_id": "organization",
+      "page_ids": ["home", "services-consulting"],
+      "context_refs": ["offers.consulting"]
+    }
+  ],
+  "pages": [
+    {
+      "page_id": "home",
+      "path": "/",
+      "semantic_role": "home",
+      "meta": {
+        "title": "Human Layer Fixture — Home",
+        "description": "Синтетическая home страница для proof generic Human Layer runtime."
+      },
+      "canonical": {"path": "/"},
+      "robots": {"index": true, "follow": true},
+      "open_graph": {
+        "type": "website",
+        "title": "Human Layer Fixture — Home",
+        "description": "Синтетическая home страница для proof generic Human Layer runtime."
+      },
+      "breadcrumbs": [],
+      "primary_entity_id": "organization",
+      "service_ids": ["consulting"],
+      "sitemap": true
+    },
+    {
+      "page_id": "services-consulting",
+      "path": "/services/consulting/",
+      "semantic_role": "offer",
+      "meta": {
+        "title": "Профессиональная консультация — Human Layer Fixture",
+        "description": "Синтетическая услуга профессиональной консультации для proof service JSON-LD, canonical и breadcrumbs."
+      },
+      "canonical": {"path": "/services/consulting/"},
+      "robots": {"index": true, "follow": true},
+      "open_graph": {
+        "type": "website",
+        "title": "Профессиональная консультация — Human Layer Fixture",
+        "description": "Синтетическая услуга профессиональной консультации для proof service JSON-LD, canonical и breadcrumbs."
+      },
+      "breadcrumbs": [
+        {"label": "Главная", "path": "/"}
+      ],
+      "primary_entity_id": "organization",
+      "service_ids": ["consulting"],
+      "sitemap": true
+    }
+  ],
+  "decisions": [
+    {
+      "id": "professional-service-schema-type",
+      "decision": "Использовать schema_type ProfessionalService.",
+      "reason": "Синтетический бизнес позиционируется как профессиональная сервисная компания; subtype поддержан входом.",
+      "context_refs": ["business.entity_type", "semantic_identity.entity_type"]
+    },
+    {
+      "id": "confirmed-contacts-used",
+      "decision": "Использовать confirmed phone/email в primary_entity.contacts.",
+      "reason": "Fixture contacts block содержит confirmed значения; placeholder отсутствует.",
+      "context_refs": ["conversion.contact_methods", "contacts.phone", "contacts.email"]
+    },
+    {
+      "id": "breadcrumb-home-only",
+      "decision": "Breadcrumb услуги ведёт только на существующую home.",
+      "reason": "Промежуточной /services/ страницы в SiteModel нет; выдумывать её запрещено.",
+      "context_refs": ["pages.services-consulting"]
+    }
+  ],
+  "issues": []
+}

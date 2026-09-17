@@ -1,0 +1,107 @@
+---
+/**
+ * Generic page-level renderer.
+ *
+ * Inputs:
+ *   - SiteModel page (blocks in canonical order)
+ *   - MachineSpec + matching Machine page (matched by page.id AND page.path)
+ *   - mountBase (preview mount prefix, e.g. "/test/human-runtime/"; "/" = no-op)
+ *
+ * Builds semantic structure:
+ *   <header>...</header>
+ *   <main id="top"> middle blocks </main>
+ *   <footer>...</footer>
+ *
+ * Contract requires header first and footer last, so PageRenderer extracts
+ * them when present and renders middle blocks inside <main>. Block order is
+ * never sorted or changed. Every block.id becomes its HTML id.
+ *
+ * Link rebasing is applied render-time only: internal absolute hrefs in
+ * block content are rebased to mountBase. External/anchor/mailto/tel links
+ * are untouched. SiteModel and MachineSpec canonical paths are NOT mutated.
+ *
+ * Machine page match is strict: page.id == machinePage.page_id AND
+ * page.path == machinePage.path, otherwise throw. No positional guessing.
+ */
+
+import SiteLayout from '../layouts/SiteLayout.astro';
+import BlockRenderer from './BlockRenderer.astro';
+import StructuredData from '../components/StructuredData.astro';
+import { rebaseContent } from '../runtime/rebase-links';
+import type { MachineSpec, MachinePage } from '../machine/structured-data';
+import type { Block } from './types';
+
+interface SiteModelPage {
+  id: string;
+  path: string;
+  title: string;
+  description: string | null;
+  blocks: Block[];
+}
+
+interface Props {
+  page: SiteModelPage;
+  machine: MachineSpec;
+  mountBase?: string;
+}
+
+const { page, machine, mountBase = '/' } = Astro.props;
+
+// --- Machine page match (strict) ---
+const machinePage: MachinePage | undefined = machine.pages.find(
+  (mp) => mp.page_id === page.id
+);
+
+if (!machinePage) {
+  throw new Error(
+    `PageRenderer: SiteModel page "${page.id}" has no matching MachineSpec page (page_id "${page.id}"). MachineSpec was provided, so fallback is not allowed.`
+  );
+}
+
+if (machinePage.path !== page.path) {
+  throw new Error(
+    `PageRenderer: SiteModel page "${page.id}" path "${page.path}" does not match MachineSpec page path "${machinePage.path}".`
+  );
+}
+
+// --- Machine metadata (MachineSpec wins when present) ---
+const headTitle = machinePage.meta.title;
+const headDescription = machinePage.meta.description;
+
+// --- Header / footer extraction (contract: header first, footer last) ---
+const blocks = page.blocks;
+const first = blocks[0];
+const last = blocks.length > 1 ? blocks[blocks.length - 1] : undefined;
+
+const headerBlock: Block | null =
+  first && first.type === 'header' ? first : null;
+const footerBlock: Block | null =
+  last && last.type === 'footer' ? last : null;
+
+const startIndex = headerBlock ? 1 : 0;
+const endIndex = footerBlock ? blocks.length - 1 : blocks.length;
+const middleBlocks = blocks.slice(startIndex, endIndex);
+
+// --- Render-time link rebasing (non-mutating) ---
+const rebase = (block: Block): Block =>
+  mountBase && mountBase !== '/'
+    ? { ...block, content: rebaseContent(block.content, mountBase) }
+    : block;
+
+const headerRender = headerBlock ? rebase(headerBlock) : null;
+const footerRender = footerBlock ? rebase(footerBlock) : null;
+const middleRender = middleBlocks.map(rebase);
+---
+
+<SiteLayout
+  title={headTitle}
+  description={headDescription}
+  machinePage={machinePage}
+>
+  {headerRender && <BlockRenderer block={headerRender} />}
+  <main id="top">
+    {middleRender.map((block) => <BlockRenderer block={block} />)}
+  </main>
+  {footerRender && <BlockRenderer block={footerRender} />}
+  <StructuredData machine={machine} machinePage={machinePage} />
+</SiteLayout>

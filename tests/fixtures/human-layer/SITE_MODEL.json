@@ -1,0 +1,272 @@
+{
+  "schema_version": "0.1",
+  "site_id": "human-layer-fixture",
+  "source_context_id": "human-layer-fixture-context",
+  "title": "Human Layer Fixture Site",
+  "description": "Synthetic fixture for STAGE 3 Human Layer generic runtime proof",
+  "status": "ready",
+  "pages": [
+    {
+      "id": "home",
+      "path": "/",
+      "title": "Human Layer Fixture — Home",
+      "description": "Synthetic home page proving generic Human Layer rendering with header, hero, CTA form and contacts.",
+      "blocks": [
+        {
+          "id": "site-header",
+          "type": "header",
+          "variant": "default",
+          "surface": "default",
+          "content": {
+            "brand": "Human Layer Fixture",
+            "nav": [
+              {"label": "Главная", "href": "/"},
+              {"label": "Услуга", "href": "/services/consulting/"}
+            ],
+            "actions": [
+              {"label": "Оставить заявку", "href": "#request", "style": "primary"}
+            ]
+          }
+        },
+        {
+          "id": "hero",
+          "type": "hero",
+          "variant": "centered",
+          "surface": "inverse",
+          "content": {
+            "eyebrow": "Human Layer v0.1",
+            "title": "Generic semantic Astro runtime",
+            "body": "Synthetic fixture proving deterministic Human Layer rendering from SiteModel + MachineSpec.",
+            "actions": [
+              {"label": "Запросить услугу", "href": "/services/consulting/", "style": "primary"}
+            ],
+            "note": "Review build proof",
+            "media": null
+          }
+        },
+        {
+          "id": "request",
+          "type": "cta",
+          "variant": "centered",
+          "surface": "accent",
+          "content": {
+            "eyebrow": "Заявка",
+            "title": "Оставить заявку",
+            "body": "Заполните форму — мы свяжемся с вами. Форма физически установлена, transport ещё не подключён.",
+            "form": {
+              "id": "quote-request",
+              "transport_status": "unwired",
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "text",
+                  "label": "Имя",
+                  "placeholder": "Иван",
+                  "required": true,
+                  "autocomplete": "name"
+                },
+                {
+                  "name": "email",
+                  "type": "email",
+                  "label": "Email",
+                  "placeholder": "ivan@example.test",
+                  "required": true,
+                  "autocomplete": "email"
+                },
+                {
+                  "name": "phone",
+                  "type": "tel",
+                  "label": "Телефон",
+                  "placeholder": "+7 900 000-00-00",
+                  "required": false,
+                  "autocomplete": "tel"
+                },
+                {
+                  "name": "message",
+                  "type": "textarea",
+                  "label": "О проекте",
+                  "placeholder": "Опишите задачу",
+                  "required": false,
+                  "autocomplete": null
+                }
+              ],
+              "submit_label": "Отправить"
+            },
+            "actions": [],
+            "media": null
+          }
+        },
+        {
+          "id": "contacts",
+          "type": "contacts",
+          "variant": "default",
+          "surface": "default",
+          "content": {
+            "title": "Контакты",
+            "phone": {
+              "value": "+7 495 000-00-00",
+              "href": "tel:+74950000000",
+              "status": "confirmed"
+            },
+            "email": {
+              "value": "hello@human-layer-fixture.test",
+              "href": "mailto:hello@human-layer-fixture.test",
+              "status": "confirmed"
+            },
+            "address": "Москва, синтетический адрес",
+            "messengers": [],
+            "legal": {
+              "name": null,
+              "inn": null,
+              "ogrn": null
+            }
+          }
+        },
+        {
+          "id": "site-footer",
+          "type": "footer",
+          "variant": "simple",
+          "surface": "inverse",
+          "content": {
+            "brand": "Human Layer Fixture",
+            "description": "Synthetic Human Layer fixture for ANWE STAGE 3 runtime proof.",
+            "columns": [],
+            "note": "ANWE Human Layer v0.1",
+            "actions": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "services-consulting",
+      "path": "/services/consulting/",
+      "title": "Услуга — Профессиональная консультация",
+      "description": "Service page proving breadcrumbs, service JSON-LD, CTA form and contacts rendering.",
+      "blocks": [
+        {
+          "id": "site-header",
+          "type": "header",
+          "variant": "default",
+          "surface": "default",
+          "content": {
+            "brand": "Human Layer Fixture",
+            "nav": [
+              {"label": "Главная", "href": "/"},
+              {"label": "Услуга", "href": "/services/consulting/"}
+            ],
+            "actions": [
+              {"label": "Оставить заявку", "href": "#request", "style": "primary"}
+            ]
+          }
+        },
+        {
+          "id": "hero",
+          "type": "hero",
+          "variant": "centered",
+          "surface": "inverse",
+          "content": {
+            "eyebrow": "Услуга",
+            "title": "Профессиональная консультация",
+            "body": "Синтетическая услуга для proof service JSON-LD, canonical и breadcrumb rendering.",
+            "actions": [
+              {"label": "Запросить услугу", "href": "#request", "style": "primary"},
+              {"label": "На главную", "href": "/", "style": "secondary"}
+            ],
+            "note": null,
+            "media": null
+          }
+        },
+        {
+          "id": "request",
+          "type": "cta",
+          "variant": "centered",
+          "surface": "accent",
+          "content": {
+            "eyebrow": "Заявка",
+            "title": "Оставить заявку на консультацию",
+            "body": "Заполните форму — мы свяжемся с вами. Форма физически установлена, transport ещё не подключён.",
+            "form": {
+              "id": "quote-request",
+              "transport_status": "unwired",
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "text",
+                  "label": "Имя",
+                  "placeholder": "Иван",
+                  "required": true,
+                  "autocomplete": "name"
+                },
+                {
+                  "name": "message",
+                  "type": "textarea",
+                  "label": "О проекте",
+                  "placeholder": "Опишите задачу",
+                  "required": false,
+                  "autocomplete": null
+                }
+              ],
+              "submit_label": "Отправить"
+            },
+            "actions": [],
+            "media": null
+          }
+        },
+        {
+          "id": "contacts",
+          "type": "contacts",
+          "variant": "default",
+          "surface": "default",
+          "content": {
+            "title": "Контакты",
+            "phone": {
+              "value": "+7 495 000-00-00",
+              "href": "tel:+74950000000",
+              "status": "confirmed"
+            },
+            "email": {
+              "value": "hello@human-layer-fixture.test",
+              "href": "mailto:hello@human-layer-fixture.test",
+              "status": "confirmed"
+            },
+            "address": "Москва, синтетический адрес",
+            "messengers": [],
+            "legal": {
+              "name": null,
+              "inn": null,
+              "ogrn": null
+            }
+          }
+        },
+        {
+          "id": "site-footer",
+          "type": "footer",
+          "variant": "simple",
+          "surface": "inverse",
+          "content": {
+            "brand": "Human Layer Fixture",
+            "description": "Synthetic Human Layer fixture for ANWE STAGE 3 runtime proof.",
+            "columns": [],
+            "note": "ANWE Human Layer v0.1",
+            "actions": []
+          }
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "human-layer-fixture-shape",
+      "decision": "Two pages covering home and one service with header/hero/CTA-form/contacts/footer",
+      "reason": "Proof generic Human Layer runtime with rebasing, JSON-LD, canonical and breadcrumbs.",
+      "context_refs": ["pages.home", "pages.services-consulting"]
+    },
+    {
+      "id": "confirmed-contacts-in-fixture",
+      "decision": "Use confirmed phone/email in fixture contacts",
+      "reason": "Prove data-contact-status=confirmed path and tel:/mailto: rendering.",
+      "context_refs": ["contacts.phone", "contacts.email"]
+    }
+  ],
+  "issues": []
+}

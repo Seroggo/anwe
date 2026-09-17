@@ -9,6 +9,7 @@ export const blockTypes = [
   'gallery',
   'faq',
   'cta',
+  'contacts',
   'footer'
 ] as const;
 
@@ -36,6 +37,24 @@ export interface Block {
   variant: string;
   surface: Surface;
   content: Record<string, unknown>;
+}
+
+export type FormFieldType = 'text' | 'email' | 'tel' | 'textarea';
+
+export interface FormField {
+  name: string;
+  type: FormFieldType;
+  label: string;
+  placeholder: string;
+  required: boolean;
+  autocomplete: string | null;
+}
+
+export interface FormShell {
+  id: string;
+  transport_status: 'unwired';
+  fields: FormField[];
+  submit_label: string;
 }
 
 export interface PageFixture {

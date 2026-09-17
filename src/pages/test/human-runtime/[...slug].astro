@@ -1,0 +1,49 @@
+---
+/**
+ * Generic test-only Human Layer runtime route.
+ *
+ * Imports the synthetic Human Layer fixture (SiteModel + MachineSpec) and
+ * builds one static page per fixture page through the SAME PageRenderer,
+ * proving the generic runtime rather than a hand-written template per page.
+ *
+ * Mount base: "/test/human-runtime/" — visible internal navigation hrefs are
+ * rebased to the mount, while canonical stays the original MachineSpec path.
+ */
+
+import type { GetStaticPaths } from 'astro';
+import PageRenderer from '../../../renderer/PageRenderer.astro';
+import siteModel from '../../../../tests/fixtures/human-layer/SITE_MODEL.json';
+import machineSpec from '../../../../tests/fixtures/human-layer/MACHINE_SPEC.json';
+import type { MachineSpec } from '../../../machine/structured-data';
+import type { Block } from '../../../renderer/types';
+
+const MOUNT_BASE = '/test/human-runtime/';
+
+interface FixturePage {
+  id: string;
+  path: string;
+  title: string;
+  description: string | null;
+  blocks: Block[];
+}
+
+export const getStaticPaths = (() => {
+  const pages = (siteModel as { pages: FixturePage[] }).pages;
+  const paths = pages.map((page) => ({
+    params: { slug: page.path === '/' ? undefined : page.path.replace(/^\/|\/$/g, '') },
+    props: { pageId: page.id }
+  }));
+  return paths;
+}) as GetStaticPaths;
+
+const { pageId } = Astro.props as { pageId: string };
+
+const page = (siteModel as { pages: FixturePage[] }).pages.find((p) => p.id === pageId);
+if (!page) {
+  throw new Error(`Human runtime route: fixture SiteModel has no page with id "${pageId}".`);
+}
+
+const machine = machineSpec as unknown as MachineSpec;
+---
+
+<PageRenderer page={page} machine={machine} mountBase={MOUNT_BASE} />

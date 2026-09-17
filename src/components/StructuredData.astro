@@ -1,0 +1,22 @@
+---
+/**
+ * Deterministic JSON-LD <script> injector.
+ *
+ * Takes a pre-serialized MachineSpec + MachinePage pair and emits a safe
+ * <script type="application/ld+json"> block. Serialization logic lives in
+ * src/machine/structured-data.ts; this component only embeds the safe string.
+ */
+
+import { serializePageJsonLd, serializeJsonLdScript, type MachineSpec, type MachinePage } from '../machine/structured-data';
+
+interface Props {
+  machine: MachineSpec;
+  machinePage: MachinePage;
+}
+
+const { machine, machinePage } = Astro.props;
+const graph = serializePageJsonLd(machine, machinePage);
+const jsonLd = serializeJsonLdScript(graph);
+---
+
+<script type="application/ld+json" is:inline set:html={jsonLd} />

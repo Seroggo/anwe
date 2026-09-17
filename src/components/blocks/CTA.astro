@@ -1,8 +1,9 @@
 ---
 import ActionLink from '../ActionLink.astro';
 import MediaFrame from '../MediaFrame.astro';
+import Form from '../Form.astro';
 import { asActions, asMedia, asRecord, asString } from '../../renderer/types';
-import type { Block } from '../../renderer/types';
+import type { Block, FormShell } from '../../renderer/types';
 
 interface Props {
   block: Block;
@@ -14,6 +15,14 @@ const media = asMedia(content.media);
 const actions = asActions(content.actions);
 const surfaceClass = `surface--${block.surface}`;
 const variantClass = `cta-block--${block.variant}`;
+
+// content.form is anyOf [Form, null] per SiteModel contract.
+// Render Form only when a non-null form shell is present; otherwise nothing.
+const formRaw = content.form;
+const form: FormShell | null =
+  formRaw && typeof formRaw === 'object' && !Array.isArray(formRaw)
+    ? (formRaw as FormShell)
+    : null;
 ---
 
 <section id={block.id} class:list={['block', 'block--cta', surfaceClass, 'cta-block', variantClass]}>
@@ -22,6 +31,7 @@ const variantClass = `cta-block--${block.variant}`;
     <h2>{asString(content.title)}</h2>
     <p>{asString(content.body)}</p>
     {actions.length > 0 && <div class="action-row">{actions.map((action) => <ActionLink action={action} />)}</div>}
+    {form && <Form form={form} />}
   </div>
   {media && <MediaFrame media={media} class="cta-block__media" label="Визуальный placeholder" />}
 </section>

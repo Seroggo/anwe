@@ -1,0 +1,95 @@
+---
+/**
+ * Reusable Form shell renderer (NOT a block — not in Block Registry).
+ *
+ * Receives a SiteModel form shell and renders the physical HTML form.
+ * Raw SiteModel form always has transport_status = "unwired": the backend
+ * does not exist yet. Human Layer installs the UI form but wires nothing.
+ *
+ * Unwired boundary:
+ *   - <form data-transport-status="unwired">
+ *   - submit control exists but is disabled
+ *   - no action, no method, no fetch, no fake success
+ *
+ * Supported field types: text, email, tel, textarea.
+ * Each label is bound to its control via for/id.
+ * Placeholder is never used as a substitute for a label.
+ */
+
+import { asRecord, asString } from '../renderer/types';
+import type { FormShell, FormField } from '../renderer/types';
+
+interface Props {
+  form: FormShell;
+}
+
+const { form } = Astro.props;
+
+if (form.transport_status !== 'unwired') {
+  throw new Error(
+    `Form "${form.id}" has transport_status "${form.transport_status}". Human Layer only renders unwired forms; wired transport is a QA/Final Assembly concern.`
+  );
+}
+
+const isUnwired = true;
+
+function parseField(raw: unknown): FormField {
+  const rec = asRecord(raw);
+  const name = asString(rec.name);
+  const type = rec.type === 'email' || rec.type === 'tel' || rec.type === 'textarea' ? rec.type : 'text';
+  return {
+    name,
+    type,
+    label: asString(rec.label),
+    placeholder: asString(rec.placeholder),
+    required: rec.required === true,
+    autocomplete: typeof rec.autocomplete === 'string' ? rec.autocomplete : null
+  };
+}
+
+const fields = Array.isArray(form.fields) ? form.fields.map(parseField) : [];
+
+function fieldId(field: FormField, index: number): string {
+  const base = field.name.replace(/[^a-zA-Z0-9-]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '');
+  return base ? `form-${form.id}-${base}` : `form-${form.id}-field-${index}`;
+}
+---
+
+<form class="human-form" data-transport-status={isUnwired ? 'unwired' : 'wired'}>
+  {fields.length > 0 && (
+    <ul class="human-form__fields">
+      {fields.map((field, index) => {
+        const id = fieldId(field, index);
+        return (
+          <li class="human-form__field">
+            <label for={id}>
+              {field.label}{field.required && <span class="human-form__required" aria-hidden="true">*</span>}
+            </label>
+            {field.type === 'textarea' ? (
+              <textarea
+                id={id}
+                name={field.name}
+                placeholder={field.placeholder}
+                required={field.required}
+                autocomplete={field.autocomplete ?? undefined}
+                rows={4}
+              ></textarea>
+            ) : (
+              <input
+                id={id}
+                name={field.name}
+                type={field.type}
+                placeholder={field.placeholder}
+                required={field.required}
+                autocomplete={field.autocomplete ?? undefined}
+              />
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  )}
+  <button class="human-form__submit" type="submit" disabled={isUnwired}>
+    {form.submit_label}
+  </button>
+</form>
