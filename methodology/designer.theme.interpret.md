@@ -300,7 +300,7 @@ Reference может использовать разные модели цвет
 1. определить базовый непрозрачный цвет;
 2. сохранить его как `#RRGGBB`;
 3. необходимость прозрачности отметить отдельно в decisions;
-4. если прозрачность является существенной возможностью, которую текущий ANWE theme layer не умеет выразить стандартным способом — отметить THEME_CAPABILITY_GAP с severity и preservation_strategy.
+4. если прозрачность является существенной возможностью, которую текущий ANWE theme layer не умеет выразить стандартным способом — оцени внутренне как THEME_CAPABILITY_GAP (severity, preservation_strategy): minor/important → адаптируй и запиши в decisions[], critical невыразимое → blocker orchestration, успешный ThemeSpec не формируется.
 
 Alpha не кодируется внутрь базового semantic color. Прозрачность — это свойство эффекта или surface, а не базового color token.
 
@@ -460,14 +460,26 @@ reference evidence, hierarchy, readability и constraints, а затем про�
   preservation_strategy = «сохранить character через типографику, форму и контраст,
   без scroll-mechanics».
 
-### Оформление THEME_CAPABILITY_GAP
+### Оформление THEME_CAPABILITY_GAP (внутренняя дисциплина)
 
-Каждый gap описывается:
+Оценка capability — это **внутренняя методология принятия решений**, а не артефакт
+успешного вывода. ThemeSpec v0.1 не содержит поля `capability_gaps` и не содержит
+Coverage. Оценка каждого gap внутренняя:
+
 - characteristic — что не выражается;
 - severity — critical / important / minor;
 - preservation_strategy — как общий character сохраняется без этой характеристики.
 
+Поведение по severity:
+
+- minor / important и приближенно сохраняемое → адаптируй к representable ThemeSpec
+  capabilities и запиши адаптацию в `decisions[]` (source_type, evidence, reason);
+- critical и невыразимое → не формируй успешный ThemeSpec; сообщи blocker
+  orchestration layer и остановись.
+
 Запрещено «скрыто компенсировать» THEME_CAPABILITY_GAP указанием на «возможный custom CSS».
+Запрещено emit THEME_CAPABILITY_GAP объект внутрь ThemeSpec, добавлять `capability_gaps`
+top-level или Coverage top-level.
 
 ---
 
@@ -485,8 +497,10 @@ reference evidence, hierarchy, readability и constraints, а затем про�
 5. **Применимой к reusable Block Library** — каждое решение выражено через универсальные
    theme capabilities, без бизнес-специфичных overrides.
 6. **Воспроизводимой** — при одинаковом входе структура и coverage совпадают.
-7. **Чистой по capability** — все unsupported behaviours оформлены как THEME_CAPABILITY_GAP,
-   ни один не реализован тайно через custom CSS.
+7. **Чистой по capability** — unsupported behaviours либо адаптированы к representable
+   ThemeSpec capabilities и записаны в `decisions[]`, либо (если critical и невыразимы)
+   блокируют успешный ThemeSpec и сообщаются orchestration layer; ни один не реализован
+   тайно через custom CSS.
 
 ---
 

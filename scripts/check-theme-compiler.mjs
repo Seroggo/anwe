@@ -33,6 +33,7 @@ const root = path.resolve(process.cwd());
 const fixturePath = path.join(root, 'tests/fixtures/theme-spec/fixture-a-output.json');
 const inputPath = path.join(root, 'tests/fixtures/machine-spec/fixture-a-input.json');
 const baseCssPath = path.join(root, 'src/styles/base.css');
+const promptPath = path.join(root, 'prompts/designer.theme.interpret.json');
 
 let failed = false;
 const failures = [];
@@ -52,6 +53,8 @@ function valueOf(compiled, name) {
 const spec = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
 const input = JSON.parse(fs.readFileSync(inputPath, 'utf8'));
 const baseCss = fs.readFileSync(baseCssPath, 'utf8');
+const promptObj = JSON.parse(fs.readFileSync(promptPath, 'utf8'));
+const promptText = promptObj.systemPrompt;
 
 // ===========================================================================
 // 1. Non-blocking proof
@@ -444,6 +447,38 @@ assert(mobileCompact.includes('.block{width:min(100%-0.75rem,1440px);padding:var
 assert(mobileCompact.includes('.block+.block{margin-top:var(--space-block-gap)'), 'mobile .block + .block uses block-gap token');
 assert(mobileCompact.includes('h1{font-size:var(--display-size)'), 'mobile h1 uses --display-size');
 assert(mobileCompact.includes('h2{font-size:var(--heading-size)'), 'mobile h2 uses --heading-size');
+
+// ===========================================================================
+// 11. Interpreter prompt output-contract regression (item 4)
+// ===========================================================================
+// Lightweight source check against prompts/designer.theme.interpret.json to
+// guard the canonical ThemeSpec v0.1 output contract. No parser dependency.
+const obsoleteDirectives = [
+  'Coverage обязательно сформируй',
+  'покажи счётчики',
+  'Верни THEME_CAPABILITY_GAP'
+];
+for (const term of obsoleteDirectives) {
+  assert(
+    !promptText.includes(term),
+    `prompt contract: obsolete directive "${term}" must be removed from designer.theme.interpret.json`
+  );
+}
+
+const canonicalRules = [
+  'ТОЛЬКО валидный ThemeSpec v0.1 JSON',
+  'capability_gaps',
+  'Coverage top-level'
+];
+assert(promptText.includes(canonicalRules[0]), 'prompt contract: must state canonical output rule (ThemeSpec v0.1 JSON only)');
+assert(
+  promptText.includes('capability_gaps') && /capability_gaps top-level/.test(promptText),
+  'prompt contract: must prohibit capability_gaps top-level in ThemeSpec'
+);
+assert(
+  promptText.includes('Coverage top-level') || promptText.includes('Context/Character/Coverage/Capability_gaps top-level'),
+  'prompt contract: must prohibit Coverage top-level in ThemeSpec output'
+);
 
 // ===========================================================================
 // Report
