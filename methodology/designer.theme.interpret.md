@@ -9,7 +9,10 @@ shape, effects, capability gaps, quality.
 
 Все правила ниже применяются в рамках универсальных theme capabilities ANWE.
 Methodology не описывает конкретные CSS-свойства и не привязывается к конкретным сайтам —
-это уровень ThemeSpec contract, который будет спроектирован следующим этапом.
+это уровень ThemeSpec contract (`contracts/theme-spec.schema.json`, v0.1), который
+применяется к production runtime через детерминированный Theme Compiler
+(`src/theme/compile.ts`). Канонический поток: SiteContext + SiteModel → Theme Interpreter
+→ ThemeSpec v0.1 → deterministic Theme Compiler → runtime CSS variables.
 
 ---
 
@@ -308,8 +311,8 @@ Alpha не кодируется внутрь базового semantic color. П
 #### Граница ответственности
 
 - INTERPRETER — выбирает цвет и нормализует его в lowercase `#RRGGBB` до формирования результата.
-- THEMESPEC (будущий контракт) — валидирует формат записи, но не преобразует значения.
-- COMPILER (будущий) — получает уже нормализованные `#RRGGBB`; color normalization не входит в его обязанности.
+- THEMESPEC (`contracts/theme-spec.schema.json`, v0.1) — валидирует формат записи, но не преобразует значения.
+- COMPILER (`src/theme/compile.ts`) — получает уже нормализованные `#RRGGBB`; color normalization не входит в его обязанности.
 
 #### Анти-паттерны нормализации
 

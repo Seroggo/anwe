@@ -8,6 +8,9 @@
  * - Turns ResponsiveLength objects into CSS clamp(min, preferred, max).
  * - Assembles structured card_border / card_shadow into CSS declarations.
  * - Deterministic: the same ThemeSpec always compiles to byte-identical CSS.
+ * - Selector is ALWAYS derived only from theme_id as `html[data-theme-id="<theme_id>"]`;
+ *   no caller-supplied selector, no site-specific selectors, no .block / :nth-of-type.
+ * - Rejects unsafe font stacks containing `;`, `{`, `}`, `<`, or `>` (CSS injection guard).
  *
  * Self-contained: no relative imports, so Node 24 type-stripping can load it
  * directly from a .mjs validator (`import { compileTheme } from '../src/theme/compile.ts'`)
@@ -213,6 +216,29 @@ function hexToRgb(hex: string): { readonly r: number; readonly g: number; readon
   return { r, g, b };
 }
 
+// Font-stack safety: reject values that could break out of the inline <style> or
+// inject CSS declarations. ThemeStyle emits compiled CSS via set:html into an inline
+// <style>, so any font stack containing `;`, `{`, `}`, `<`, or `>` is unsafe. This is
+// a structural guard, not a whitelist: valid stacks like "Segoe UI", Arial, sans-serif
+// pass; injection attempts like Arial; color:red or </style> fail.
+const UNSAFE_FONT_CHARS: readonly string[] = [';', '{', '}', '<', '>'];
+
+function assertSafeFontStack(value: string, field: string): void {
+  for (const ch of UNSAFE_FONT_CHARS) {
+    if (value.includes(ch)) {
+      throw new Error(
+        `compileTheme: unsafe font stack in "${field}" — forbidden character "${ch}" (value: "${value}")`
+      );
+    }
+  }
+}
+
+function assertSafeFontStacks(typography: ThemeSpecTypography): void {
+  assertSafeFontStack(typography.font_display, 'typography.font_display');
+  assertSafeFontStack(typography.font_body, 'typography.font_body');
+  assertSafeFontStack(typography.font_mono, 'typography.font_mono');
+}
+
 function shadowToCss(shadow: CardShadow): string {
   const { r, g, b } = hexToRgb(shadow.color);
   return `${shadow.x} ${shadow.y} ${shadow.blur} ${shadow.spread} rgba(${r}, ${g}, ${b}, ${shadow.opacity})`;
@@ -220,7 +246,7 @@ function shadowToCss(shadow: CardShadow): string {
 
 function borderToCss(border: CardBorder | null): string {
   if (border === null) {
-    return '0';
+    return 'none';
   }
   // color_role is const "line" in v0.1; reference the resolved line token at runtime.
   return `${border.width} solid var(--color-line)`;
@@ -230,13 +256,13 @@ function borderToCss(border: CardBorder | null): string {
 // Compiler
 // ---------------------------------------------------------------------------
 
-export function compileTheme(spec: ThemeSpec, options?: { readonly selector?: string }): CompiledTheme {
+export function compileTheme(spec: ThemeSpec): CompiledTheme {
   assertThemeSpecShape(spec);
+  assertSafeFontStacks(spec.typography);
 
-  const selector =
-    options && options.selector !== undefined && options.selector.length > 0
-      ? options.selector
-      : `html[data-theme="${spec.theme_id}"]`;
+  // Selector is always derived only from theme_id. No caller-supplied selector,
+  // no site-specific selectors, no .block / :nth-of-type / [data-site=...] etc.
+  const selector = `html[data-theme-id="${spec.theme_id}"]`;
 
   const declarations: CompiledDeclaration[] = [];
   const push = (name: string, value: string): void => {

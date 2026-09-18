@@ -14,6 +14,9 @@
   --color-line: rgba(21, 21, 26, 0.15);
   --color-focus: #6c4ee6;
   --color-on-accent: #15151a;
+  --color-primary: #6c4ee6;
+  --color-primary-hover: #5a3fd1;
+  --color-on-primary: #ffffff;
   --radius-card: 24px;
   --radius-panel: 32px;
   --radius-button: 999px;
@@ -21,9 +24,23 @@
   --shadow-card: 0 14px 36px rgba(20, 18, 28, 0.08);
   --space-section: clamp(4.5rem, 10vw, 9.5rem);
   --space-content: clamp(1.25rem, 3vw, 3.5rem);
+  --space-block-gap: 0.75rem;
   --display-size: clamp(3.3rem, 8.5vw, 8rem);
+  --display-weight: 550;
+  --display-line-height: 0.98;
+  --display-tracking: -0.065em;
   --heading-size: clamp(2.1rem, 4.5vw, 4.8rem);
+  --heading-weight: 600;
+  --heading-line-height: 0.98;
+  --heading-tracking: -0.065em;
   --body-size: 1.08rem;
+  --body-weight: 400;
+  --body-line-height: 1.55;
+  --body-tracking: 0;
+  --eyebrow-size: 0.7rem;
+  --eyebrow-weight: 700;
+  --eyebrow-line-height: 1.3;
+  --eyebrow-tracking: 0.09em;
   --block-background: var(--color-surface);
   --block-foreground: var(--color-text);
   --block-muted-text: var(--color-text-muted);
@@ -55,8 +72,8 @@ button { font: inherit; }
 .site-header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem; }
 .site-header--transparent { margin-bottom: -0.75rem; background: transparent; border-bottom: 1px solid var(--block-line); border-radius: 0; }
 .site-header__brand, .site-footer__brand { display: inline-flex; align-items: center; gap: 0.65rem; width: max-content; font-weight: 750; letter-spacing: -0.04em; }
-.brand-mark { display: grid; place-items: center; width: 2rem; height: 2rem; color: var(--color-text); background: var(--color-accent); border-radius: 50%; font-family: var(--font-display); font-size: 1.1rem; }
-.surface--inverse .brand-mark { color: var(--color-inverse); }
+.brand-mark { display: grid; place-items: center; width: 2rem; height: 2rem; color: var(--color-on-accent); background: var(--color-accent); border-radius: 50%; font-family: var(--font-display); font-size: 1.1rem; }
+.surface--inverse .brand-mark { color: var(--color-inverse); background: var(--color-inverse-text); }
 .site-header__nav { display: flex; justify-content: center; gap: clamp(1rem, 2.5vw, 2.4rem); color: var(--block-muted-text); font-size: 0.92rem; }
 .site-header__nav a, .site-footer a { transition: color 180ms ease, opacity 180ms ease; }
 .site-header__nav a:hover, .site-footer a:hover { color: var(--block-foreground); }
@@ -253,14 +270,14 @@ h3 { margin-bottom: 0.6rem; font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight
 
 @media (max-width: 700px) {
   .demo-page { padding-top: 0; }
-  .block { width: min(100% - 0.75rem, 1440px); padding: 4rem 1.25rem; border-radius: 1.5rem; }
-  .block + .block { margin-top: 0.4rem; }
-  .block--header { position: relative; padding-block: 1rem; border-radius: 1.5rem 1.5rem 0 0; }
+  .block { width: min(100% - 0.75rem, 1440px); padding: var(--space-section) var(--space-content); border-radius: var(--block-radius); }
+  .block + .block { margin-top: var(--space-block-gap); }
+  .block--header { position: relative; padding-block: 1rem; border-radius: var(--block-radius) var(--block-radius) 0 0; }
   .site-header { grid-template-columns: 1fr auto; gap: 0.8rem; }
   .site-header__nav { grid-column: 1 / -1; justify-content: flex-start; gap: 0.75rem 1.1rem; padding-top: 0.8rem; border-top: 1px solid var(--block-line); font-size: 0.8rem; }
   .site-header__actions .action-link { display: none; }
-  h1 { font-size: clamp(3.1rem, 15vw, 5.4rem); }
-  h2 { font-size: clamp(2.2rem, 11vw, 3.8rem); }
+  h1 { font-size: var(--display-size); }
+  h2 { font-size: var(--heading-size); }
   .hero, .hero--split, .hero--centered, .text-block, .split-block, .cta-block--split { display: block; min-height: 0; }
   .hero__media, .hero--centered .hero__media { min-height: 0; margin-top: 3rem; }
   .split-block__media, .split-block--media-left .split-block__media, .split-block--media-right .split-block__media { order: 0; margin-bottom: 2.5rem; }

@@ -45,7 +45,13 @@ CSS as an inline `<style>` in the page `<head>`; `SiteLayout` and `PageRenderer`
 optional `theme` prop so any page can apply a ThemeSpec through the same generic renderer
 used in production.
 
-The compiler emits one CSS block scoped to `html[data-theme="<theme_id>"]`:
+The compiler emits one CSS block scoped to `html[data-theme-id="<theme_id>"]`. The
+selector is always derived only from `theme_id`; there is no caller-supplied selector
+option, and the compiler never emits `.block`, `:nth-of-type`, `[data-site=...]`, or any
+selector derived from business/site structure. Compiled ThemeSpec runtime uses the
+`data-theme-id` namespace, intentionally separate from the legacy manual demo themes
+(`html[data-theme="editorial-pastel"|"cinematic-dark"|"color-block"]` in `src/themes/`),
+which coexist unchanged during migration:
 
 ```text
 colors.*           -> --color-*
@@ -57,7 +63,7 @@ spacing.content    -> --space-content
 spacing.block_gap  -> --space-block-gap
 spacing.density    -> (descriptor; not emitted)
 shape.*            -> --radius-*
-card_border        -> --border-card  (null -> 0; object -> "<width> solid var(--color-line)")
+card_border        -> --border-card  (null -> none; object -> "<width> solid var(--color-line)")
 card_shadow        -> --shadow-card  (null -> none; object -> "<x> <y> <blur> <spread> rgba(r,g,b,opacity)")
 ResponsiveLength   -> clamp(min, preferred, max)
 ```
