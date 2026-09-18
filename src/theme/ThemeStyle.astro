@@ -1,0 +1,29 @@
+---
+/**
+ * ThemeStyle — runtime bridge between a compiled ThemeSpec and the ANWE CSS
+ * variable runtime.
+ *
+ * It is the deterministic production mechanism that applies a ThemeSpec to the
+ * page: it compiles the ThemeSpec to a CSS custom-property block (see
+ * src/theme/compile.ts) and emits it as an inline <style> so the same ANWE
+ * components, surfaces and blocks defined in base.css consume theme tokens.
+ *
+ * Determinism guarantee: the same ThemeSpec always compiles to byte-identical
+ * CSS, regardless of JSON key order. The Compiler never chooses fallbacks,
+ * reinterprets the brief, or normalizes colors.
+ *
+ * Usage (typically through SiteLayout/PageRenderer `theme` prop, not directly):
+ *   <ThemeStyle spec={themeSpec} />
+ */
+
+import { compileTheme } from './compile';
+import type { ThemeSpec } from './compile';
+
+interface Props {
+  spec: ThemeSpec;
+}
+
+const { spec } = Astro.props;
+const compiled = compileTheme(spec);
+---
+<style is:inline set:html={compiled.css}></style>

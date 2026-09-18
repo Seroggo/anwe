@@ -1,0 +1,46 @@
+---
+/**
+ * Generic test-only Theme runtime route (Stage 4A proof).
+ *
+ * Renders the synthetic machine-spec fixture A SiteModel home page through the
+ * SAME PageRenderer used in production, with a ThemeSpec applied via the
+ * deterministic Theme Compiler (ThemeStyle bridge, wired through SiteLayout).
+ *
+ * This proves the Stage 4A non-blocking rule and the production runtime contract:
+ * a ThemeSpec produced from a SiteContext whose `brand.desired_character` is
+ * empty but whose grounded business context is sufficient compiles to a valid
+ * ANWE CSS variable runtime and is applied to real blocks.
+ *
+ * Mount base: "/test/theme-runtime/" — visible internal navigation hrefs are
+ * rebased to the mount, while canonical stays the original MachineSpec path.
+ */
+
+import PageRenderer from '../../../renderer/PageRenderer.astro';
+import themeSpec from '../../../../tests/fixtures/theme-spec/fixture-a-output.json';
+import fixtureInput from '../../../../tests/fixtures/machine-spec/fixture-a-input.json';
+import machineSpec from '../../../../tests/fixtures/machine-spec/fixture-a-output.json';
+import type { ThemeSpec } from '../../../theme/compile';
+import type { MachineSpec } from '../../../machine/structured-data';
+import type { Block } from '../../../renderer/types';
+
+const MOUNT_BASE = '/test/theme-runtime/';
+
+interface FixturePage {
+  id: string;
+  path: string;
+  title: string;
+  description: string | null;
+  blocks: Block[];
+}
+
+const theme = themeSpec as unknown as ThemeSpec;
+const machine = machineSpec as unknown as MachineSpec;
+const pages = (fixtureInput as { site_model: { pages: FixturePage[] } }).site_model.pages;
+const page = pages.find((p) => p.path === '/');
+
+if (!page) {
+  throw new Error('Theme runtime route: fixture A SiteModel has no home page.');
+}
+---
+
+<PageRenderer page={page} machine={machine} mountBase={MOUNT_BASE} theme={theme} />

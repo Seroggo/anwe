@@ -1,14 +1,17 @@
 ---
 import '../styles/base.css';
+import ThemeStyle from '../theme/ThemeStyle.astro';
 import type { MachinePage } from '../machine/structured-data';
+import type { ThemeSpec } from '../theme/compile';
 
 interface Props {
   title: string;
   description: string | null;
   machinePage?: MachinePage;
+  theme?: ThemeSpec;
 }
 
-const { title, description, machinePage } = Astro.props;
+const { title, description, machinePage, theme } = Astro.props;
 
 // Machine metadata wins when present; existing demo pages without MachineSpec
 // keep using the plain title/description props (backward compatibility).
@@ -28,7 +31,7 @@ const ogDescription = og ? og.description : null;
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-theme={theme ? theme.theme_id : undefined}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -38,6 +41,7 @@ const ogDescription = og ? og.description : null;
     {ogType && <meta property="og:type" content={ogType} />}
     {ogTitle && <meta property="og:title" content={ogTitle} />}
     {ogDescription != null && <meta property="og:description" content={ogDescription} />}
+    {theme && <ThemeStyle spec={theme} />}
     <title>{pageTitle}</title>
   </head>
   <body>

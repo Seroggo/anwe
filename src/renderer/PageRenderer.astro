@@ -30,6 +30,7 @@ import StructuredData from '../components/StructuredData.astro';
 import { rebaseContent } from '../runtime/rebase-links';
 import type { MachineSpec, MachinePage } from '../machine/structured-data';
 import type { Block } from './types';
+import type { ThemeSpec } from '../theme/compile';
 
 interface SiteModelPage {
   id: string;
@@ -43,9 +44,10 @@ interface Props {
   page: SiteModelPage;
   machine: MachineSpec;
   mountBase?: string;
+  theme?: ThemeSpec;
 }
 
-const { page, machine, mountBase = '/' } = Astro.props;
+const { page, machine, mountBase = '/', theme } = Astro.props;
 
 // --- Machine page match (strict) ---
 const machinePage: MachinePage | undefined = machine.pages.find(
@@ -97,6 +99,7 @@ const middleRender = middleBlocks.map(rebase);
   title={headTitle}
   description={headDescription}
   machinePage={machinePage}
+  theme={theme}
 >
   {headerRender && <BlockRenderer block={headerRender} />}
   <main id="top">

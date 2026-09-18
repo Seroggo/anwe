@@ -1,0 +1,135 @@
+{
+  "schema_version": "0.1",
+  "theme_id": "techassembly-precision",
+  "metadata": {
+    "name": "TechAssembly Precision",
+    "description": "Visual theme for a contract electronics manufacturer: industrial-precision direction self-selected from grounded business context while brand desired_character was empty.",
+    "interpreter_skill": "designer.theme.interpret",
+    "interpreter_version": "0.1"
+  },
+  "colors": {
+    "canvas": "#f2f4f6",
+    "surface": "#ffffff",
+    "surface_muted": "#e6eaee",
+    "text": "#10161c",
+    "text_muted": "#5b6672",
+    "primary": "#12495c",
+    "primary_hover": "#0d3847",
+    "on_primary": "#ffffff",
+    "accent": "#cfe3ea",
+    "on_accent": "#0f2a33",
+    "inverse": "#0c1218",
+    "inverse_text": "#f4f7f9",
+    "line": "#c9d2da",
+    "focus": "#1d7fa0",
+    "accent_palette": ["#1d7fa0", "#a9c4cf"]
+  },
+  "typography": {
+    "font_display": "\"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+    "font_body": "\"Segoe UI\", Arial, sans-serif",
+    "font_mono": "\"Cascadia Mono\", Consolas, ui-monospace, monospace",
+    "display": {
+      "size": { "min": "2.6rem", "preferred": "5.6vw", "max": "5.2rem" },
+      "weight": 600,
+      "line_height": 1.02,
+      "tracking": "-0.03em"
+    },
+    "heading": {
+      "size": { "min": "1.7rem", "preferred": "3.2vw", "max": "2.9rem" },
+      "weight": 600,
+      "line_height": 1.08,
+      "tracking": "-0.02em"
+    },
+    "body": {
+      "size": "1.05rem",
+      "weight": 400,
+      "line_height": 1.6,
+      "tracking": "0"
+    },
+    "eyebrow": {
+      "size": "0.72rem",
+      "weight": 700,
+      "line_height": 1.3,
+      "tracking": "0.09em"
+    }
+  },
+  "spacing": {
+    "density": "balanced",
+    "section": { "min": "3.5rem", "preferred": "7vw", "max": "7rem" },
+    "content": { "min": "1.1rem", "preferred": "2.6vw", "max": "3rem" },
+    "block_gap": "0.75rem"
+  },
+  "shape": {
+    "card_radius": "14px",
+    "panel_radius": "20px",
+    "button_radius": "10px"
+  },
+  "effects": {
+    "card_border": {
+      "width": "1px",
+      "color_role": "line"
+    },
+    "card_shadow": {
+      "x": "0",
+      "y": "10px",
+      "blur": "28px",
+      "spread": "-12px",
+      "color": "#0c1218",
+      "opacity": 0.18
+    }
+  },
+  "decisions": [
+    {
+      "id": "visual-direction-from-business-context",
+      "source_type": "INTERPRETER_DECISION",
+      "decision": "Chosen the \"industrial precision\" visual direction: cool neutral canvas, deep technical primary, restrained accent, low radii, border-led surfaces and mono eyebrows.",
+      "evidence": [
+        "SiteContext.brand.desired_character is empty — the brand did not prescribe a visual character",
+        "semantic_identity.entity_type = contract electronics manufacturer",
+        "semantic_identity.categories include SMT/SMD PCB assembly",
+        "proof includes AOI Mirtec MV-7Xi and SMT line Juki RS-1"
+      ],
+      "reason": "Desired_character[] is empty but grounded business context is sufficient (business type, audience, positioning, offers, constraints), so interpretation is not blocked: the direction was self-selected by the interpreter and recorded as INTERPRETER_DECISION."
+    },
+    {
+      "id": "brand-inputs-absent-safe-fallbacks",
+      "source_type": "FALLBACK",
+      "decision": "Used safe system font stacks and a synthesised palette; no real brand colors or fonts existed.",
+      "evidence": [
+        "brand.existing_colors is empty",
+        "brand.existing_fonts is empty",
+        "brand.reference is null"
+      ],
+      "reason": "Absence of brand inputs does not block interpretation: a safe universal option was applied and recorded as FALLBACK."
+    },
+    {
+      "id": "single-primary-cta-color-role",
+      "source_type": "CONTEXT_DERIVED",
+      "decision": "primary is a deep technical color for the single CTA \"Запросить расчёт\"; accent is a light technical tint reserved for accent surfaces.",
+      "evidence": [
+        "conversion.primary_cta.label = \"Запросить расчёт\"",
+        "conversion.secondary_ctas is empty"
+      ],
+      "reason": "A single primary CTA justifies economical use of the action-accent color and a distinct, restrained accent surface color."
+    },
+    {
+      "id": "border-led-flat-effects",
+      "source_type": "INTERPRETER_DECISION",
+      "decision": "card_border = 1px line; card_shadow is a narrow soft shadow with negative spread. Surfaces are border-led, not shadow-led.",
+      "evidence": [
+        "positioning.differentiators include AOI inspection and BOM/DFM review",
+        "proof includes aoi-equipment and smd-line"
+      ],
+      "reason": "Technical precision and engineering verifiability read through strict borders and flat surfaces rather than decorative shadows."
+    },
+    {
+      "id": "low-contrast-line-for-opaque-borders",
+      "source_type": "INTERPRETER_DECISION",
+      "decision": "line is a light low-contrast color compensating for the absence of alpha in the v0.1 contract.",
+      "evidence": [
+        "ThemeSpec v0.1: colors.line accepts only #RRGGBB without alpha"
+      ],
+      "reason": "The contract forbids alpha in base colors, so the visual softness of dividers is achieved by choosing a light shade rather than transparency."
+    }
+  ]
+}

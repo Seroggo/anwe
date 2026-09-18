@@ -15,7 +15,10 @@ const schemas = [
   { name: 'site.model.build output', path: 'schemas/output/site.model.build.json' },
   { name: 'machine-spec contract', path: 'contracts/machine-spec.schema.json' },
   { name: 'site.machine.build input', path: 'schemas/input/site.machine.build.json' },
-  { name: 'site.machine.build output', path: 'schemas/output/site.machine.build.json' }
+  { name: 'site.machine.build output', path: 'schemas/output/site.machine.build.json' },
+  { name: 'theme-spec contract', path: 'contracts/theme-spec.schema.json' },
+  { name: 'designer.theme.interpret input', path: 'schemas/input/designer.theme.interpret.json' },
+  { name: 'designer.theme.interpret output', path: 'schemas/output/designer.theme.interpret.json' }
 ];
 
 const fixtures = [
@@ -39,7 +42,9 @@ const fixtures = [
   { name: 'fixture confirmed-contacts MachineSpec output', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-confirmed-contacts-output.json' },
   { name: 'fixture placeholder-contacts MachineSpec output', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json' },
   { name: 'Human Layer fixture SiteModel', schemaPath: 'schemas/output/site.model.build.json', dataPath: 'tests/fixtures/human-layer/SITE_MODEL.json' },
-  { name: 'Human Layer fixture MachineSpec', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/human-layer/MACHINE_SPEC.json' }
+  { name: 'Human Layer fixture MachineSpec', schemaPath: 'schemas/output/site.machine.build.json', dataPath: 'tests/fixtures/human-layer/MACHINE_SPEC.json' },
+  { name: 'fixture A Theme Interpreter input', schemaPath: 'schemas/input/designer.theme.interpret.json', dataPath: 'tests/fixtures/machine-spec/fixture-a-input.json' },
+  { name: 'fixture A ThemeSpec output', schemaPath: 'schemas/output/designer.theme.interpret.json', dataPath: 'tests/fixtures/theme-spec/fixture-a-output.json' }
 ];
 
 const outputFixtures = new Map([
@@ -53,7 +58,8 @@ const outputFixtures = new Map([
   ['tests/fixtures/machine-spec/fixture-confirmed-contacts-output.json', 'contracts/machine-spec.schema.json'],
   ['tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json', 'contracts/machine-spec.schema.json'],
   ['tests/fixtures/human-layer/SITE_MODEL.json', 'contracts/site-model.schema.json'],
-  ['tests/fixtures/human-layer/MACHINE_SPEC.json', 'contracts/machine-spec.schema.json']
+  ['tests/fixtures/human-layer/MACHINE_SPEC.json', 'contracts/machine-spec.schema.json'],
+  ['tests/fixtures/theme-spec/fixture-a-output.json', 'contracts/theme-spec.schema.json']
 ]);
 
 let failed = false;
@@ -63,7 +69,7 @@ for (const { path: relPath } of schemas) {
 }
 
 // Register canonical contracts first so wrappers can use their canonical $id refs.
-for (const relPath of ['contracts/site-context.schema.json', 'contracts/site-model.schema.json', 'contracts/machine-spec.schema.json']) {
+for (const relPath of ['contracts/site-context.schema.json', 'contracts/site-model.schema.json', 'contracts/machine-spec.schema.json', 'contracts/theme-spec.schema.json']) {
   ajv.addSchema(rawSchemas.get(relPath));
 }
 
@@ -121,6 +127,7 @@ if (fs.existsSync(sitesDir)) {
     const contextPath = path.join('sites', siteId, 'SITE_CONTEXT.json');
     const modelPath = path.join('sites', siteId, 'SITE_MODEL.json');
     const machinePath = path.join('sites', siteId, 'MACHINE_SPEC.json');
+    const themePath = path.join('sites', siteId, 'THEME_SPEC.json');
 
     if (fs.existsSync(path.join(root, contextPath))) {
       productionArtifacts.push({ name: `${siteId} SITE_CONTEXT`, dataPath: contextPath, contractPath: 'contracts/site-context.schema.json' });
@@ -132,6 +139,10 @@ if (fs.existsSync(sitesDir)) {
 
     if (fs.existsSync(path.join(root, machinePath))) {
       productionArtifacts.push({ name: `${siteId} MACHINE_SPEC`, dataPath: machinePath, contractPath: 'contracts/machine-spec.schema.json' });
+    }
+
+    if (fs.existsSync(path.join(root, themePath))) {
+      productionArtifacts.push({ name: `${siteId} THEME_SPEC`, dataPath: themePath, contractPath: 'contracts/theme-spec.schema.json' });
     }
   }
 }

@@ -14,8 +14,10 @@
     "check:site-model": "node scripts/check-site-model.mjs",
     "check:machine": "node scripts/check-machine-spec.mjs && node scripts/check-machine-spec-negative.mjs",
     "check:astro": "astro check",
+    "check:theme": "node scripts/check-theme-compiler.mjs",
     "check:human-build": "node scripts/check-human-build.mjs",
-    "check": "npm run check:json && npm run check:blueprints && npm run check:blocks && npm run check:schemas && npm run check:site-model && npm run check:machine && npm run check:astro"
+    "check:theme-build": "node scripts/check-theme-build.mjs",
+    "check": "npm run check:json && npm run check:blueprints && npm run check:blocks && npm run check:schemas && npm run check:site-model && npm run check:machine && npm run check:theme && npm run check:astro"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anwe.dev/schemas/input/designer.theme.interpret.json",
+  "title": "designer.theme.interpret input",
+  "description": "Canonical Theme Interpreter input containing SiteContext and SiteModel. Cross-document identity is semantic.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["site_context", "site_model"],
+  "properties": {
+    "site_context": { "$ref": "https://anwe.dev/contracts/site-context.schema.json" },
+    "site_model": { "$ref": "https://anwe.dev/contracts/site-model.schema.json" }
+  }
+}

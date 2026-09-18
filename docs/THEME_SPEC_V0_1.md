@@ -2,8 +2,8 @@
 
 ## Purpose
 
-ThemeSpec is the minimal machine contract between the ANWE Theme Interpreter and a
-future deterministic Theme Compiler:
+ThemeSpec is the minimal machine contract between the ANWE Theme Interpreter and the
+deterministic Theme Compiler:
 
 ```text
 Theme Interpreter
@@ -31,9 +31,43 @@ ThemeSpec stores only the resulting values plus concise decision traceability. I
 not store the full ThemeBrief, raw reference, coverage, capability gaps, or private
 chain-of-thought.
 
-The future Compiler consumes already normalized ThemeSpec. It maps structured values to
+The deterministic Theme Compiler (`src/theme/compile.ts`) consumes already normalized ThemeSpec. It maps structured values to
 ANWE CSS variables and structured responsive lengths to CSS `clamp()` where needed. It
 does not choose fallbacks, reinterpret the brief, or normalize RGB/HSL/named colors.
+
+## Deterministic Theme Compiler
+
+The production mechanism that applies a ThemeSpec is `src/theme/compile.ts` — a
+deterministic, dependency-free function `compileTheme(spec)` that maps every ThemeSpec
+field to the ANWE CSS custom properties consumed by `src/styles/base.css` and the block
+components. The runtime bridge is `src/theme/ThemeStyle.astro`, which emits the compiled
+CSS as an inline `<style>` in the page `<head>`; `SiteLayout` and `PageRenderer` accept an
+optional `theme` prop so any page can apply a ThemeSpec through the same generic renderer
+used in production.
+
+The compiler emits one CSS block scoped to `html[data-theme="<theme_id>"]`:
+
+```text
+colors.*           -> --color-*
+accent_palette[]   -> --color-accent-palette-1..N
+typography fonts   -> --font-display / --font-body / --font-mono
+typography roles   -> --{role}-size / -weight / -line-height / -tracking
+spacing.section    -> --space-section
+spacing.content    -> --space-content
+spacing.block_gap  -> --space-block-gap
+spacing.density    -> (descriptor; not emitted)
+shape.*            -> --radius-*
+card_border        -> --border-card  (null -> 0; object -> "<width> solid var(--color-line)")
+card_shadow        -> --shadow-card  (null -> none; object -> "<x> <y> <blur> <spread> rgba(r,g,b,opacity)")
+ResponsiveLength   -> clamp(min, preferred, max)
+```
+
+Determinism guarantee: the same ThemeSpec always compiles to byte-identical CSS,
+regardless of JSON key order. Colors are preserved verbatim; the compiler never
+normalizes, invents fallbacks, or reinterprets the brief. A synthetic proof route at
+`/test/theme-runtime/` and the validators `scripts/check-theme-compiler.mjs` and
+`scripts/check-theme-build.mjs` verify the non-blocking rule, determinism, token coverage
+and the built runtime output.
 
 ## Why Capability Registry Is Wider
 
@@ -103,7 +137,7 @@ Invalid forms include short/uppercase HEX, RGB/RGBA, HSL/HSLA, named colors,
 `transparent`, and alpha HEX.
 
 ThemeSpec does not normalize color input. The Interpreter supplies canonical lowercase
-`#RRGGBB`; the future Compiler preserves it and does not normalize it.
+`#RRGGBB`; the deterministic Theme Compiler preserves it and does not normalize it.
 
 Base semantic colors contain no alpha. Effects are the deliberate exception: a shadow
 has a hex `color` plus a separate numeric `opacity`. That opacity belongs to
@@ -150,9 +184,11 @@ inverse
 The mapping is fixed ANWE behaviour, not data repeated in every ThemeSpec. Shape and
 effects provide the remaining visual expression of these surfaces.
 
-Current `base.css` is not fully aligned: `.surface--accent` currently uses
-`--color-text` rather than `--color-on-accent`. This is a documented runtime gap for a
-future compiler-integration stage. It is not changed in v0.1.
+`base.css` is aligned with the fixed surface mapping: `.surface--accent` consumes
+`--color-on-accent` for foreground, muted text and line. The deterministic Theme
+Compiler (`src/theme/compile.ts`) emits `--color-on-accent` from `colors.on_accent`,
+and `base.css` supplies a `--color-on-accent` default in `:root` so unthemed pages
+remain coherent.
 
 ## Typography, Lengths, and Spacing
 
@@ -184,7 +220,7 @@ Weights are integers from 100 through 900 and do not require a 100-point step.
 }
 ```
 
-The future Compiler, not ThemeSpec, turns the object into `clamp(min, preferred, max)`.
+The deterministic Theme Compiler, not ThemeSpec, turns the object into `clamp(min, preferred, max)`.
 Raw CSS expressions such as `clamp(...)`, `calc(...)`, `min(...)`, and `var(...)` are
 not valid ThemeSpec values.
 
@@ -207,7 +243,7 @@ object with a simple `width` and `color_role: "line"`; solid is implicit in v0.1
 
 `card_shadow` is either `null` or a strict object with `x`, `y`, `blur`, `spread`,
 hex `color`, and numeric `opacity`. Offsets and spread may be negative; blur may not.
-The future Compiler is responsible for assembling that object into CSS shadow syntax.
+The deterministic Theme Compiler is responsible for assembling that object into CSS shadow syntax.
 
 There is intentionally no panel border or panel shadow in v0.1. The current runtime only
 has `--border-card` and `--shadow-card`; new panel effects require a demonstrated runtime
@@ -247,11 +283,11 @@ ThemeSpec v0.1 excludes:
 This keeps industrial B2B and beauty themes within one schema while preventing the
 contract from becoming a CSS DSL or a collection of industry templates.
 
-## Current Runtime Mapping
+## Runtime Mapping
 
 This table compares v0.1 with `src/styles/base.css`, the three current manual themes,
-and `src/renderer/types.ts`. Status describes the current CSS variable/runtime consumer,
-not implementation of the future Compiler.
+`src/renderer/types.ts`, and the deterministic Theme Compiler (`src/theme/compile.ts`).
+Status describes the current CSS variable / runtime consumer.
 
 | ThemeSpec field | Current CSS variable / runtime consumer | Status |
 |---|---|---|
@@ -259,25 +295,25 @@ not implementation of the future Compiler.
 | `colors.surface` | `--color-surface`; `surface--default` | SUPPORTED |
 | `colors.surface_muted` | `--color-surface-muted`; `surface--muted` | SUPPORTED |
 | `colors.text`, `colors.text_muted` | `--color-text`, `--color-text-muted` | SUPPORTED |
-| `colors.primary`, `colors.primary_hover`, `colors.on_primary` | Primary action variables | SUPPORTED |
+| `colors.primary`, `colors.primary_hover`, `colors.on_primary` | `--color-primary`, `--color-primary-hover`, `--color-on-primary`; primary actions | SUPPORTED |
 | `colors.accent` | `--color-accent`; accent surfaces | SUPPORTED |
-| `colors.on_accent` | Intended accent foreground; current accent surface uses `--color-text` | PARTIAL |
+| `colors.on_accent` | `--color-on-accent`; `.surface--accent` foreground | SUPPORTED |
 | `colors.inverse`, `colors.inverse_text` | `surface--inverse` variables | SUPPORTED |
 | `colors.line`, `colors.focus` | `--color-line`, `--color-focus` | SUPPORTED |
-| `colors.accent_palette` | No universal runtime consumer | NOT_YET_CONSUMED |
+| `colors.accent_palette` | `--color-accent-palette-1..N`; no universal component consumer | NOT_YET_CONSUMED |
 | `typography.font_display`, `font_body`, `font_mono` | `--font-display`, `--font-body`, `--font-mono` | SUPPORTED |
 | `typography.display.size`, `heading.size`, `body.size` | `--display-size`, `--heading-size`, `--body-size` | SUPPORTED |
-| Typography role weights | `h1`, `h2`, `h3`, and eyebrow values are hardcoded | NOT_YET_CONSUMED |
-| Typography role line heights | Body and heading line heights are hardcoded | NOT_YET_CONSUMED |
-| Typography role tracking | Heading and eyebrow tracking are hardcoded | NOT_YET_CONSUMED |
-| `typography.eyebrow` | Eyebrow uses hardcoded size, weight, line-height, tracking | NOT_YET_CONSUMED |
+| `typography.eyebrow.size` | `--eyebrow-size` | SUPPORTED |
+| Typography role weights | `--display-weight`, `--heading-weight`, `--body-weight`, `--eyebrow-weight` | SUPPORTED |
+| Typography role line heights | `--display-line-height`, `--heading-line-height`, `--body-line-height`, `--eyebrow-line-height` | SUPPORTED |
+| Typography role tracking | `--display-tracking`, `--heading-tracking`, `--body-tracking`, `--eyebrow-tracking` | SUPPORTED |
 | `spacing.density` | Descriptor only; no runtime consumer | NOT_YET_CONSUMED |
 | `spacing.section`, `spacing.content` | `--space-section`, `--space-content` | SUPPORTED |
-| `spacing.block_gap` | `.block + .block` hardcoded at `0.75rem` | NOT_YET_CONSUMED |
+| `spacing.block_gap` | `--space-block-gap`; `.block + .block` | SUPPORTED |
 | `shape.card_radius`, `panel_radius`, `button_radius` | `--radius-card`, `--radius-panel`, `--radius-button` | SUPPORTED |
-| `effects.card_border` | `--border-card` exists, but structured border needs compiler conversion | PARTIAL |
-| `effects.card_shadow` | `--shadow-card` exists, but structured shadow needs compiler conversion | PARTIAL |
-| Fixed surface mapping | `Surface` union: default/muted/accent/inverse | PARTIAL (`accent` foreground gap) |
+| `effects.card_border` | `--border-card` assembled from `{width, color_role}` | SUPPORTED |
+| `effects.card_shadow` | `--shadow-card` assembled from `{x, y, blur, spread, color, opacity}` | SUPPORTED |
+| Fixed surface mapping | `Surface` union: default/muted/accent/inverse | SUPPORTED |
 | `decisions[]` | Traceability artifact; no CSS consumer | NOT_YET_CONSUMED |
 
 The existing editorial-pastel and cinematic-dark themes are conceptually expressible
