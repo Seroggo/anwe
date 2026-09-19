@@ -28,6 +28,8 @@ const og = machinePage ? machinePage.open_graph : null;
 const ogType = og ? og.type : null;
 const ogTitle = og ? og.title : null;
 const ogDescription = og ? og.description : null;
+
+const blockDebugAvailable = import.meta.env.DEV;
 ---
 
 <!doctype html>
@@ -48,5 +50,94 @@ const ogDescription = og ? og.description : null;
     <div class="site-shell">
       <slot />
     </div>
+    {blockDebugAvailable && (
+        <script is:inline>
+          if (new URLSearchParams(window.location.search).get('debug') === 'blocks') {
+            const style = document.createElement('style');
+            style.dataset.anweDebug = 'blocks';
+            style.textContent = `
+              .anwe-debug-target {
+                position: relative !important;
+                outline: 1px dashed rgb(255 0 153 / 65%) !important;
+                outline-offset: -1px;
+              }
+
+              .anwe-debug-item {
+                position: relative !important;
+                outline: 1px dashed rgb(0 196 255 / 55%) !important;
+                outline-offset: -1px;
+              }
+
+              .anwe-debug-badge {
+                position: absolute;
+                inset: 2px auto auto 2px;
+                z-index: 2147483647;
+                max-width: calc(100% - 4px);
+                margin: 0;
+                border: 1px solid rgb(255 255 255 / 80%);
+                border-radius: 2px;
+                padding: 2px 4px;
+                color: #fff;
+                background: #96005c;
+                box-shadow: 0 1px 3px rgb(0 0 0 / 45%);
+                font: 600 10px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace;
+                letter-spacing: 0;
+                text-align: left;
+                text-transform: none;
+                white-space: nowrap;
+                cursor: copy;
+              }
+
+              .anwe-debug-badge--item {
+                inset: 2px 2px auto auto;
+                color: #06141a;
+                background: #62ddff;
+              }
+
+              .anwe-debug-badge:focus-visible {
+                outline: 2px solid #fff;
+                outline-offset: 2px;
+              }
+            `;
+            document.head.append(style);
+
+            const itemSelector = '.card, .step, .stat, .gallery-item, .faq-item, .check-list > li';
+
+            const addBadge = (target, reference, item = false) => {
+              const badge = document.createElement('button');
+              badge.type = 'button';
+              badge.className = `anwe-debug-badge${item ? ' anwe-debug-badge--item' : ''}`;
+              badge.textContent = reference;
+              badge.title = `Copy ${reference}`;
+              badge.addEventListener('click', async (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                try {
+                  await navigator.clipboard.writeText(reference);
+                  badge.textContent = 'copied';
+                  window.setTimeout(() => {
+                    badge.textContent = reference;
+                  }, 800);
+                } catch {
+                  badge.textContent = 'copy failed';
+                }
+              });
+              target.append(badge);
+            };
+
+            document.querySelectorAll('.block[id]').forEach((block) => {
+              const blockId = block.id;
+              block.classList.add('anwe-debug-target');
+              addBadge(block, blockId);
+
+              block.querySelectorAll(itemSelector).forEach((item, index) => {
+                const reference = `${blockId}/item-${String(index + 1).padStart(2, '0')}`;
+                item.classList.add('anwe-debug-item');
+                addBadge(item, reference, true);
+              });
+            });
+          }
+        </script>
+    )}
   </body>
 </html>
