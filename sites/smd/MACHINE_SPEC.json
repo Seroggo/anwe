@@ -1,0 +1,131 @@
+{
+  "schema_version": "0.1",
+  "machine_id": "smd-service-machine",
+  "site_id": "smd-service",
+  "source_context_id": "smd-service",
+  "status": "partial",
+  "primary_entity": {
+    "id": "organization",
+    "schema_type": "Organization",
+    "name": "Мириад Систем",
+    "description": "Инженерная компания в Екатеринбурге с собственным производством электроники: контрактное производство электронных узлов и SMT/SMD-монтаж печатных плат с инженерной проверкой проекта до запуска.",
+    "home_path": "/",
+    "contacts": {
+      "phone": null,
+      "email": null
+    },
+    "context_refs": ["business.name", "business.entity_type", "business.summary", "semantic_identity.primary_entity", "semantic_identity.locations"]
+  },
+  "services": [
+    {
+      "id": "contract-electronics-manufacturing",
+      "name": "Контрактное производство электронных узлов по документации заказчика",
+      "description": "Производство внешних разработок с SMT/SMD-монтажом как основной операцией, проверкой производственной пригодности проекта и возможностью повторных серий.",
+      "provider_entity_id": "organization",
+      "page_ids": ["home"],
+      "context_refs": ["offers.contract-electronics-manufacturing"]
+    },
+    {
+      "id": "engineering-development-and-production",
+      "name": "Инженерная разработка по техническому заданию с последующим производством",
+      "description": "Разработка электронного изделия по техническому заданию заказчика, подготовка проекта к производству и выпуск на собственном производстве.",
+      "provider_entity_id": "organization",
+      "page_ids": ["home"],
+      "context_refs": ["offers.engineering-development-and-production"]
+    },
+    {
+      "id": "component-procurement-and-kitting",
+      "name": "Закупка и комплектование компонентами",
+      "description": "Закупка компонентов через многолетний пул поставщиков, а также работа с давальческими компонентами при согласованных требованиях к качеству, хранению и технологическому запасу.",
+      "provider_entity_id": "organization",
+      "page_ids": ["home"],
+      "context_refs": ["offers.component-procurement-and-kitting"]
+    },
+    {
+      "id": "tht-and-mixed-assembly",
+      "name": "THT-монтаж и смешанный SMT/THT-монтаж",
+      "description": "THT-монтаж, смешанный SMT/THT-монтаж и ручной монтаж нестандартных компонентов; THT не является предпочтительным типом заказа для производства.",
+      "provider_entity_id": "organization",
+      "page_ids": ["home"],
+      "context_refs": ["offers.tht-and-mixed-assembly"]
+    },
+    {
+      "id": "functional-testing-and-programming",
+      "name": "Функциональное тестирование и программирование",
+      "description": "Функциональное тестирование выполняется после оценки конкретного проекта; программирование микроконтроллеров возможно в составе выходного тестирования или финальной сборки.",
+      "provider_entity_id": "organization",
+      "page_ids": ["home"],
+      "context_refs": ["offers.functional-testing-and-programming"]
+    },
+    {
+      "id": "test-fixture-development",
+      "name": "Разработка тестового стенда",
+      "description": "Разработка тестового стенда возможна для экономически и технически интересных заказов после оценки проекта.",
+      "provider_entity_id": "organization",
+      "page_ids": ["home"],
+      "context_refs": ["offers.test-fixture-development"]
+    }
+  ],
+  "pages": [
+    {
+      "page_id": "home",
+      "path": "/",
+      "semantic_role": "home",
+      "meta": {
+        "title": "Мириад Систем — контрактное производство электроники для повторных серий",
+        "description": "SMT/SMD-монтаж печатных плат с инженерной проверкой BOM, Gerber и производственной пригодности проекта до запуска. Екатеринбург."
+      },
+      "canonical": {"path": "/"},
+      "robots": {"index": true, "follow": true},
+      "open_graph": {
+        "type": "website",
+        "title": "Мириад Систем — контрактное производство электроники для повторных серий",
+        "description": "SMT/SMD-монтаж печатных плат с инженерной проверкой BOM, Gerber и производственной пригодности проекта до запуска. Екатеринбург."
+      },
+      "breadcrumbs": [],
+      "primary_entity_id": "organization",
+      "service_ids": [
+        "contract-electronics-manufacturing",
+        "engineering-development-and-production",
+        "component-procurement-and-kitting",
+        "tht-and-mixed-assembly",
+        "functional-testing-and-programming",
+        "test-fixture-development"
+      ],
+      "sitemap": true
+    }
+  ],
+  "decisions": [
+    {
+      "id": "organization-schema-type",
+      "decision": "Использовать schema_type Organization для primary entity.",
+      "reason": "Мириад Систем — инженерная компания с собственным производством; подтверждённого публичного сервисного локейшна и отраслевого subtype для LocalBusiness/ProfessionalService нет в SiteContext.",
+      "context_refs": ["business.entity_type", "semantic_identity.entity_type", "semantic_identity.locations"]
+    },
+    {
+      "id": "null-entity-contacts",
+      "decision": "Оставить primary_entity.contacts.phone и email равными null.",
+      "reason": "SiteModel содержит только placeholder контакты; confirmed публичного канала связи нет. Placeholder значения не должны попадать в machine-facing данные.",
+      "context_refs": ["data_gaps.legal-and-contact-details", "data_gaps.contact-methods"]
+    },
+    {
+      "id": "six-services-from-offers",
+      "decision": "Создать шесть Service из подтверждённых offers, все привязанные к home page.",
+      "reason": "Все шесть offers подтверждены в SiteContext и представлены на единственной home странице; декоративных или неподтверждённых offers нет.",
+      "context_refs": ["offers.contract-electronics-manufacturing", "offers.engineering-development-and-production", "offers.component-procurement-and-kitting", "offers.tht-and-mixed-assembly", "offers.functional-testing-and-programming", "offers.test-fixture-development"]
+    },
+    {
+      "id": "single-home-page",
+      "decision": "Машинная спецификация содержит одну home страницу с пустыми breadcrumbs.",
+      "reason": "SiteModel содержит единственную home страницу; выдумывать дополнительные страницы запрещено.",
+      "context_refs": ["pages.home"]
+    },
+    {
+      "id": "indexable-home",
+      "decision": "Установить robots.index=true, robots.follow=true, sitemap=true для home страницы.",
+      "reason": "Публичный коммерческий сайт должен индексироваться; canonical путь совпадает с page path.",
+      "context_refs": ["business.summary", "constraints.geographic"]
+    }
+  ],
+  "issues": []
+}

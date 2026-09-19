@@ -1,20 +1,40 @@
 ---
-import siteModel from '../../../sites/smd/SITE_MODEL.json';
-import SiteLayout from '../../layouts/SiteLayout.astro';
-import BlockRenderer from '../../renderer/BlockRenderer.astro';
-import type { PageFixture } from '../../renderer/types';
+/**
+ * SMD (Мириад Систем) production-style route.
+ *
+ * Generic ANWE pipeline output: imports the site's SiteModel, MachineSpec and
+ * ThemeSpec and renders the home page through the same PageRenderer used by the
+ * Human Layer and Theme runtime proof routes. No business copy lives here — all
+ * content comes from the canonical site artifacts.
+ *
+ * Mount base: "/" — the site is a single home page with same-page anchor nav,
+ * so no rebasing is required; canonical stays the MachineSpec path.
+ */
 
-const homePage = siteModel.pages.find((page) => page.id === 'home');
+import PageRenderer from '../../renderer/PageRenderer.astro';
+import siteModel from '../../../sites/smd/SITE_MODEL.json';
+import machineSpec from '../../../sites/smd/MACHINE_SPEC.json';
+import themeSpec from '../../../sites/smd/THEME_SPEC.json';
+import type { MachineSpec } from '../../machine/structured-data';
+import type { Block } from '../../renderer/types';
+import type { ThemeSpec } from '../../theme/compile';
+
+interface SiteModelPage {
+  id: string;
+  path: string;
+  title: string;
+  description: string | null;
+  blocks: Block[];
+}
+
+const homePage = (siteModel as { pages: SiteModelPage[] }).pages.find((page) => page.id === 'home');
 
 if (!homePage) {
   throw new Error('SMD SiteModel does not contain the required home page.');
 }
 
-const page = homePage as PageFixture;
+const machine = machineSpec as unknown as MachineSpec;
+const theme = themeSpec as unknown as ThemeSpec;
 ---
 
-<SiteLayout title={page.title} description={page.description}>
-  <main id="top">
-    {page.blocks.map((block) => <BlockRenderer block={block} />)}
-  </main>
-</SiteLayout>
+<PageRenderer page={homePage} machine={machine} mountBase="/" theme={theme} />

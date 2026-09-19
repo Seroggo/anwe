@@ -25,7 +25,9 @@
               {"label": "Как работаем", "href": "#process"},
               {"label": "Вопросы", "href": "#faq"}
             ],
-            "actions": []
+            "actions": [
+              {"label": "Отправить проект на расчёт", "href": "#request", "style": "primary"}
+            ]
           }
         },
         {
@@ -37,7 +39,10 @@
             "eyebrow": "Мириад Систем · Екатеринбург",
             "title": "Контрактное производство электроники для повторных серий",
             "body": "SMT/SMD-монтаж печатных плат с инженерной проверкой BOM, Gerber и производственной пригодности проекта до запуска.",
-            "actions": [],
+            "actions": [
+              {"label": "Отправить проект на расчёт", "href": "#request", "style": "primary"},
+              {"label": "Производственные возможности", "href": "#production", "style": "secondary"}
+            ],
             "note": "Для российских инженерно-производственных компаний со своим электронным продуктом и повторным выпуском.",
             "media": null
           }
@@ -72,7 +77,7 @@
               {
                 "eyebrow": "Постановка на серию",
                 "title": "Прототип переходит в регулярный выпуск",
-                "body": "Проект проверяется на производственную пригодность, необходимые изменения согласуются до первого серийного запуска.",
+                "body": "Проект проверяется на производственную пригодность, необходимые изменения согласуются до первого серийного запуска с перспективой повторных партий.",
                 "media": null,
                 "icon": null,
                 "actions": []
@@ -190,7 +195,7 @@
           }
         },
         {
-          "id": "contact",
+          "id": "request",
           "type": "cta",
           "variant": "centered",
           "surface": "inverse",
@@ -199,7 +204,44 @@
             "title": "Передайте технические данные проекта на расчёт",
             "body": "BOM, Gerber, Pick&Place, планируемая партия, требования к комплектованию и тестированию помогут начать инженерную проверку и подготовить расчёт.",
             "actions": [],
+            "form": {
+              "id": "rfq-project",
+              "transport_status": "unwired",
+              "fields": [
+                {"name": "name", "type": "text", "label": "Как к вам обращаться", "placeholder": "Имя", "required": true, "autocomplete": "name"},
+                {"name": "company", "type": "text", "label": "Компания", "placeholder": "Название компании", "required": false, "autocomplete": "organization"},
+                {"name": "contact", "type": "email", "label": "Email для ответа", "placeholder": "you@company.ru", "required": true, "autocomplete": "email"},
+                {"name": "message", "type": "textarea", "label": "Что нужно произвести", "placeholder": "Кратко опишите изделие, партию и требования", "required": false, "autocomplete": null}
+              ],
+              "submit_label": "Отправить проект на расчёт"
+            },
             "media": null
+          }
+        },
+        {
+          "id": "contacts",
+          "type": "contacts",
+          "variant": "default",
+          "surface": "default",
+          "content": {
+            "title": "Контакты",
+            "phone": {
+              "value": "+7 (000) 000-00-00",
+              "href": "tel:+70000000000",
+              "status": "placeholder"
+            },
+            "email": {
+              "value": "example@mail.test",
+              "href": "mailto:example@mail.test",
+              "status": "placeholder"
+            },
+            "address": null,
+            "messengers": [],
+            "legal": {
+              "name": null,
+              "inn": null,
+              "ogrn": null
+            }
           }
         },
         {
@@ -227,9 +269,15 @@
     },
     {
       "id": "h4-supporting-context",
-      "decision": "Использовать сложную компонентную базу, закупку и давальческую схему как поддерживающий смысл внутри основного предложения.",
+      "decision": "Использовать сложную компонентную базу, закупку и давальческую схему как поддерживающий смысл внутри основного предложения и процесса.",
       "reason": "SiteContext прямо запрещает превращать H4 в самостоятельный основной сегмент или позиционирование; его смысл усиливает H1–H3 и процесс квалификации.",
       "context_refs": ["demand_situations.h4-complex-component-base", "constraints.content"]
+    },
+    {
+      "id": "h3-prototype-to-series-visibility",
+      "decision": "Дать H3 «Постановка на серию» отдельную карточку в блоке ситуаций с явным рамкированием «Прототип переходит в регулярный выпуск».",
+      "reason": "SiteContext повышает значимость постановки на серию как одной из ключевых ситуаций спроса; H3 требует инженерных согласований и перспективы повторных партий.",
+      "context_refs": ["demand_situations.h3-transition-to-series", "proof.prototype-to-series-experience"]
     },
     {
       "id": "select-operational-proof",
@@ -244,15 +292,27 @@
       "context_refs": ["proof.free-production-capacity", "proof.repeat-customer-base", "proof.energy-and-industrial-experience", "proof.actual-line-throughput"]
     },
     {
+      "id": "rfq-form-shell",
+      "decision": "Разместить B2B form shell внутри CTA с transport_status=unwired и полями name, company, contact (email), message.",
+      "reason": "Primary conversion — квалифицированный запрос на расчёт; production-shell rule требует форму даже без подключённого backend. Минимальный квалифицирующий контакт — имя и email; компания и сообщение опциональны, чтобы не блокировать отправку.",
+      "context_refs": ["conversion.primary_goal", "conversion.primary_cta", "constraints.commercial"]
+    },
+    {
+      "id": "contacts-scaffold-placeholder",
+      "decision": "Добавить contacts block с placeholder phone/email, пустыми messengers и null legal.",
+      "reason": "Коммерческий сайт обязан иметь contacts scaffold; SiteContext не содержит подтверждённого публичного канала клиентской связи, ИНН/ОГРН/адреса — null без выдумывания.",
+      "context_refs": ["data_gaps.legal-and-contact-details", "data_gaps.contact-methods"]
+    },
+    {
       "id": "no-fake-cta-destination",
-      "decision": "Сохранить CTA без action до подтверждения клиентского destination.",
-      "reason": "Conversion goal и состав технических данных известны, но SiteContext не содержит подтверждённого URL, формы, email или телефона для отправки проекта; fake href запрещён contract и methodology.",
+      "decision": "Сохранить CTA action пустым и использовать form shell; навигационные ссылки ведут на same-page anchors существующих блоков.",
+      "reason": "Conversion goal и состав технических данных известны, но SiteContext не содержит подтверждённого URL, формы или телефона для отправки проекта; fake href запрещён. Same-page anchors #request, #production, #engineering, #process, #faq соответствуют реальным block ids.",
       "context_refs": ["conversion.primary_cta", "data_gaps.contact-methods"]
     },
     {
       "id": "no-visual-assets",
       "decision": "Не добавлять gallery, images, icons или ThemeSpec на этапе SiteModel.",
-      "reason": "Для ясного AI-first сайта достаточно текстовой и структурной подачи; visual boundary требует placeholder media только для выбранного split блока и запрещает выбор иконок, изображений и design tokens.",
+      "reason": "Для AI-first сайта достаточно текстовой и структурной подачи; visual boundary требует placeholder media только для выбранного split блока и запрещает выбор иконок, изображений и design tokens на raw SiteModel.",
       "context_refs": ["brand", "proof", "content.required_messages"]
     }
   ],
@@ -261,7 +321,7 @@
       "id": "cta-destination",
       "type": "DATA_GAP",
       "severity": "important",
-      "message": "Известна цель передачи проекта на инженерную проверку и расчёт, но SiteContext не содержит подтверждённого destination для action; CTA оставлен без ссылки.",
+      "message": "Известна цель передачи проекта на инженерную проверку и расчёт, но SiteContext не содержит подтверждённого destination для отправки; form shell оставлен с transport_status=unwired.",
       "context_ref": "conversion.primary_cta",
       "page_id": "home"
     },
@@ -269,8 +329,16 @@
       "id": "public-contact-channel",
       "type": "DATA_GAP",
       "severity": "important",
-      "message": "Официальные реквизиты подтверждают юридическое лицо, адреса и телефон, но не подтверждают, какой канал предназначен для публичной отправки проекта и клиентской связи.",
+      "message": "Официальные реквизиты подтверждают юридическое лицо, но не подтверждают, какой канал предназначен для публичной отправки проекта и клиентской связи; contacts используют placeholder значения.",
       "context_ref": "data_gaps.contact-methods",
+      "page_id": "home"
+    },
+    {
+      "id": "legal-details-unconfirmed",
+      "type": "DATA_GAP",
+      "severity": "important",
+      "message": "ИНН, ОГРН и публичный адрес не зафиксированы в SiteContext как клиентские контакты; legal fields оставлены null без выдумывания.",
+      "context_ref": "data_gaps.legal-and-contact-details",
       "page_id": "home"
     }
   ]
