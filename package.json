@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
+    "icons": "astro dev --open /dev/icons/",
     "build": "astro build",
     "check:json": "node scripts/check-json.mjs",
     "check:blueprints": "node scripts/check-blueprints.mjs",

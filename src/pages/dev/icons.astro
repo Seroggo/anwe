@@ -1,0 +1,334 @@
+---
+/**
+ * Local Lucide icon browser — DEVELOPMENT UTILITY ONLY.
+ *
+ * Enumerates the exact `icons` object exported by the installed @lucide/astro
+ * package — the same object ANWE's src/components/Icon.astro renders from.
+ * No second registry, no copied icon files, no metadata, no extra dependency.
+ *
+ * Development: /dev/icons/
+ * Production:  minimal non-tool page (no gallery, no search/copy code).
+ */
+import AnweIcon from '../../components/Icon.astro';
+
+const isDev = import.meta.env.DEV;
+
+let iconNames: string[] = [];
+
+if (isDev) {
+  const { icons } = await import('@lucide/astro');
+  // Deterministic ASCII sort — never rely on Object.keys() package order.
+  iconNames = Object.keys(icons).sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+}
+
+/**
+ * Normalized haystack for client-side matching:
+ * lowercase name + PascalCase word tokens.
+ * "HardDriveDownload" -> "harddrivedownload hard drive download"
+ */
+function searchHaystack(name: string): string {
+  const tokens = name
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+    .split(/[^A-Za-z0-9]+/)
+    .filter(Boolean)
+    .map((token) => token.toLowerCase());
+
+  return `${name.toLowerCase()} ${tokens.join(' ')}`.trim();
+}
+
+const total = iconNames.length;
+---
+
+{
+  isDev ? (
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="robots" content="noindex" />
+        <title>Lucide Browser</title>
+        <style>
+          :root {
+            color-scheme: light dark;
+            --lb-border: color-mix(in srgb, currentColor 18%, transparent);
+            --lb-muted: color-mix(in srgb, currentColor 60%, transparent);
+            --lb-surface: color-mix(in srgb, currentColor 6%, transparent);
+          }
+
+          * {
+            box-sizing: border-box;
+          }
+
+          body {
+            margin: 0;
+            padding: 24px 16px 64px;
+            font: 14px/1.45 ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+          }
+
+          header {
+            max-width: 1400px;
+            margin: 0 auto 20px;
+          }
+
+          h1 {
+            margin: 0 0 4px;
+            font-size: 22px;
+          }
+
+          .lb-hint {
+            margin: 0 0 16px;
+            color: var(--lb-muted);
+          }
+
+          .lb-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+          }
+
+          .lb-search {
+            flex: 1 1 320px;
+            min-width: 0;
+            padding: 9px 12px;
+            font: inherit;
+            color: inherit;
+            background: var(--lb-surface);
+            border: 1px solid var(--lb-border);
+            border-radius: 8px;
+          }
+
+          .lb-search:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 1px;
+          }
+
+          .lb-count {
+            margin: 0;
+            font-variant-numeric: tabular-nums;
+            color: var(--lb-muted);
+          }
+
+          .lb-status {
+            margin: 0;
+            min-height: 1.45em;
+            font-weight: 600;
+          }
+
+          .lb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 8px;
+            max-width: 1400px;
+            margin: 16px auto 0;
+            padding: 0;
+            list-style: none;
+          }
+
+          .lb-card[hidden] {
+            display: none;
+          }
+
+          .lb-card-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            width: 100%;
+            height: 100%;
+            padding: 12px 8px;
+            font: inherit;
+            color: inherit;
+            text-align: center;
+            background: transparent;
+            border: 1px solid var(--lb-border);
+            border-radius: 10px;
+            cursor: pointer;
+          }
+
+          .lb-card-btn:hover {
+            background: var(--lb-surface);
+          }
+
+          .lb-card-btn:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 1px;
+          }
+
+          .lb-card-name {
+            font-size: 12px;
+            word-break: break-word;
+          }
+
+          .lb-empty {
+            max-width: 1400px;
+            margin: 24px auto 0;
+            color: var(--lb-muted);
+          }
+        </style>
+      </head>
+      <body>
+        <header>
+          <h1>Lucide Browser</h1>
+          <p class="lb-hint">
+            Local development utility. Names come from the installed @lucide/astro
+            <code>icons</code> export — the same source <code>src/components/Icon.astro</code> uses.
+          </p>
+          <div class="lb-controls">
+            <label for="lb-search" class="lb-hint">Search</label>
+            <input
+              id="lb-search"
+              class="lb-search"
+              type="search"
+              placeholder="e.g. circuit, arrow left, hard drive"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <p id="lb-count" class="lb-count" role="status" aria-live="polite">
+              {total} icons
+            </p>
+          </div>
+          <p id="lb-status" class="lb-status" role="status" aria-live="polite"></p>
+        </header>
+
+        <ul id="lb-grid" class="lb-grid">
+          {iconNames.map((name) => (
+            <li class="lb-card" data-icon-card data-name={name} data-search={searchHaystack(name)}>
+              <button type="button" class="lb-card-btn" data-copy={name} aria-label={`Copy ${name}`}>
+                <AnweIcon name={name} size={22} />
+                <span class="lb-card-name">{name}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <p id="lb-empty" class="lb-empty" hidden>No icons match this search.</p>
+
+        <script is:inline>
+          (function () {
+            var input = document.getElementById('lb-search');
+            var count = document.getElementById('lb-count');
+            var status = document.getElementById('lb-status');
+            var empty = document.getElementById('lb-empty');
+            var cards = Array.prototype.slice.call(document.querySelectorAll('[data-icon-card]'));
+            var total = cards.length;
+            var statusTimer = 0;
+
+            function queryTokens(value) {
+              return value
+                .toLowerCase()
+                .split(/[^a-z0-9]+/)
+                .filter(Boolean);
+            }
+
+            function applyFilter() {
+              var tokens = queryTokens(input.value);
+              var visible = 0;
+
+              for (var i = 0; i < cards.length; i += 1) {
+                var haystack = cards[i].getAttribute('data-search') || '';
+                var matched = true;
+
+                for (var t = 0; t < tokens.length; t += 1) {
+                  if (haystack.indexOf(tokens[t]) === -1) {
+                    matched = false;
+                    break;
+                  }
+                }
+
+                if (matched) {
+                  cards[i].hidden = false;
+                  visible += 1;
+                } else {
+                  cards[i].hidden = true;
+                }
+              }
+
+              count.textContent = visible + ' of ' + total + ' icons';
+              empty.hidden = visible !== 0;
+            }
+
+            function setStatus(text) {
+              status.textContent = text;
+              if (statusTimer) {
+                clearTimeout(statusTimer);
+              }
+              statusTimer = setTimeout(function () {
+                status.textContent = '';
+              }, 2500);
+            }
+
+            function fallbackCopy(text) {
+              var area = document.createElement('textarea');
+              area.value = text;
+              area.setAttribute('readonly', '');
+              area.style.position = 'fixed';
+              area.style.top = '-1000px';
+              area.style.opacity = '0';
+              document.body.appendChild(area);
+              area.select();
+              area.setSelectionRange(0, area.value.length);
+
+              var ok = false;
+              try {
+                ok = document.execCommand('copy');
+              } catch (error) {
+                ok = false;
+              }
+
+              document.body.removeChild(area);
+              return ok;
+            }
+
+            function copyName(name) {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(name).then(
+                  function () {
+                    setStatus('Copied: ' + name);
+                  },
+                  function () {
+                    setStatus(fallbackCopy(name) ? 'Copied: ' + name : 'Copy failed: ' + name);
+                  },
+                );
+                return;
+              }
+
+              setStatus(fallbackCopy(name) ? 'Copied: ' + name : 'Copy failed: ' + name);
+            }
+
+            input.addEventListener('input', applyFilter);
+
+            document.addEventListener('click', function (event) {
+              var card = event.target.closest ? event.target.closest('[data-copy]') : null;
+              if (!card) {
+                return;
+              }
+              event.preventDefault();
+              copyName(card.getAttribute('data-copy'));
+            });
+
+            applyFilter();
+          })();
+        </script>
+      </body>
+    </html>
+  ) : (
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="robots" content="noindex" />
+        <meta http-equiv="refresh" content="0; url=/" />
+        <title>Not available</title>
+      </head>
+      <body>
+        <p>
+          The Lucide Browser is a local development utility and is not available in production.
+          <a href="/">Continue to the site.</a>
+        </p>
+      </body>
+    </html>
+  )
+}
