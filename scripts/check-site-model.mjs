@@ -42,12 +42,44 @@ const surfaces = new Set(['default', 'muted', 'accent', 'inverse']);
 const aspects = new Set(['4:3', '1:1', '3:4']);
 const contactStatuses = new Set(['confirmed', 'placeholder']);
 const formFieldTypes = new Set(['text', 'email', 'tel', 'textarea']);
+// `@lucide/astro` publishes TypeScript-only module entrypoints. Node executes
+// this validator directly, so derive the exact runtime export names from the
+// package's generated icon index instead of importing its TS entrypoint.
+const lucideIndexPath = path.join(root, 'node_modules', '@lucide', 'astro', 'src', 'icons', 'index.ts');
+const lucideIconNames = new Set(
+  [...fs.readFileSync(lucideIndexPath, 'utf8').matchAll(/export \{ default as (\w+) \} from/g)].map((match) => match[1])
+);
 let failed = false;
 
 function fail(fixture, message) {
   failed = true;
   console.error(`SITE MODEL ERROR: ${fixture}: ${message}`);
 }
+
+function iconValidationMessage(value) {
+  if (value === null) return null;
+  if (typeof value !== 'string' || value.length === 0) return 'icon must be null or a non-empty Lucide icon name';
+  if (!lucideIconNames.has(value)) return `unknown Lucide icon '${value}'`;
+  return null;
+}
+
+function checkIcon(fixture, value, owner) {
+  const message = iconValidationMessage(value);
+  if (message) fail(fixture, `${owner} ${message}`);
+}
+
+function checkIconContractRegression() {
+  const installedExample = 'Factory';
+  if (!lucideIconNames.has(installedExample)) {
+    fail('icon contract regression', `installed example '${installedExample}' is unavailable`);
+    return;
+  }
+  if (iconValidationMessage(null) !== null) fail('icon contract regression', 'null icon must pass');
+  if (iconValidationMessage(installedExample) !== null) fail('icon contract regression', 'installed icon must pass');
+  if (iconValidationMessage('__ANWE_UNKNOWN_ICON__') === null) fail('icon contract regression', 'unknown icon must fail');
+}
+
+checkIconContractRegression();
 
 function checkMedia(fixture, media, owner, required) {
   if (required && !media) return fail(fixture, `${owner} requires media`);
@@ -277,12 +309,12 @@ for (const relPath of fixtures) {
       if (block.type === 'cards') {
         for (const [index, item] of (content.items ?? []).entries()) {
           if (item.media !== null) fail(relPath, `cards ${block.id} item ${index} media must be null`);
-          if (item.icon !== null) fail(relPath, `cards ${block.id} item ${index} icon must be null`);
+          checkIcon(relPath, item.icon, `cards ${block.id} item ${index}`);
           checkActions(relPath, item.actions, page, pagesByPath, `cards ${block.id} item ${index}`);
         }
       }
       if (block.type === 'steps') {
-        for (const [index, item] of (content.items ?? []).entries()) if (item.icon !== null) fail(relPath, `steps ${block.id} item ${index} icon must be null`);
+        for (const [index, item] of (content.items ?? []).entries()) checkIcon(relPath, item.icon, `steps ${block.id} item ${index}`);
       }
       checkActions(relPath, content.actions, page, pagesByPath, `block ${block.id}`);
       if (block.type === 'footer') {

@@ -68,11 +68,26 @@
             "lead": null,
             "columns": 3,
             "items": [
-              {"eyebrow": null, "title": "AOI-контроль", "body": "Автоматический оптический контроль на каждом этапе производства.", "media": null, "icon": null, "actions": []},
-              {"eyebrow": null, "title": "Автоматическая линия SMD-монтажа", "body": "Линия Juki RS-1.", "media": null, "icon": null, "actions": []},
+              {"eyebrow": null, "title": "AOI-контроль", "body": "Автоматический оптический контроль на каждом этапе производства.", "media": null, "icon": "CircuitBoard", "actions": []},
+              {"eyebrow": null, "title": "Автоматическая линия SMD-монтажа", "body": "Линия Juki RS-1.", "media": null, "icon": "Factory", "actions": []},
               {"eyebrow": null, "title": "Система менеджмента качества", "body": "Сертификация ISO 9001:2015.", "media": null, "icon": null, "actions": []}
             ],
             "actions": []
+          }
+        },
+        {
+          "id": "production-process",
+          "type": "steps",
+          "variant": "horizontal",
+          "surface": "default",
+          "content": {
+            "eyebrow": "Процесс",
+            "title": "Как запускается партия",
+            "lead": null,
+            "items": [
+              {"title": "Передать данные", "body": "Передайте данные для оценки партии.", "icon": "Workflow"},
+              {"title": "Получить результат", "body": "Получите готовую партию после запуска.", "icon": "PackageCheck"}
+            ]
           }
         },
         {

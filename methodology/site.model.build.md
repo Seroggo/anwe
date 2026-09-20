@@ -33,7 +33,7 @@
 | SiteContext meaning | Generic block |
 | --- | --- |
 | business and positioning | `hero`, `text` |
-| offers, audiences, capabilities | `cards`, `split`, `text` |
+| offers, audiences, capabilities | `cards`, `text` |
 | actual sequence | `steps` |
 | verified numeric proof | `stats` |
 | real visual portfolio or visual narrative | `gallery` |
@@ -93,11 +93,13 @@ message (textarea, optional)
 
 Не создавай select, checkbox, radio, file upload, date picker, multi-step или conditional fields без явной задачи. Отсутствие form destination/transport фиксируется `DATA_GAP` important, но не удаляет form shell.
 
-## 8. Media, Icons, Variants And Surfaces
+## 8. HTML-First Blocks, Icons, Variants And Surfaces
 
-Media slot создаётся, когда он структурно необходим: `hero split`, `split`, `cta split`, gallery item. Initial media всегда `{ "src": null, "alt": "", "aspect": "4:3|1:1|3:4", "fit": "cover" }`. `centered` hero/CTA имеют `media: null`; Cards media/icon и Steps icon имеют `null`.
+Обычная автоматическая композиция строится без обязательных external media assets: `header`, `hero centered`, `text`, `cards`, `steps`, `stats`, `faq`, `cta centered`, `contacts`, `footer`. Выбирай block по смысловой функции и предпочитай меньше blocks с большей information density.
 
-Не выбирай Lucide names, image prompts, изображения, palette, typography или ThemeSpec. Visual Skill делает это позже.
+`centered` hero/CTA имеют `media: null`; Cards media всегда `null`. Cards и Steps могут использовать `icon: null` или точное имя установленного Lucide icon, когда icon улучшает понимание item. Подходящие примеры: `CircuitBoard`, `Factory`, `Workflow`, `PackageCheck`. Icon является HTML-native presentation, не external media и не proof.
+
+Media slot остаётся для существующих explicit media-bearing structures: `hero split`, `split`, `cta split`, gallery item. Его shape не меняется: `{ "src": null, "alt": "", "aspect": "4:3|1:1|3:4", "fit": "cover" }`.
 
 Выбирай variant из структуры: `cards grid` для обычного набора, `horizontal` для длинных равноправных items; `steps horizontal` для короткой последовательности, `vertical` для развёрнутой; `transparent` header только непосредственно перед hero при смысловой необходимости соединить их. Surface отражает semantic emphasis, не декоративное чередование.
 
@@ -118,6 +120,6 @@ Media slot создаётся, когда он структурно необхо
 3. Использованы только vocabulary, variants и surfaces контракта.
 4. Internal links имеют реальный target; fake href отсутствует.
 5. Stats и FAQ имеют подтверждённую основу.
-6. Media and icons соблюдают Visual boundary.
+6. HTML-first composition, media compatibility and semantic icons соответствуют contract.
 7. Все factual claims выводятся из SiteContext, required messages сохранены, forbidden claims отсутствуют.
 8. Status детерминированно соответствует максимальной severity issues: `critical` → `blocked`, иначе `important` → `partial`, иначе `ready`.

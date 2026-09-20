@@ -51,13 +51,13 @@
 
 | ID | Check | Status guide |
 | --- | --- | --- |
-| M030 | Offers/capabilities mapped to generic blocks | cards, split or text; never semantic type |
+| M030 | Offers/capabilities mapped to generic blocks | cards or text by default; never semantic type |
 | M031 | Steps only for factual sequences | N_A without a sequence |
 | M032 | Stats only for verified numeric proof | N_A without numbers |
-| M033 | Gallery only for actual visual narrative | N_A when decorative |
+| M033 | Gallery only for explicit supported visual narrative | N_A for normal HTML-first automatic composition |
 | M034 | FAQ only for supported answers | N_A without answers |
 | M035 | CTA only for known conversion purpose | N_A without conversion |
-| M036 | Structural use of split/media | N_A when visual slot is unjustified |
+| M036 | Existing split/media use | Only for an explicit supported requirement; N_A for normal HTML-first automatic composition |
 
 ## Block Content / Copy (M040–M049)
 
@@ -100,16 +100,16 @@
 | M068 | Legal data null when unknown | No fake INN/OGRN; null if unavailable |
 | M069 | Messenger confirmed only | Real URLs only; empty array when unknown |
 
-## Media / Visual Boundary (M070–M079)
+## HTML-First Presentation And Media Compatibility (M070–M079)
 
 | ID | Check | Status guide |
 | --- | --- | --- |
-| M070 | Required media placeholders | split hero/CTA, split and gallery items |
+| M070 | Default HTML-first vocabulary | Prefer header, centered hero, text, cards, steps, stats, FAQ, centered CTA, contacts and footer |
 | M071 | Centered media is null | hero and CTA centered |
-| M072 | Initial media fields | src null, alt empty, fit cover, allowed aspect |
-| M073 | Cards media and icon are null | Visual Skill decides later |
-| M074 | Steps icon is null | Visual Skill decides later |
-| M075 | No Lucide name, generated image or ThemeSpec | RESOLVED when absent |
+| M072 | Existing media placeholder fields | split hero/CTA, split and gallery items keep src null, alt empty, fit cover, allowed aspect |
+| M073 | Cards media and semantic icon | media is null; icon is null or installed Lucide name when it improves comprehension |
+| M074 | Steps semantic icon | icon is null or installed Lucide name; steps remain HTML-native process presentation |
+| M075 | Icon factual discipline | Icon clarifies item and does not assert an unsupported business fact |
 
 ## Block Library Compatibility (M080–M089)
 

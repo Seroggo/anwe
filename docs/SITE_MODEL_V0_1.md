@@ -4,9 +4,8 @@
 
 ```text
 SiteContext: что известно о бизнесе
-SiteModel: как этот смысл разложен по страницам и блокам
+SiteModel: как этот смысл разложен по HTML-native страницам и блокам
 ThemeSpec: как сайт выглядит
-Visual Skill: какие визуалы и иконки нужны
 ```
 
 Формальный контракт: `contracts/site-model.schema.json`. Поле `schema_version` всегда равно `"0.1"`.
@@ -62,7 +61,7 @@ SiteModel использует только приведённые block types. 
 
 Copy может быть переформулирован и организован, но каждый фактический claim должен выводиться из SiteContext. Нельзя добавлять преимущества, цифры, гарантии, клиентов, сертификаты, географию, сроки или capabilities. `positioning.do_not_claim`, `content.forbidden_messages` и `constraints` имеют приоритет. Все существенные `content.required_messages` должны быть представлены на релевантных pages; `required_terms` используются только по смыслу.
 
-## Actions, Media And Visuals
+## Actions, Media And HTML-Native Presentation
 
 Action состоит из `label`, `href`, `style`, где style: `primary`, `secondary` или `text`. Contract допускает только `#existing-anchor`, `/existing-page/`, `https://...`, `mailto:...` или `tel:...`; произвольные strings и неизвестные URI schemes запрещены. Semantic validation проверяет target internal links, а provenance external destination остаётся обязанностью skill. `#` и придуманные контакты запрещены. Header содержит максимум одну primary action.
 
@@ -72,11 +71,13 @@ Action состоит из `label`, `href`, `style`, где style: `primary`, `s
 {"src": null, "alt": "", "aspect": "4:3", "fit": "cover"}
 ```
 
-Разрешены только aspects `4:3`, `1:1`, `3:4`. Placeholder обязателен для `hero split`, `split`, `cta split` и каждого gallery item; у `hero centered` и `cta centered` media равно `null`. У Cards media и icon равны `null`; у Steps icon равен `null`. SiteModel не выбирает Lucide names, не генерирует изображения и не определяет ThemeSpec, цвета или шрифты.
+Разрешены только aspects `4:3`, `1:1`, `3:4`. Placeholder обязателен для `hero split`, `split`, `cta split` и каждого gallery item; у `hero centered` и `cta centered` media равно `null`. Нормальная автоматическая HTML-first vocabulary: `header`, `hero centered`, `text`, `cards`, `steps`, `stats`, `faq`, `cta centered`, `contacts`, `footer`.
+
+У Cards `media` всегда равен `null`. `Cards.items[].icon` и `Steps.items[].icon` имеют значение `null` или точное non-empty имя установленного Lucide export, например `CircuitBoard`, `Factory`, `Workflow`, `PackageCheck`. Icon выбирается только когда помогает понять item; это HTML-native presentation, не external media и не proof. Semantic validator проверяет non-null name against installed `@lucide/astro`. Existing split/gallery/media-bearing blocks сохраняют compatibility и используются только при explicit supported requirement.
 
 ## Decisions And Issues
 
-`decisions[]` фиксирует только meaningful structural choices: отдельную page, сохранение offer на home, выбор Stats вместо Cards, отказ от Gallery или осмысленный media split.
+`decisions[]` фиксирует только meaningful site-specific structural choices: отдельную page, сохранение offer на home, выбор Stats вместо Cards, отказ от Gallery или осмысленный media split. Pipeline defaults, например отсутствие images или centered hero by default, decisions не являются.
 
 `issues[]` имеет `type` (`DATA_GAP` или `BLOCK_LIBRARY_GAP`), `severity` (`critical`, `important`, `minor`), message, context reference и page reference. Неизвестные business data не заполняются отраслевым знанием: вместо этого строится буквальная структура и добавляется `DATA_GAP`.
 
