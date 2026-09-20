@@ -2,71 +2,9 @@
 
 ## 1. Назначение
 
-`AGENTS.md` — канонический исполняемый сценарий сборки сайта в ANWE **MVP**.
+`AGENTS.md` — канонический исполняемый сценарий сборки сайта в ANWE MVP.
 
-Агент получает на вход готовый `SiteContext` и обязан пройти pipeline строго по порядку:
-
-1. SiteContext
-2. SiteModel
-3. Machine Layer
-4. Human Layer
-5. Theme
-6. Review Build
-7. **STOP** — human operator refinement
-
-Для каждого этапа агент должен:
-
-1. определить входной artifact;
-2. открыть и прочитать canonical instructions этапа;
-3. выполнить этап;
-4. сохранить результат в предписанное место;
-5. пройти проверки этапа;
-6. только после этого переходить дальше.
-
-`AGENTS.md` отвечает на вопросы:
-
-- какой этап выполняется сейчас;
-- какие файлы нужно прочитать;
-- какой artifact взять на вход;
-- какой artifact получить на выходе;
-- куда его сохранить;
-- какие проверки обязательны;
-- когда нужно остановиться.
-
-Конкретные `methodology`, `prompt`, `registry`, `contract`, `script` и runtime-компоненты определяют, **как именно** выполнять соответствующий этап.
-
----
-
-# 2. Граница ANWE pipeline
-
-ANWE production pipeline начинается **с готового SiteContext**.
-
-RAW business input, исследование рынка, сегментация, позиционирование, U&A, JTBD, CustDev, конкурентный анализ и другие маркетинговые процессы находятся уровнем выше.
-
-Они должны закончиться созданием:
-
-```text
-sites/<site-id>/SITE_CONTEXT.json
-```
-
-Именно этот файл является входом production pipeline ANWE.
-
-Pipeline не должен самовольно возвращаться к RAW-источникам, PDF, заметкам или маркетинговым исследованиям, если это отдельно не предусмотрено задачей.
-
-Если SiteContext содержит неполные данные, downstream stages должны:
-
-- использовать подтверждённые значения, если они есть;
-- использовать разрешённые structural placeholders/scaffolds там, где SiteModel обязан сохранить конструкцию сайта;
-- фиксировать gaps;
-- не выдумывать business facts.
-
----
-
-# 3. AI-first принцип
-
-ANWE — AI-first website system.
-
-Поэтому после SiteModel первым downstream-слоем всегда является **Machine Layer**.
+ANWE получает готовый `SiteContext` и автоматически собирает работающий тематизированный Review Build.
 
 Канонический порядок:
 
@@ -86,6 +24,16 @@ Review Build
 STOP — Human Operator Refinement
 ```
 
+После `Review Build` автоматический production pipeline завершён. Дальнейшие изменения выполняются по явным командам человека-оператора.
+
+---
+
+# 2. Основные принципы MVP
+
+## 2.1. AI-first
+
+После SiteModel сначала строится Machine Layer.
+
 Принцип:
 
 ```text
@@ -93,7 +41,7 @@ machine interpretation first
 human presentation second
 ```
 
-Сначала определяется, что сайт означает для поисковых и AI-систем:
+Machine Layer определяет:
 
 - primary entity;
 - offers/services;
@@ -102,26 +50,164 @@ human presentation second
 - metadata;
 - structured data;
 - canonical structure;
-- internal semantic links.
+- internal semantic relationships.
 
-После этого Human Layer реализует ту же структуру в человекочитаемом интерфейсе.
+Human Layer реализует ту же структуру в человекочитаемом интерфейсе.
 
-Human Layer не является источником семантики для Machine Layer.
+Machine-readable представление должно соответствовать реально видимому содержимому сайта.
+
+---
+
+## 2.2. HTML-first
+
+Автоматически собранный сайт должен быть визуально полноценным без обязательных внешних media assets.
+
+Основной визуальный язык ANWE MVP:
+
+- типографика;
+- spacing;
+- surfaces;
+- cards;
+- steps;
+- stats;
+- lists;
+- grids;
+- badges/chips, если поддерживаются runtime;
+- semantic icons;
+- простые process/data compositions;
+- lightweight HTML/CSS/inline-SVG primitives, поддерживаемые generic runtime.
+
+Визуальная подача должна помогать:
+
+- быстро сканировать страницу;
+- видеть иерархию сообщений;
+- понимать процесс;
+- выделять доказательства;
+- различать предложения и ситуации спроса;
+- находить CTA.
+
+SiteModel и Human Layer должны стремиться к законченной HTML-native композиции.
+
+---
+
+## 2.3. Meaning-first
+
+Структура страницы определяется смыслом, а не декоративным наполнением.
+
+Каждый block должен выполнять отдельную задачу:
+
+- объяснять предложение;
+- раскрывать ситуацию спроса;
+- показывать процесс;
+- подтверждать claim;
+- снимать возражение;
+- вести к conversion;
+- давать контактную информацию.
+
+Визуальная форма подбирается под эту смысловую функцию.
+
+---
+
+## 2.4. Operator-led finish
+
+После Review Build человек принимает финальные редакторские и визуальные решения.
+
+Оператор может:
+
+- заменить текст;
+- изменить block variant/surface;
+- поменять порядок или состав blocks;
+- добавить или заменить semantic icon;
+- вставить operator media block;
+- заменить HTML-native block на operator media block;
+- добавить реальный media asset;
+- оставить media placeholder для последующего заполнения;
+- выполнить pre-deploy доработку.
+
+Каждая такая команда является локальной правкой текущего сайта.
+
+---
+
+## 2.5. Context discipline
+
+Для обычного production stage рабочим контекстом являются только файлы, явно перечисленные в разделе `Прочитать` этого stage.
+
+Дополнительный файл открывается только когда:
+
+- текущий canonical file прямо на него ссылается;
+- runtime import/reference ведёт к нему;
+- validator/build error указывает на него;
+- текущая задача явно требует его изменить.
+
+При локальной операторской правке агент работает с указанным site/block/item и минимальным набором файлов, необходимых для этого изменения.
+
+---
+
+## 2.6. Scope discipline
+
+Выполняй текущую задачу до её acceptance criteria.
+
+Если задача — полный rebuild, проходи canonical stages последовательно до Review Build.
+
+Если задача — локальная операторская правка, выполняй только эту правку и применимые проверки.
+
+Если текущий contract/runtime не позволяет выполнить конкретную правку, укажи точный технический blocker и файл/поле, которое его создаёт.
+
+---
+
+## 2.7. Positive specification
+
+Исполняемые инструкции описывают только актуальное целевое состояние и действия, необходимые для его получения.
+
+Формат задачи агенту:
+
+```text
+контекст
+→ вход
+→ конкретное действие
+→ ожидаемый output
+→ acceptance checks
+→ STOP
+```
+
+Исторические решения, альтернативные архитектуры и не относящиеся к текущей задаче механизмы в исполняемый prompt не включаются.
+
+Если действие не требуется для получения указанного output, оно не описывается в задаче.
+
+Git history сохраняет предыдущие состояния архитектуры; текущие canonical instructions содержат только действующую модель.
+
+---
+
+# 3. Граница production pipeline
+
+Production pipeline ANWE начинается с:
+
+```text
+sites/<site-id>/SITE_CONTEXT.json
+```
+
+`SiteContext` уже содержит утверждённый business/marketing context.
+
+Upstream-работы — исследование рынка, сегментация, позиционирование, U&A, JTBD, CustDev, конкурентный анализ и другие маркетинговые процессы — завершаются до входа в этот pipeline.
+
+Если business truth требует изменения, изменение сначала вносится в canonical upstream context.
 
 ---
 
 # 4. Canonical MVP pipeline
 
 ```text
-Sites/<site-id>/SITE_CONTEXT.json
+sites/<site-id>/SITE_CONTEXT.json
+        ↓
+STAGE 0 — PRE-FLIGHT
         ↓
 STAGE 1 — SITE MODEL BUILD
         ↓
-Sites/<site-id>/SITE_MODEL.json
+sites/<site-id>/SITE_MODEL.json
         ↓
 STAGE 2 — MACHINE LAYER
         ↓
-Sites/<site-id>/MACHINE_SPEC.json
+sites/<site-id>/MACHINE_SPEC.json
         ↓
 STAGE 3 — HUMAN LAYER
         ↓
@@ -129,67 +215,51 @@ Generic Astro runtime
         ↓
 STAGE 4 — THEME
         ↓
-Sites/<site-id>/THEME_SPEC.json
+sites/<site-id>/THEME_SPEC.json
         ↓
 REVIEW BUILD
         ↓
 STOP — HUMAN OPERATOR REFINEMENT
 ```
 
-**Нет Stage 4B. Нет Stage 4C. Нет автоматического Visual Layer.**
-
-MVP автоматически создаёт только работающую структурированную «рыбу». Все финальные визуальные доработки выполняются вручную человеком через Harness / CLI после инспекции Review Build.
-
 ---
 
 # 5. Site-specific artifacts
 
-Для каждого сайта используется папка:
+Для каждого сайта используется:
 
 ```text
 sites/<site-id>/
 ```
 
-Минимальный набор artifacts:
+Canonical artifacts автоматического pipeline:
 
 ```text
 sites/<site-id>/
 ├── SITE_CONTEXT.json
 ├── SITE_MODEL.json
 ├── MACHINE_SPEC.json
-├── THEME_SPEC.json
-└── ...
+└── THEME_SPEC.json
 ```
 
-`<site-id>` — стабильный технический id проекта.
-
-Site-specific business facts и copy не должны попадать в generic renderer/components.
+Site-specific facts и copy хранятся в site artifacts, а не в generic renderer/components.
 
 ---
 
 # 6. Общие правила исполнения
 
-1. Не пропускай stages.
-2. Не переходи дальше, пока предыдущий stage не дал валидный artifact.
-3. Перед каждым stage прочитай перечисленные canonical files.
-4. Не заменяй отсутствующий stage собственной ad-hoc логикой.
-5. Если обязательный stage package отсутствует:
-   - зафиксируй blocker;
-   - перечисли, чего не хватает;
-   - остановись перед этим stage.
-6. `SiteContext` — источник известных business facts.
-7. `SiteModel` — источник site structure, blocks, user-facing copy и production shell.
-8. `MachineSpec` — источник machine-readable page/entity semantics.
-9. Human Layer faithfully реализует SiteModel + MachineSpec.
-10. Если downstream получил новые реальные данные, которых раньше не было, замени соответствующий placeholder, не перестраивая сайт без необходимости.
-11. Generic capability сначала ищи:
-    - в текущем ANWE;
-    - затем на GitHub;
-    - затем в других OSS-каталогах.
-12. Новый subsystem создавай только если готовое решение не подходит.
-13. После изменений выполняй применимые validators/build checks.
-14. Historical материалы вне текущего repository non-normative, если явно не указано обратное.
-15. **Не интерпретируй прямой визуальный выбор оператора как запрос на запуск Autonomous Visual Layer.**
+1. Проходи stages в canonical order.
+2. Перед stage прочитай его canonical files.
+3. Используй SiteContext как источник business facts.
+4. Используй SiteModel как источник page/block/copy/conversion structure.
+5. Используй MachineSpec как источник machine-readable semantics.
+6. Human Layer faithfully реализует SiteModel + MachineSpec.
+7. Theme отвечает за design tokens и presentation system.
+8. HTML-native visual presentation является нормальным конечным состоянием Review Build.
+9. Новые business claims появляются только из canonical business context.
+10. После изменений выполняй применимые validators/build checks.
+11. Новый generic capability вводится только после подтверждённой потребности реального сайта.
+12. История решений хранится в Git; root canonical files описывают только текущую архитектуру.
 
 ---
 
@@ -211,19 +281,15 @@ methodology/site.context.build.md
 
 ## Проверить
 
-- файл существует;
+- input существует;
 - JSON валиден;
 - соответствует SiteContext contract;
 - `context_id` стабилен;
-- meaningful site возможно построить.
+- данных достаточно для meaningful site.
 
-`site.context.build` в рамках этого pipeline автоматически не запускается:
+## Acceptance
 
-```text
-SiteContext уже является входным artifact.
-```
-
-Если требуется изменить business truth — вернуть задачу upstream на marketing/context stage.
+SiteContext принят как canonical input текущего build.
 
 ---
 
@@ -231,7 +297,7 @@ SiteContext уже является входным artifact.
 
 ## Purpose
 
-Преобразовать SiteContext в полный render-ready каркас сайта.
+Преобразовать SiteContext в render-ready модель сайта.
 
 ```text
 SiteContext
@@ -265,9 +331,7 @@ sites/<site-id>/SITE_CONTEXT.json
 sites/<site-id>/SITE_MODEL.json
 ```
 
----
-
-## 1.1. Ответственность SiteModel
+## Ответственность SiteModel
 
 SiteModel определяет:
 
@@ -277,100 +341,59 @@ SiteModel определяет:
 - factual copy;
 - navigation;
 - conversion UI;
-- contact UI;
-- media placeholders;
-- structural placeholders для данных, которые могут быть добавлены позже.
+- contacts UI;
+- semantic visual presentation;
+- structural placeholders для обязательных production-shell данных.
 
-SiteModel описывает **готовую конструкцию сайта**, а не только те блоки, для которых уже существуют все внешние данные и integrations.
+## HTML-first rule
 
-Media slots в SiteModel остаются unresolved placeholders на выходе pipeline; они не разрешаются автоматически.
+SiteModel по умолчанию проектирует страницу так, чтобы она выглядела завершённой средствами HTML-native block library.
 
----
-
-## 1.2. Production-shell rule
-
-Для коммерческого сайта нельзя удалять важный UI только потому, что соответствующая downstream-функция ещё не подключена.
-
-Принцип:
+При выборе block structure приоритет имеют конструкции, которые сами несут визуальный ритм и смысл:
 
 ```text
-SiteModel   = размечено место под розетку
-Human Layer = розетка физически установлена
-Operator    = позже подводит провода
+hero
+text
+cards
+steps
+stats
+faq
+cta
+contacts
+header
+footer
+и другие generic HTML-native blocks, поддерживаемые текущим contract/runtime
 ```
 
-Поэтому отсутствие:
+Для visual presentation SiteModel может использовать поддерживаемые semantic icons и HTML-native visual primitives, определённые текущим contract.
 
-- backend;
-- form endpoint;
-- реального email;
-- реального телефона;
-- messenger;
-- analytics;
+Внешний media asset не является обязательным условием полноценного блока.
 
-не является автоматическим основанием удалить соответствующий UI scaffold.
+## Production shell
 
----
+Для commercial site сохраняются структурно необходимые элементы:
 
-## 1.3. Contacts — обязательный scaffold
+- contacts;
+- conversion CTA;
+- form shell, когда primary conversion требует lead/request/contact;
+- confirmed values, если они известны;
+- contract-defined placeholders для обязательных данных, если они пока неизвестны.
 
-Для обычного коммерческого сайта SiteModel должен предусматривать `contacts`.
+Form без подключённого transport остаётся структурной частью Review Build в состоянии, разрешённом contract.
 
-Contact block существует даже если часть реальных данных пока неизвестна.
+## Block economy
 
-Если реальные данные подтверждены и доступны в canonical input — использовать их.
+Каждый block выполняет отдельную смысловую функцию.
 
-Если данных нет — использовать структурный placeholder там, где это разрешено contract.
+Предпочитай:
 
-Статусы:
+- меньше blocks;
+- выше information density;
+- ясную hierarchy;
+- естественный visual rhythm;
+- прямой путь к conversion.
 
-```text
-confirmed
-placeholder
-```
-
-ИНН/ОГРН не выдумывать. Если их нет — `null`.
-
-Placeholder contact values предназначены для review/build scaffold.
-
----
-
-## 1.4. CTA / Form — обязательный scaffold для lead/quote сценария
-
-Если primary conversion связан с заявкой, консультацией, запросом расчёта, передачей проекта или квалифицированным lead — SiteModel должен содержать form shell.
-
-```text
-CTA
-├── title
-├── body
-├── form
-│   ├── fields[]
-│   ├── submit_label
-│   └── transport_status
-└── media
-```
-
-Типичный form shell:
-
-```text
-name
-company
-phone-or-email
-message
-submit
-```
-
-Если transport ещё не подключён:
-
-```text
-transport_status = unwired
-```
-
-SiteModel всё равно должен содержать форму.
-
----
-
-## 1.5. Acceptance
+## Acceptance
 
 - SiteModel проходит schema validation;
 - проходит semantic validation;
@@ -378,6 +401,7 @@ SiteModel всё равно должен содержать форму.
 - block ids стабильны;
 - conversion scaffold присутствует, когда нужен;
 - contacts scaffold присутствует для commercial site;
+- HTML-native presentation образует полноценную страницу;
 - status соответствует issues;
 - output сохранён в canonical path.
 
@@ -389,7 +413,7 @@ SiteModel всё равно должен содержать форму.
 
 ## Purpose
 
-Построить первичную machine-readable интерпретацию сайта из SiteContext + SiteModel.
+Построить machine-readable интерпретацию сайта из SiteContext + SiteModel.
 
 ```text
 SiteContext
@@ -401,9 +425,17 @@ site.machine.build
 MachineSpec
 ```
 
-Machine Layer создаётся **до Human Layer**.
+## Прочитать
 
----
+```text
+contracts/machine-spec.schema.json
+docs/MACHINE_SPEC_V0_1.md
+methodology/site.machine.build.md
+prompts/site.machine.build.json
+checklist-registries/site.machine.build-registry.md
+schemas/input/site.machine.build.json
+schemas/output/site.machine.build.json
+```
 
 ## Input
 
@@ -418,61 +450,36 @@ sites/<site-id>/SITE_MODEL.json
 sites/<site-id>/MACHINE_SPEC.json
 ```
 
----
-
-## 2.1. Machine Layer responsibilities
+## Responsibilities
 
 Минимум:
 
 - primary entity;
 - entity type;
-- services/offers;
+- grounded services/offers;
 - entity/service relationships;
 - page semantic role;
 - title;
 - meta description;
-- canonical path/url strategy;
+- canonical path strategy;
 - robots directives;
 - sitemap membership;
-- OpenGraph/basic sharing metadata where appropriate;
+- OpenGraph/basic sharing metadata where supported;
 - Organization structured data;
 - relevant Service structured data;
-- breadcrumbs for multi-page site;
+- breadcrumbs for multi-page sites;
 - internal semantic relationships;
-- SEO/GEO machine-readable representation.
+- SEO/GEO/AEO machine-readable representation.
 
-Machine Layer не должен добавлять факты, которых нет в SiteContext/SiteModel.
+Machine semantics должны соответствовать реально представленному в SiteModel visible content.
 
-Structured data должны соответствовать visible content, который позже реализует Human Layer.
-
----
-
-## 2.2. Canonical stage package
-
-Перед выполнением должны существовать:
-
-```text
-contracts/machine-spec.schema.json
-docs/MACHINE_SPEC_V0_1.md
-methodology/site.machine.build.md
-prompts/site.machine.build.json
-checklist-registries/site.machine.build-registry.md
-schemas/input/site.machine.build.json
-schemas/output/site.machine.build.json
-```
-
-Допустимы deterministic scripts/tools для sitemap, robots, schema serialization, validation.
-
-Если stage package отсутствует — STOP и зафиксировать blocker.
-
----
-
-## 2.3. Acceptance
+## Acceptance
 
 - MachineSpec соответствует contract;
 - metadata корректны;
 - canonical strategy согласована;
 - Organization/Service data grounded;
+- service/page relationships соответствуют visible SiteModel;
 - sitemap/robots plan валиден;
 - structured data не содержит unsupported claims;
 - entity naming consistent.
@@ -485,23 +492,17 @@ schemas/output/site.machine.build.json
 
 ## Purpose
 
-Детерминированно превратить SiteModel + MachineSpec в человекочитаемый semantic HTML/UI.
+Детерминированно превратить SiteModel + MachineSpec в semantic HTML/UI.
 
 ```text
 SiteModel
 +
 MachineSpec
     ↓
-BlockRenderer / layouts
+generic renderer
     ↓
 Astro site
 ```
-
-Human Layer не является отдельным AI marketing skill.
-
-Он faithfully реализует уже принятые upstream решения.
-
----
 
 ## Прочитать
 
@@ -515,37 +516,53 @@ src/layouts/
 src/styles/
 ```
 
----
+## Required behavior
 
-## 3.1. Required behavior
+Human Layer:
 
-- каждый SiteModel block имеет renderer support;
-- порядок blocks сохраняется;
-- block ids переходят в HTML ids;
-- semantic HTML реализует MachineSpec;
-- title/meta/schema hooks не придумываются заново;
-- contacts scaffold рендерится;
-- phone/email отображаются кликабельными;
-- CTA form shell рендерится;
-- submit button физически существует;
-- absence of backend не удаляет форму;
-- media placeholders остаются placeholders (не разрешаются автоматически);
-- generic components не содержат site-specific business copy.
+- сохраняет page/block order;
+- переносит block ids в HTML ids;
+- реализует MachineSpec metadata/structured semantics;
+- рендерит factual copy из SiteModel;
+- рендерит conversion/contact scaffolds;
+- реализует HTML-native visual presentation из SiteModel;
+- использует generic reusable components;
+- поддерживает semantic HTML;
+- сохраняет site-specific business content вне generic components.
 
----
+## HTML-native visual presentation
 
-## 3.2. Acceptance
+Human Layer является renderer для лёгкого визуального языка ANWE.
+
+Используются поддерживаемые generic primitives:
+
+- typography hierarchy;
+- surfaces;
+- grids;
+- cards;
+- steps/process structures;
+- stats;
+- lists/checklists;
+- semantic icons;
+- badges/chips;
+- lightweight connectors/separators;
+- простые diagrammatic compositions.
+
+Каждый primitive остаётся обычным DOM/HTML/CSS/inline-SVG представлением и адаптируется responsive layout средствами runtime.
+
+## Acceptance
 
 - route HTTP 200;
 - blocks rendered in order;
 - MachineSpec реализован в HTML/layout;
+- HTML-native visual presentation отображается корректно;
 - contacts присутствуют;
-- form shell присутствует;
+- form shell присутствует, когда задан SiteModel;
 - desktop/mobile structural integrity;
 - anchors работают;
 - build проходит.
 
-После acceptance перейти к STAGE 4 — THEME.
+После acceptance перейти к Theme.
 
 ---
 
@@ -553,16 +570,19 @@ src/styles/
 
 ## Purpose
 
-Преобразовать business/brand context и reference в ThemeSpec.
+Преобразовать business/brand context в ThemeSpec и применить его к generic runtime.
 
-Theme в MVP — **только** дизайн-система / тема. Он **не** включает:
-
-- изображения;
-- иконки;
-- media;
-- планирование визуальных слотов;
-- генерацию ассетов;
-- выбор визуального контента.
+```text
+SiteContext
++
+SiteModel
+    ↓
+designer.theme.interpret
+    ↓
+ThemeSpec
+    ↓
+Theme Compiler
+```
 
 ## Прочитать
 
@@ -577,9 +597,8 @@ checklist-registries/designer.theme.interpret-registry.md
 ## Input
 
 ```text
-SiteContext
-SiteModel
-brand/reference data
+sites/<site-id>/SITE_CONTEXT.json
+sites/<site-id>/SITE_MODEL.json
 ```
 
 ## Output
@@ -588,167 +607,178 @@ brand/reference data
 sites/<site-id>/THEME_SPEC.json
 ```
 
-ThemeSpec должен быть применён production runtime через deterministic Theme Compiler.
+## Responsibilities
 
-Если ThemeSpec создаётся, но production mechanism его применения отсутствует — STOP и зафиксировать blocker.
+Theme определяет presentation system:
+
+- colors;
+- typography;
+- spacing;
+- shape;
+- effects;
+- surface treatment;
+- supported visual tokens.
+
+Theme применяется deterministic Theme Compiler.
 
 ## Acceptance
 
 - ThemeSpec соответствует contract;
-- application через deterministic Theme Compiler работает;
-- theme не содержит media/icon/asset resolution;
-- output сохранён в canonical path.
+- Theme Compiler применяет его к runtime;
+- HTML-native visual primitives используют theme tokens;
+- output сохранён в canonical path;
+- themed site builds successfully.
 
-После acceptance перейти к REVIEW BUILD.
+После acceptance перейти к Review Build.
 
 ---
 
 # REVIEW BUILD
 
-После Theme агент создаёт/проверяет работающий Review Build.
+Review Build — конечный результат автоматического ANWE MVP pipeline.
 
-Review Build означает только:
+Он должен:
 
-- SiteModel рендерится;
-- MachineSpec применяется;
-- ThemeSpec применяется;
-- route работает;
-- существующие placeholders остаются видимыми, где не разрешены;
-- существующий form scaffold остаётся видимым;
-- текущий generic runtime работает;
-- стандартные validators/build checks проходят.
+- рендерить SiteModel;
+- применять MachineSpec;
+- применять ThemeSpec;
+- выглядеть цельно без обязательных внешних media assets;
+- иметь рабочую page hierarchy;
+- иметь conversion/contact scaffolds;
+- использовать HTML-native visual language;
+- проходить существующие canonical validators/build checks.
 
-Review Build может по-прежнему содержать:
+Review Build является рабочей «рыбой», готовой к операторской доводке.
 
-- media placeholders;
-- `icon = null`;
-- placeholder contacts;
-- unwired form;
-- незавершённую операторскую доработку.
+После успешного Review Build:
 
-Это допустимо.
-
-**Автоматический pipeline НЕ должен продолжать пытаться разрешать эти элементы.**
-
----
-
-# STOP — HUMAN OPERATOR REFINEMENT
-
-Автоматический run `SiteContext → Review Build` **останавливается** здесь.
-
-До deploy pipeline не продолжается автоматически.
+```text
+STOP
+```
 
 ---
 
 # HUMAN OPERATOR REFINEMENT — OUTSIDE AUTOMATIC PIPELINE
 
-После Review Build человек ревьюит «рыбу» и даёт явные команды на правку. Это вне автоматического pipeline.
+После Review Build человек просматривает сайт и даёт конкретные команды.
 
-Примеры команд:
+Примеры:
 
 ```text
-Smd → engineering → use image main_smd.png
-Smd → situations/item-02 → icon CircuitBoard
-Smd → hero → replace title with "."
-Smd → production/item-03 → delete
+smd → situations/item-02 → icon CircuitBoard
+
+smd → hero → replace title with "..."
+
+smd → production/item-03 → delete
+
+smd → after engineering → add operator media block
 ```
 
-Агент выполняет **только явный edit**.
-
-## Critical rule
-
-Если оператор явно предоставляет визуальный выбор, агент **НЕ должен**:
-
-- запускать visual classification;
-- инспектировать все media;
-- предлагать визуальную архитектуру;
-- создавать media manifest;
-- проектировать resolver;
-- генерировать альтернативные изображения;
-- выбирать другую иконку;
-- просить автономные visual-planning решения.
-
-**Не превращай прямой запрос на правку в pipeline stage.**
-
-Если выполнение заблокировано текущим контрактом/runtime ограничением:
-
-- сообщи точный технический blocker узко;
-- **НЕ** изобретай subsystem для его решения.
+Агент выполняет указанную локальную правку и сохраняет остальную структуру без изменений.
 
 ---
 
-# IMAGE / VISION RULE
+## Operator Media Block
 
-Image understanding — **не обязательная capability** core ANWE MVP агента.
+Media добавляется человеком как отдельное структурное решение после Review Build.
 
-Если оператор даёт точное имя файла изображения, агенту не нужно понимать само изображение, чтобы выполнить явную правку.
+Operator Media Block может быть:
 
-- **НЕ** запускай image analysis автоматически.
-- **НЕ** проси оператора описать изображение лишь потому, что core model не имеет vision, если точный запрошенный edit реально можно выполнить без этого.
-- **НЕ** проектируй автоматическую alt-generation инфраструктуру в `AGENTS.md`.
+```text
+media only
+```
 
-Alt/accessibility cleanup относится к позднему ручному pre-deploy review, а не к автоматическому визуальному планированию.
+или:
+
+```text
+media + HTML text
+```
+
+или:
+
+```text
+placeholder + HTML text
+```
+
+Оператор может:
+
+- вставить Media Block между существующими blocks;
+- заменить существующий block на Media Block;
+- указать конкретный media asset;
+- создать Media Block с placeholder и заполнить его позже.
+
+Смысловой текст остаётся HTML content блока.
+
+Примеры операторских команд:
+
+```text
+smd → replace engineering with media block
+media: main_smd.png
+title: "..."
+body: "..."
+
+smd → after proof → add media block placeholder
+title: "Производство"
+body: "..."
+```
+
+Для точной команды агент использует указанные оператором значения и вносит минимальное структурное изменение.
 
 ---
 
-# PRE-DEPLOY / QA / DEPLOY
+# PRE-DEPLOY
 
-Для MVP это **не** автоматический этап и **не** обязательный QA package.
+Pre-deploy выполняется по отдельной команде после операторской доводки.
 
-После операторской доработки (по запросу):
+Минимальный цикл:
 
-- примени минимальный pre-deploy UX, если запрошено;
-- выполни существующие npm checks/build;
-- человек ревьюит desktop/mobile/forms/contacts/media;
-- явное approval на deploy;
-- deploy выполняется отдельно.
+```text
+operator refinement
+    ↓
+existing checks/build
+    ↓
+desktop/mobile human review
+    ↓
+contacts/forms/content review
+    ↓
+explicit deploy approval
+```
 
-**Не** требуй canonical QA package.
-**Не** останавливайся только потому, что AI QA package не существует.
-**Не** внось Playwright или автоматизированный QA в этот patch.
-
-Pre-deploy UX сейчас не реализуется.
+Конкретные production integrations подключаются отдельными задачами.
 
 ---
 
 # DEPLOY
 
-Deploy остаётся **поздним явным действием оператора**.
+Deploy — отдельное явное действие оператора.
 
-Автоматический run `SiteContext → Review Build` должен **STOP** перед deploy.
-
-Deploy не является частью обычной rebuild-задачи, если пользователь явно не просит.
+До явного deploy approval автоматический pipeline не продолжает работу после Review Build.
 
 ---
 
 # 7. Open-source first policy
 
-Перед разработкой новой generic capability:
+Перед созданием новой generic capability:
 
-1. проверить существующий код ANWE;
-2. проверить GitHub;
-3. проверить релевантные OSS aggregators;
-4. сравнить license, activity, architecture fit, dependencies, complexity;
-5. reuse/adapt/integrate, если это рациональнее;
-6. писать своё только при подтверждённом gap.
-
-Не добавлять dependency только потому, что проект существует. Сначала оценить fit.
+1. проверь существующий ANWE runtime;
+2. проверь доступные mature OSS components/libraries;
+3. оцени architecture fit, dependency cost и complexity;
+4. reuse/adapt, когда это проще текущей реализации;
+5. создавай новый generic subsystem после подтверждённого gap.
 
 ---
 
 # 8. SiteBlueprint position
 
-`blueprints/` остаётся reusable knowledge library.
+`blueprints/` — reusable knowledge library.
 
-На текущем production pipeline canonical runtime input:
+Canonical runtime input текущего production pipeline:
 
 ```text
 SiteContext
 ```
 
-Не считать SiteBlueprint автоматически resolved runtime input для `site.model.build`, пока это явно не введено в input contract.
-
-Blueprint не должен скрытно переопределять SiteContext.
+SiteBlueprint влияет на runtime только через явно определённый contract.
 
 ---
 
@@ -764,49 +794,34 @@ checklist-registries/    stage coverage registries
 docs/                    human-readable current contracts/guides
 scripts/                 deterministic tooling
 src/                     Astro runtime / renderer / components
-sites/<site-id>/         site-specific artifacts/media
+sites/<site-id>/         site-specific artifacts and operator assets
 tests/                   fixtures/tests
-Archive/                 archived non-canonical/legacy material (not executable)
 ```
 
-Если появляется новая AI decision stage, у неё должны быть явно определены input, output, methodology, prompt, registry/validation где полезно.
-
-Если stage детерминированный — не создавай AI skill без необходимости. Используй `runtime/script + concise canonical guide`.
+Canonical files текущей архитектуры должны описывать текущий pipeline и его действующие contracts.
 
 ---
 
-# 10. Definition of Done (MVP)
+# 10. Definition of Done — Automatic MVP Build
 
-Для **AUTOMATIC ANWE BUILD** done означает:
+Automatic ANWE build завершён, когда:
 
 ```text
-SiteContext
-    ↓
-validated SiteModel
-    ↓
-MachineSpec
-    ↓
-Generic Human Layer
-    ↓
+approved SiteContext
+        ↓
+valid SiteModel
+        ↓
+valid MachineSpec
+        ↓
+working Human Layer
+        ↓
 valid ThemeSpec
-    ↓
-Working themed Review Build
-    ↓
+        ↓
+working themed HTML-first Review Build
+        ↓
 STOP
 ```
 
-Primary criterion:
+Главный критерий:
 
-> ANWE воспроизводимо превращает одобренный SiteContext в работающий темированный сайт-«рыбу»,
-> который человек-оператор может быстро доработать до production качества.
-
-MVP явно принимает существенную ручную доработку после того, как «рыба» построена.
-
-Definition of Done **не** требует:
-
-- generated/resolved media;
-- автоматическое завершение иконок;
-- автономный Visual Layer;
-- QA assembly package;
-- form wiring;
-- production-ready output с минимальным человеческим вмешательством.
+> ANWE воспроизводимо превращает утверждённый SiteContext в работающий AI-first / HTML-first коммерческий сайт-«рыбу», который визуально полноценен сам по себе и быстро доводится человеком до production качества.
