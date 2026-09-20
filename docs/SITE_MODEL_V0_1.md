@@ -50,6 +50,7 @@ ThemeSpec: как сайт выглядит
 | `gallery` | `grid`, `featured` |
 | `faq` | `stacked` |
 | `cta` | `centered`, `split` |
+| `media` | `media-only`, `media-left`, `media-right` |
 | `contacts` | `default` |
 | `footer` | `simple`, `columns` |
 
@@ -74,6 +75,32 @@ Action состоит из `label`, `href`, `style`, где style: `primary`, `s
 Разрешены только aspects `4:3`, `1:1`, `3:4`. Placeholder обязателен для `hero split`, `split`, `cta split` и каждого gallery item; у `hero centered` и `cta centered` media равно `null`. Нормальная автоматическая HTML-first vocabulary: `header`, `hero centered`, `text`, `cards`, `steps`, `stats`, `faq`, `cta centered`, `contacts`, `footer`.
 
 У Cards `media` всегда равен `null`. `Cards.items[].icon` и `Steps.items[].icon` имеют значение `null` или точное non-empty имя установленного Lucide export, например `CircuitBoard`, `Factory`, `Workflow`, `PackageCheck`. Icon выбирается только когда помогает понять item; это HTML-native presentation, не external media и не proof. Semantic validator проверяет non-null name against installed `@lucide/astro`. Existing split/gallery/media-bearing blocks сохраняют compatibility и используются только при explicit supported requirement.
+
+## Operator Media Block
+
+После Review Build оператор может вставить standalone generic `media` block или заменить им существующий HTML-native block. Автоматический SiteModel Builder не добавляет его сам.
+
+```json
+{
+  "id": "production-media",
+  "type": "media",
+  "variant": "media-left",
+  "surface": "default",
+  "content": {
+    "eyebrow": "Производство",
+    "title": "Производственная линия",
+    "body": "Смысловой текст остаётся semantic HTML.",
+    "media": {
+      "src": "sites/smd/media/main_smd.png",
+      "alt": "Производственная линия SMD-монтажа",
+      "aspect": "4:3",
+      "fit": "cover"
+    }
+  }
+}
+```
+
+`media-only` содержит только visual/placeholder и использует `null` для `eyebrow`, `title`, `body`. `media-left` и `media-right` требуют непустой `title` или `body`; текст рендерится как HTML рядом с media. `src:null` создаёт видимый placeholder. Local asset path имеет canonical repository-relative форму `sites/<site-folder>/media/<filename>` без parent traversal; Astro/Vite преобразует его в build URL. Для real image точный `alt` из SiteModel передаётся в `<img>`, включая допустимый decorative `alt:""`.
 
 ## Decisions And Issues
 

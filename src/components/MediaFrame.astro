@@ -1,6 +1,7 @@
 ---
 import type { MediaObject } from '../renderer/types';
 import { mediaAspect } from '../renderer/types';
+import { resolveSiteMedia } from '../runtime/resolve-site-media';
 
 interface Props {
   media: MediaObject;
@@ -11,7 +12,7 @@ interface Props {
 const { media } = Astro.props;
 const className = Astro.props.class || '';
 const label = Astro.props.label || 'Визуальный placeholder';
-const alt = media.alt || label;
+const resolvedSrc = resolveSiteMedia(media.src);
 const mediaRatio = mediaAspect(media.aspect);
 const objectFit = media.fit;
 ---
@@ -20,8 +21,8 @@ const objectFit = media.fit;
   class:list={['media-frame', className]}
   style={`--media-ratio: ${mediaRatio};`}
 >
-  {media.src ? (
-    <img src={media.src} alt={alt} loading="lazy" style={`object-fit: ${objectFit};`} />
+  {resolvedSrc ? (
+    <img src={resolvedSrc} alt={media.alt} loading="lazy" style={`object-fit: ${objectFit};`} />
   ) : (
     <div class="media-placeholder" role="img" aria-label={label}>
       <span class="media-placeholder__orb media-placeholder__orb--one" aria-hidden="true"></span>

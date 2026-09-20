@@ -9,6 +9,7 @@ export const blockTypes = [
   'gallery',
   'faq',
   'cta',
+  'media',
   'contacts',
   'footer'
 ] as const;

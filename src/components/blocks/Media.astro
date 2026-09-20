@@ -1,0 +1,32 @@
+---
+import MediaFrame from '../MediaFrame.astro';
+import { asMedia, asRecord, asString } from '../../renderer/types';
+import type { Block } from '../../renderer/types';
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const content = asRecord(block.content);
+const media = asMedia(content.media);
+
+if (!media) {
+  throw new Error(`Media block "${block.id}" requires a media object.`);
+}
+
+const surfaceClass = `surface--${block.surface}`;
+const variantClass = `media-block--${block.variant}`;
+const hasText = block.variant !== 'media-only';
+---
+
+<section id={block.id} class:list={['block', 'block--media', surfaceClass, 'media-block', variantClass]}>
+  <MediaFrame media={media} class="media-block__frame" label="Медиа placeholder" />
+  {hasText && (
+    <div class="media-block__copy">
+      {content.eyebrow && <p class="eyebrow">{asString(content.eyebrow)}</p>}
+      {content.title && <h2>{asString(content.title)}</h2>}
+      {content.body && <p class="media-block__body">{asString(content.body)}</p>}
+    </div>
+  )}
+</section>

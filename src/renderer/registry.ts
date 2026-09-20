@@ -8,6 +8,7 @@ import Stats from '../components/blocks/Stats.astro';
 import Gallery from '../components/blocks/Gallery.astro';
 import FAQ from '../components/blocks/FAQ.astro';
 import CTA from '../components/blocks/CTA.astro';
+import Media from '../components/blocks/Media.astro';
 import Contacts from '../components/blocks/Contacts.astro';
 import Footer from '../components/blocks/Footer.astro';
 import type { BlockType } from './types';
@@ -23,6 +24,7 @@ export const blockRegistry = {
   gallery: Gallery,
   faq: FAQ,
   cta: CTA,
+  media: Media,
   contacts: Contacts,
   footer: Footer
 } as const;

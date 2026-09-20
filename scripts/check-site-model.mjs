@@ -35,6 +35,7 @@ const variants = {
   gallery: new Set(['grid', 'featured']),
   faq: new Set(['stacked']),
   cta: new Set(['centered', 'split']),
+  media: new Set(['media-only', 'media-left', 'media-right']),
   contacts: new Set(['default']),
   footer: new Set(['simple', 'columns'])
 };
@@ -89,6 +90,66 @@ function checkMedia(fixture, media, owner, required) {
   if (media.fit !== 'cover') fail(fixture, `${owner} media.fit must be cover`);
   if (!aspects.has(media.aspect)) fail(fixture, `${owner} media.aspect is invalid`);
 }
+
+const operatorMediaPathPattern = /^sites\/[a-z0-9]+(?:-[a-z0-9]+)*\/media\/[A-Za-z0-9][A-Za-z0-9._-]*$/;
+
+function operatorMediaValidationMessages(block) {
+  const messages = [];
+  const content = block?.content ?? {};
+  const media = content.media;
+
+  if (!media || typeof media !== 'object' || Array.isArray(media)) {
+    return ['requires a media object'];
+  }
+  if (media.src !== null && (typeof media.src !== 'string' || !operatorMediaPathPattern.test(media.src))) {
+    messages.push('media.src must be null or a normalized sites/<site-folder>/media/<filename> path');
+  }
+  if (typeof media.alt !== 'string') messages.push('media.alt must be a string');
+  if (!aspects.has(media.aspect)) messages.push('media.aspect is invalid');
+  if (media.fit !== 'cover' && media.fit !== 'contain') messages.push('media.fit must be cover or contain');
+
+  if (block.variant === 'media-only') {
+    if (content.eyebrow !== null || content.title !== null || content.body !== null) {
+      messages.push('media-only text fields must be null');
+    }
+  } else if (!content.title && !content.body) {
+    messages.push(`${block.variant} requires a non-empty title or body`);
+  }
+  return messages;
+}
+
+function checkOperatorMedia(fixture, block) {
+  for (const message of operatorMediaValidationMessages(block)) {
+    fail(fixture, `media ${block.id} ${message}`);
+  }
+}
+
+function checkOperatorMediaContractRegression() {
+  const valid = {
+    id: 'media-proof', type: 'media', variant: 'media-left', surface: 'default',
+    content: { eyebrow: null, title: 'Proof', body: null, media: { src: 'sites/smd/media/main_smd.png', alt: '', aspect: '4:3', fit: 'contain' } }
+  };
+  if (operatorMediaValidationMessages(valid).length !== 0) {
+    fail('media contract regression', 'valid local site-media path must pass');
+  }
+
+  const invalidPaths = [
+    '../sites/smd/media/main.png',
+    '/sites/smd/media/main.png',
+    'sites/smd/media/../main.png',
+    'sites/smd/assets/main.png',
+    'sites\\smd\\media\\main.png'
+  ];
+  for (const src of invalidPaths) {
+    const candidate = structuredClone(valid);
+    candidate.content.media.src = src;
+    if (operatorMediaValidationMessages(candidate).length === 0) {
+      fail('media contract regression', `invalid path '${src}' must fail`);
+    }
+  }
+}
+
+checkOperatorMediaContractRegression();
 
 function checkLink(fixture, href, page, pagesByPath, owner) {
   // Path pattern matches the contract: ^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$
@@ -316,6 +377,7 @@ for (const relPath of fixtures) {
       if (block.type === 'steps') {
         for (const [index, item] of (content.items ?? []).entries()) checkIcon(relPath, item.icon, `steps ${block.id} item ${index}`);
       }
+      if (block.type === 'media') checkOperatorMedia(relPath, block);
       checkActions(relPath, content.actions, page, pagesByPath, `block ${block.id}`);
       if (block.type === 'footer') {
         for (const column of content.columns ?? []) for (const link of column.links ?? []) checkLink(relPath, link.href, page, pagesByPath, `footer ${block.id}`);

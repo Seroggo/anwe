@@ -113,6 +113,17 @@ if (home) {
   assertIncludes(home, 'href="/test/human-runtime/services/consulting/"', 'home', 'internal service link rebased to mount');
   // Canonical NOT rebased
   assertIncludes(home, 'rel="canonical" href="/"', 'home', 'canonical not rebased (stays /)');
+
+  // HTML-native icons and operator media variants
+  assertIncludes(home, 'lucide-factory icon card__icon', 'home', 'Card Lucide icon rendered');
+  assertIncludes(home, 'lucide-workflow icon step__icon', 'home', 'Step Lucide icon rendered');
+  assertIncludes(home, 'id="media-placeholder-only"', 'home', 'media-only block rendered');
+  assertIncludes(home, 'media-block--media-only', 'home', 'media-only variant class rendered');
+  assertIncludes(home, 'media-block--media-left', 'home', 'media-left variant class rendered');
+  assertIncludes(home, 'media-block--media-right', 'home', 'media-right variant class rendered');
+  assertIncludes(home, 'Media left with semantic text', 'home', 'media-left semantic title rendered');
+  assertIncludes(home, 'Media right with semantic text', 'home', 'media-right semantic title rendered');
+  assertIncludes(home, 'Медиа placeholder', 'home', 'operator media placeholders rendered');
 }
 
 // ===== SERVICE page =====

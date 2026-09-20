@@ -45,6 +45,73 @@
           }
         },
         {
+          "id": "icon-cards",
+          "type": "cards",
+          "variant": "grid",
+          "surface": "default",
+          "content": {
+            "eyebrow": "Иконки",
+            "title": "Semantic icon rendering",
+            "lead": null,
+            "columns": 1,
+            "items": [
+              {"eyebrow": null, "title": "Производство", "body": "Карточка с реальной Lucide icon.", "media": null, "icon": "Factory", "actions": []}
+            ],
+            "actions": []
+          }
+        },
+        {
+          "id": "workflow",
+          "type": "steps",
+          "variant": "horizontal",
+          "surface": "muted",
+          "content": {
+            "eyebrow": "Процесс",
+            "title": "HTML-native steps",
+            "lead": null,
+            "items": [
+              {"title": "Подготовить", "body": "Первый шаг fixture.", "icon": "Workflow"},
+              {"title": "Проверить", "body": "Второй шаг fixture.", "icon": null}
+            ]
+          }
+        },
+        {
+          "id": "media-placeholder-only",
+          "type": "media",
+          "variant": "media-only",
+          "surface": "default",
+          "content": {
+            "eyebrow": null,
+            "title": null,
+            "body": null,
+            "media": {"src": null, "alt": "", "aspect": "4:3", "fit": "cover"}
+          }
+        },
+        {
+          "id": "media-placeholder-left",
+          "type": "media",
+          "variant": "media-left",
+          "surface": "accent",
+          "content": {
+            "eyebrow": "Operator media",
+            "title": "Media left with semantic text",
+            "body": "Смысл остаётся доступным в HTML рядом с placeholder.",
+            "media": {"src": null, "alt": "", "aspect": "1:1", "fit": "contain"}
+          }
+        },
+        {
+          "id": "media-placeholder-right",
+          "type": "media",
+          "variant": "media-right",
+          "surface": "inverse",
+          "content": {
+            "eyebrow": "Operator media",
+            "title": "Media right with semantic text",
+            "body": "Responsive composition сохраняет текст в semantic HTML.",
+            "media": {"src": null, "alt": "", "aspect": "3:4", "fit": "cover"}
+          }
+        },
+        {
           "id": "request",
           "type": "cta",
           "variant": "centered",
