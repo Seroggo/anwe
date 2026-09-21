@@ -1,0 +1,43 @@
+---
+/** Generic static Review Build route for every complete site artifact set. */
+import type { GetStaticPaths } from 'astro';
+import PageRenderer from '../../../renderer/PageRenderer.astro';
+import { discoverReviewSites } from '../../../runtime/review-build.mjs';
+import type { Block } from '../../../renderer/types';
+import type { MachineSpec } from '../../../machine/structured-data';
+import type { ThemeSpec } from '../../../theme/compile';
+
+interface ReviewPage { id: string; path: string; title: string; description: string | null; blocks: Block[]; }
+interface ReviewSite {
+  folder: string;
+  siteModel: { pages: ReviewPage[] };
+  machineSpec: MachineSpec;
+  themeSpec: ThemeSpec;
+}
+
+export const getStaticPaths = (() => {
+  const sites = discoverReviewSites() as ReviewSite[];
+  return sites.flatMap((site) =>
+    site.siteModel.pages.map((page) => ({
+      params: {
+        siteId: site.folder,
+        slug: page.path === '/' ? undefined : page.path.replace(/^\/|\/$/g, '')
+      },
+      props: { site, pageId: page.id }
+    }))
+  );
+}) as GetStaticPaths;
+
+const { site, pageId } = Astro.props as { site: ReviewSite; pageId: string };
+const page = site.siteModel.pages.find((candidate) => candidate.id === pageId);
+if (!page) {
+  throw new Error(`Review Build: site folder "${site.folder}" has no SiteModel page "${pageId}".`);
+}
+---
+
+<PageRenderer
+  page={page}
+  machine={site.machineSpec}
+  mountBase={`/review/${site.folder}/`}
+  theme={site.themeSpec}
+/>
