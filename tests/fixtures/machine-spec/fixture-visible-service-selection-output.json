@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1",
+  "machine_id": "visible-service-selection-machine",
+  "site_id": "visible-service-selection",
+  "source_context_id": "visible-service-selection",
+  "status": "ready",
+  "primary_entity": {"id": "organization", "schema_type": "Organization", "name": "Assembly Example", "description": "Assembly Example выполняет сборку электроники.", "home_path": "/", "contacts": {"phone": null, "email": null}, "context_refs": ["business.name", "business.summary"]},
+  "services": [
+    {"id": "assembly", "name": "Сборка электроники", "description": "Сборка электронных изделий.", "provider_entity_id": "organization", "page_ids": ["home"], "context_refs": ["offers.assembly"]}
+  ],
+  "pages": [
+    {"page_id": "home", "path": "/", "semantic_role": "home", "meta": {"title": "Сборка электроники — Assembly Example", "description": "Сборка электронных изделий."}, "canonical": {"path": "/"}, "robots": {"index": true, "follow": true}, "open_graph": {"type": "website", "title": "Сборка электроники — Assembly Example", "description": "Сборка электронных изделий."}, "breadcrumbs": [], "primary_entity_id": "organization", "service_ids": ["assembly"], "sitemap": true}
+  ],
+  "decisions": [{"id": "visible-assembly-only", "decision": "Создать Service только для visibly представленной сборки.", "reason": "SiteContext содержит assembly и engineering, но SiteModel visibly представляет только assembly.", "context_refs": ["offers.assembly", "offers.engineering", "pages.home"]}],
+  "issues": []
+}

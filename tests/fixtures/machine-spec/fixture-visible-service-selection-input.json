@@ -1,0 +1,39 @@
+{
+  "site_context": {
+    "schema_version": "0.1",
+    "context_id": "visible-service-selection",
+    "business": {"name": "Assembly Example", "entity_type": "electronics manufacturer", "category": "electronics assembly", "summary": "Assembly Example выполняет сборку электроники.", "geography": []},
+    "offers": [
+      {"id": "assembly", "name": "Сборка электроники", "description": "Сборка электронных изделий.", "category": "assembly", "priority": "primary"},
+      {"id": "engineering", "name": "Инженерная разработка", "description": "Разработка электронных изделий.", "category": "engineering", "priority": "secondary"}
+    ],
+    "audiences": [],
+    "demand_situations": [],
+    "positioning": {"value_proposition": "Сборка электроники.", "differentiators": [], "alternatives": [], "do_not_claim": []},
+    "proof": [],
+    "objections": [],
+    "conversion": {"primary_goal": "Запросить сборку", "primary_cta": {"label": "Запросить сборку", "action": "Отправить запрос"}, "secondary_ctas": [], "contact_methods": []},
+    "content": {"required_messages": [], "required_terms": [], "forbidden_messages": [], "faq_candidates": []},
+    "brand": {"desired_character": [], "tone": [], "avoid": [], "constraints": [], "existing_colors": [], "existing_fonts": [], "reference": null},
+    "constraints": {"legal": [], "commercial": [], "geographic": [], "technical": [], "content": []},
+    "semantic_identity": {"primary_entity": "Assembly Example", "entity_type": "electronics manufacturer", "categories": ["electronics assembly"], "services_or_products": ["Сборка электроники", "Инженерная разработка"], "audiences": [], "use_cases": [], "locations": []},
+    "decisions": [],
+    "data_gaps": []
+  },
+  "site_model": {
+    "schema_version": "0.1",
+    "site_id": "visible-service-selection",
+    "source_context_id": "visible-service-selection",
+    "title": "Assembly Example",
+    "description": "Сборка электроники.",
+    "status": "ready",
+    "pages": [
+      {"id": "home", "path": "/", "title": "Сборка электроники", "description": "Сборка электронных изделий.", "blocks": [
+        {"id": "hero", "type": "hero", "variant": "centered", "surface": "default", "content": {"eyebrow": "Assembly Example", "title": "Сборка электроники", "body": "Выполняем сборку электронных изделий.", "actions": [], "note": null, "media": null}},
+        {"id": "footer", "type": "footer", "variant": "simple", "surface": "default", "content": {"brand": "Assembly Example", "description": "Сборка электроники.", "columns": [], "note": null, "actions": []}}
+      ]}
+    ],
+    "decisions": [],
+    "issues": []
+  }
+}

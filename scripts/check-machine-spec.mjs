@@ -121,6 +121,7 @@ export function validateSpec(_name, spec, siteContext, siteModel) {
 
 const fixtures = [
   ['fixture-a', 'tests/fixtures/machine-spec/fixture-a-input.json', 'tests/fixtures/machine-spec/fixture-a-output.json'],
+  ['fixture-visible-service-selection', 'tests/fixtures/machine-spec/fixture-visible-service-selection-input.json', 'tests/fixtures/machine-spec/fixture-visible-service-selection-output.json'],
   ['fixture-confirmed-contacts', 'tests/fixtures/machine-spec/fixture-confirmed-contacts-input.json', 'tests/fixtures/machine-spec/fixture-confirmed-contacts-output.json'],
   ['fixture-placeholder-contacts', 'tests/fixtures/machine-spec/fixture-placeholder-contacts-input.json', 'tests/fixtures/machine-spec/fixture-placeholder-contacts-output.json']
 ];

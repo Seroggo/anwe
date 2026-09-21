@@ -96,7 +96,9 @@ MachineSpec **хранит**:
 }
 ```
 
-Service возникает из реального offer/service/meaningful commercial capability в SiteContext/SiteModel. Не создавать Service из:
+Service начинается с grounded offer/service/meaningful commercial capability из SiteContext. Он попадает в MachineSpec только когда substantively visible content хотя бы одной SiteModel page даёт посетителю понять, что услуга/способность действительно предлагается. Valid visible evidence: hero title/body, text blocks, cards, steps, stats, FAQ, CTA, operator media block title/body. Wording может быть семантически эквивалентным offer, а не дословным.
+
+Navigation labels, internal decisions, issues, `context_refs`, metadata-only wording и сам inventory offers в SiteContext не являются visible page evidence. Grounded offer без substantive visible representation на любой странице просто отсутствует из `services[]`; это не создаёт machine issue. Не создавать Service из:
 
 - benefit;
 - proof;
@@ -105,7 +107,7 @@ Service возникает из реального offer/service/meaningful comm
 - audience;
 - generic capability wording.
 
-`provider_entity_id` всегда указывает на `primary_entity.id`. `page_ids` не может быть пустым: каждый Service представлен хотя бы одной реальной SiteModel page (minItems 1). `service.page_ids` и `page.service_ids` обязаны быть согласованы reciprocally — если Service ссылается на page, то и page ссылается на этот Service, и наоборот.
+`provider_entity_id` всегда указывает на `primary_entity.id`. `page_ids` содержит ровно SiteModel pages с substantive visible representation Service и не может быть пустым (minItems 1). `service.page_ids` и `page.service_ids` обязаны быть согласованы reciprocally — если Service ссылается на page, то и page ссылается на этот Service, и наоборот.
 
 ## pages
 

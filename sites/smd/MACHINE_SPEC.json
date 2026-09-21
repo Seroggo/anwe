@@ -26,14 +26,6 @@
       "context_refs": ["offers.contract-electronics-manufacturing"]
     },
     {
-      "id": "engineering-development-and-production",
-      "name": "Инженерная разработка по техническому заданию с последующим производством",
-      "description": "Разработка электронного изделия по техническому заданию заказчика, подготовка проекта к производству и выпуск на собственном производстве.",
-      "provider_entity_id": "organization",
-      "page_ids": ["home"],
-      "context_refs": ["offers.engineering-development-and-production"]
-    },
-    {
       "id": "component-procurement-and-kitting",
       "name": "Закупка и комплектование компонентами",
       "description": "Закупка компонентов через многолетний пул поставщиков, а также работа с давальческими компонентами при согласованных требованиях к качеству, хранению и технологическому запасу.",
@@ -56,14 +48,6 @@
       "provider_entity_id": "organization",
       "page_ids": ["home"],
       "context_refs": ["offers.functional-testing-and-programming"]
-    },
-    {
-      "id": "test-fixture-development",
-      "name": "Разработка тестового стенда",
-      "description": "Разработка тестового стенда возможна для экономически и технически интересных заказов после оценки проекта.",
-      "provider_entity_id": "organization",
-      "page_ids": ["home"],
-      "context_refs": ["offers.test-fixture-development"]
     }
   ],
   "pages": [
@@ -86,11 +70,9 @@
       "primary_entity_id": "organization",
       "service_ids": [
         "contract-electronics-manufacturing",
-        "engineering-development-and-production",
         "component-procurement-and-kitting",
         "tht-and-mixed-assembly",
-        "functional-testing-and-programming",
-        "test-fixture-development"
+        "functional-testing-and-programming"
       ],
       "sitemap": true
     }
@@ -109,10 +91,10 @@
       "context_refs": ["data_gaps.legal-and-contact-details", "data_gaps.contact-methods"]
     },
     {
-      "id": "six-services-from-offers",
-      "decision": "Создать шесть Service из подтверждённых offers, все привязанные к home page.",
-      "reason": "Все шесть offers подтверждены в SiteContext и представлены на единственной home странице; декоративных или неподтверждённых offers нет.",
-      "context_refs": ["offers.contract-electronics-manufacturing", "offers.engineering-development-and-production", "offers.component-procurement-and-kitting", "offers.tht-and-mixed-assembly", "offers.functional-testing-and-programming", "offers.test-fixture-development"]
+      "id": "visible-services-on-home",
+      "decision": "Создать четыре Service, substantively представленные на home page: contract-electronics-manufacturing, component-procurement-and-kitting, tht-and-mixed-assembly и functional-testing-and-programming.",
+      "reason": "Visible home content представляет контрактное производство, комплектование, THT/смешанный монтаж и функциональное тестирование/программирование. Offers engineering-development-and-production и test-fixture-development не представлены как самостоятельные видимые услуги и поэтому не попадают в MachineSpec.",
+      "context_refs": ["offers.contract-electronics-manufacturing", "offers.component-procurement-and-kitting", "offers.tht-and-mixed-assembly", "offers.functional-testing-and-programming", "offers.engineering-development-and-production", "offers.test-fixture-development", "pages.home"]
     },
     {
       "id": "single-home-page",

@@ -42,8 +42,8 @@
 
 | ID | Check | Status guide |
 | --- | --- | --- |
-| C020 | Each service from real offer/capability | RESOLVED; no Service from decorative block |
-| C021 | No service from benefit/proof/FAQ/audience | RESOLVED when omitted |
+| C020 | Each service starts from a grounded SiteContext offer/capability | RESOLVED; SiteContext inventory alone does not force a Service |
+| C021 | Service has substantive visible SiteModel evidence on every referenced page | RESOLVED from hero/text/cards/steps/stats/FAQ/CTA/operator media title/body; semantic equivalence is allowed |
 | C022 | provider_entity_id == primary_entity.id | RESOLVED before output |
 | C023 | page_ids are non-empty and reference existing SiteModel pages | RESOLVED before output |
 | C024 | service.page_ids ↔ page.service_ids reciprocal consistency | RESOLVED before output |
@@ -51,7 +51,7 @@
 | C026 | name/description grounded | RESOLVED; no new claims |
 | C027 | context_refs present | RESOLVED |
 | C028 | No fabricated services | RESOLVED when only SiteContext offers used |
-| C029 | Single-offer site → one Service; decorative/unsupported offer omitted | RESOLVED when consistent and no Service is forced |
+| C029 | Offer without visible substantive representation omitted | RESOLVED when navigation, decisions, issues, context_refs and metadata-only wording are not used as evidence; no machine issue is forced |
 
 ## Pages (C030–C044)
 

@@ -37,13 +37,17 @@ Placeholder-значения (`+7 (000) 000-00-00`, `example@mail.test`, `tel:+7
 
 ## 4. Services
 
-Service возникает из реального offer/service/meaningful commercial capability в SiteContext `offers[]` и/или SiteModel. Минимально: `id`, `name`, `description`, `provider_entity_id` (всегда `primary_entity.id`), `page_ids` (SiteModel page ids, где эта услуга представлена), `context_refs`. `page_ids` не может быть пустым: каждый Service представлен хотя бы одной реальной SiteModel page (minItems 1). `service.page_ids` и `page.service_ids` обязаны быть согласованы reciprocally — если Service ссылается на page, то и page ссылается на этот Service, и наоборот.
+Service начинается с grounded offer/service/meaningful commercial capability из SiteContext `offers[]`. Затем для каждой SiteModel page проверь substantive visible content: Service создаётся и получает page id только там, где посетитель по видимому содержимому страницы может понять, что эта услуга/способность действительно предлагается. Достаточным evidence может быть visible content в hero, text, cards, steps, stats, FAQ, CTA или operator media block title/body. Wording не обязан дословно повторять название offer: допустима semantic equivalence.
+
+Navigation labels, internal decisions, issues, `context_refs`, metadata-only wording и само наличие offer в SiteContext не являются page evidence. Grounded offer, который не представлен substantively ни на одной странице, не попадает в `services[]`; не создавай из этого machine issue. Это семантическое решение Machine Builder, а не задача deterministic keyword matching.
+
+Минимально Service содержит `id`, `name`, `description`, `provider_entity_id` (всегда `primary_entity.id`), `page_ids` (ровно SiteModel page ids с substantive visible representation), `context_refs`. `page_ids` не может быть пустым: каждый Service представлен хотя бы одной реальной SiteModel page (minItems 1). `service.page_ids` и `page.service_ids` обязаны быть согласованы reciprocally — если Service ссылается на page, то и page ссылается на этот Service, и наоборот.
 
 Не превращай каждую card в отдельный Service. Не создавать Service из:
 
 - benefit / proof / process step / FAQ / audience / generic capability wording,
 
-если это не самостоятельная услуга. Если SiteContext имеет несколько offers — обычно несколько Services. Если единственный offer — обычно один Service. Если offer чисто декоративный или не имеет самостоятельной коммерческой сущности — не создавать Service.
+если это не самостоятельная услуга. Несколько offers в SiteContext не означают обязательное создание нескольких Services: отображай только substantively visible offers. Если единственный offer visibly представлен — обычно один Service. Если offer чисто декоративный, не имеет самостоятельной коммерческой сущности или не представлен visibly — не создавать Service.
 
 ## 5. Page semantic role
 
@@ -120,7 +124,7 @@ Status — один канонический алгоритм. Сначала re
 1. JSON соответствует MachineSpec schema; ids unique; отдельный идентификатор модели отсутствует.
 2. Ровно одна machine page на каждую SiteModel page; `page_id`/`path`/`canonical.path` совпадают.
 3. `primary_entity.id` существует; `primary_entity.home_path == "/"`; `service_ids`/`provider_entity_id`/`page_ids` ссылаются на существующие ids.
-4. `service.page_ids` non-empty; `service.page_ids` ↔ `page.service_ids` reciprocally consistent.
+4. Каждый Service grounded в SiteContext и substantively visibly представлен на каждой странице из `service.page_ids`; `service.page_ids` non-empty и ↔ `page.service_ids` reciprocally consistent.
 5. Placeholder SiteModel contacts не попали как factual Machine contacts.
 6. Каждый breadcrumb path существует в SiteModel; home `[]`; non-home `length >= 1` и первый `path == "/"`; path не равен текущему `page.path`; trail уникален.
 7. `sitemap = true` → `robots.index = true`.
