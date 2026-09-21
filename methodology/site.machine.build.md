@@ -92,7 +92,7 @@ Invariant: `sitemap = true` влечёт `robots.index = true` (эквивале
 
 ## 10. OpenGraph
 
-`open_graph.type` для v0.1 всегда `"website"`; другие OpenGraph types не входят в текущий content model. `title`/`description` — grounded, как `meta`. OG image не добавляется (зависит от Visual Layer). Никаких fake/placeholder image URL.
+OpenGraph v0.1 содержит только `type`, `title`, `description`. `open_graph.type` всегда `"website"`; другие OpenGraph types не входят в текущий content model. `title`/`description` — grounded, как `meta`. Image data находится вне MachineSpec v0.1 contract; fake/placeholder image URLs не являются частью MachineSpec.
 
 ## 11. Breadcrumbs
 
