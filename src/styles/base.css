@@ -247,6 +247,10 @@ h3 { margin-bottom: 0.6rem; font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight
 .human-form textarea { resize: vertical; min-height: 6rem; }
 .human-form__submit { justify-self: start; padding: 0.72rem 1.4rem; border: 1px solid transparent; border-radius: var(--radius-button); background: var(--color-primary, var(--color-inverse)); color: var(--color-on-primary, #fff); font-weight: 700; cursor: pointer; }
 .human-form__submit:disabled { opacity: 0.55; cursor: not-allowed; }
+.human-form__status { margin: 0; font-size: 0.9rem; color: var(--block-muted-text); }
+.human-form[data-submit-state="success"] .human-form__status { color: var(--block-foreground); }
+.human-form[data-submit-state="error"] .human-form__status { color: #c62828; }
+.human-form__honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 .index-page { width: min(100% - 1.5rem, 1240px); min-height: 100vh; margin-inline: auto; padding: clamp(3rem, 9vw, 8rem) var(--space-content); }
 .index-page__intro { max-width: 880px; }

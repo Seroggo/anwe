@@ -1,13 +1,14 @@
 ---
 import { getBlockComponent } from './registry';
-import type { Block } from './types';
+import type { Block, FormConnectors } from './types';
 
 interface Props {
   block: Block;
+  formConnectors?: FormConnectors;
 }
 
-const { block } = Astro.props;
+const { block, formConnectors } = Astro.props;
 const Component = getBlockComponent(block.type);
 ---
 
-<Component block={block} />
+<Component block={block} formConnectors={formConnectors} />

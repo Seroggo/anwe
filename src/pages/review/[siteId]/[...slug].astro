@@ -13,6 +13,7 @@ interface ReviewSite {
   siteModel: { pages: ReviewPage[] };
   machineSpec: MachineSpec;
   themeSpec: ThemeSpec;
+  formConnectors: Record<string, { endpoint: string }>;
 }
 
 export const getStaticPaths = (() => {
@@ -40,4 +41,5 @@ if (!page) {
   machine={site.machineSpec}
   mountBase={`/review/${site.folder}/`}
   theme={site.themeSpec}
+  formConnectors={site.formConnectors}
 />

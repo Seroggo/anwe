@@ -3,13 +3,14 @@ import ActionLink from '../ActionLink.astro';
 import MediaFrame from '../MediaFrame.astro';
 import Form from '../Form.astro';
 import { asActions, asMedia, asRecord, asString } from '../../renderer/types';
-import type { Block, FormShell } from '../../renderer/types';
+import type { Block, FormShell, FormConnectors } from '../../renderer/types';
 
 interface Props {
   block: Block;
+  formConnectors?: FormConnectors;
 }
 
-const { block } = Astro.props;
+const { block, formConnectors = {} } = Astro.props;
 const content = asRecord(block.content);
 const media = asMedia(content.media);
 const actions = asActions(content.actions);
@@ -31,7 +32,7 @@ const form: FormShell | null =
     <h2>{asString(content.title)}</h2>
     <p>{asString(content.body)}</p>
     {actions.length > 0 && <div class="action-row">{actions.map((action) => <ActionLink action={action} />)}</div>}
-    {form && <Form form={form} />}
+    {form && <Form form={form} connector={formConnectors[form.id]} />}
   </div>
   {media && <MediaFrame media={media} class="cta-block__media" label="Визуальный placeholder" />}
 </section>

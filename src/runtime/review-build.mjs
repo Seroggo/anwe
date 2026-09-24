@@ -40,6 +40,31 @@ function assertConsistent(folder, siteModel, machineSpec) {
   }
 }
 
+function formIds(siteModel) {
+  return new Set(siteModel.pages.flatMap((page) => page.blocks)
+    .filter((block) => block?.type === 'cta' && block.content?.form && typeof block.content.form.id === 'string')
+    .map((block) => block.content.form.id));
+}
+
+function readFormConnectors(directory, folder, siteModel) {
+  const file = path.join(directory, 'FORM_CONNECTOR.json');
+  if (!fs.existsSync(file)) return {};
+  const config = readJson(file);
+  if (!config || config.version !== '0.1' || !config.forms || typeof config.forms !== 'object' || Array.isArray(config.forms)) {
+    throw new Error(`Review Build: site folder "${folder}" has invalid FORM_CONNECTOR.json.`);
+  }
+  const knownFormIds = formIds(siteModel);
+  for (const [formId, connector] of Object.entries(config.forms)) {
+    if (!formId || !connector || typeof connector !== 'object' || Array.isArray(connector) || typeof connector.endpoint !== 'string' || !connector.endpoint.startsWith('https://script.google.com/macros/s/')) {
+      throw new Error(`Review Build: site folder "${folder}" has invalid connector for form "${formId}".`);
+    }
+    if (!knownFormIds.has(formId)) {
+      throw new Error(`Review Build: site folder "${folder}" connector references unknown form "${formId}".`);
+    }
+  }
+  return config.forms;
+}
+
 /** Discovers only complete, internally consistent site artifact sets. */
 export function discoverReviewSites(root = process.cwd()) {
   const sitesRoot = path.join(root, 'sites');
@@ -64,6 +89,6 @@ export function discoverReviewSites(root = process.cwd()) {
         throw new Error(`Review Build: site folder "${folder}" has invalid pages arrays.`);
       }
       assertConsistent(folder, siteModel, machineSpec);
-      return [{ folder, siteModel, machineSpec, themeSpec }];
+      return [{ folder, siteModel, machineSpec, themeSpec, formConnectors: readFormConnectors(directory, folder, siteModel) }];
     });
 }

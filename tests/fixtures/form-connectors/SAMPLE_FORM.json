@@ -1,0 +1,5 @@
+{
+  "form_id": "example-rfq",
+  "fields": ["name", "phone", "company", "comment"],
+  "sheet_headers": ["timestamp", "name", "phone", "company", "comment"]
+}

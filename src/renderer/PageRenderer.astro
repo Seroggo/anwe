@@ -30,6 +30,7 @@ import StructuredData from '../components/StructuredData.astro';
 import { rebaseContent } from '../runtime/rebase-links';
 import type { MachineSpec, MachinePage } from '../machine/structured-data';
 import type { Block } from './types';
+import type { FormConnectors } from './types';
 import type { ThemeSpec } from '../theme/compile';
 
 interface SiteModelPage {
@@ -45,9 +46,10 @@ interface Props {
   machine: MachineSpec;
   mountBase?: string;
   theme?: ThemeSpec;
+  formConnectors?: FormConnectors;
 }
 
-const { page, machine, mountBase = '/', theme } = Astro.props;
+const { page, machine, mountBase = '/', theme, formConnectors = {} } = Astro.props;
 
 // --- Machine page match (strict) ---
 const machinePage: MachinePage | undefined = machine.pages.find(
@@ -101,10 +103,10 @@ const middleRender = middleBlocks.map(rebase);
   machinePage={machinePage}
   theme={theme}
 >
-  {headerRender && <BlockRenderer block={headerRender} />}
+  {headerRender && <BlockRenderer block={headerRender} formConnectors={formConnectors} />}
   <main id="top">
-    {middleRender.map((block) => <BlockRenderer block={block} />)}
+    {middleRender.map((block) => <BlockRenderer block={block} formConnectors={formConnectors} />)}
   </main>
-  {footerRender && <BlockRenderer block={footerRender} />}
+  {footerRender && <BlockRenderer block={footerRender} formConnectors={formConnectors} />}
   <StructuredData machine={machine} machinePage={machinePage} />
 </SiteLayout>

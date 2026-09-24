@@ -3,8 +3,9 @@
  * Reusable Form shell renderer (NOT a block — not in Block Registry).
  *
  * Receives a SiteModel form shell and renders the physical HTML form.
- * Raw SiteModel form always has transport_status = "unwired": the backend
- * does not exist yet. Human Layer installs the UI form but wires nothing.
+ * Raw SiteModel form always has transport_status = "unwired". An optional
+ * operator-owned connector can wire it after Review Build, without mutating
+ * SiteModel or making transport part of the generic form contract.
  *
  * Unwired boundary:
  *   - <form data-transport-status="unwired">
@@ -17,13 +18,14 @@
  */
 
 import { asRecord, asString } from '../renderer/types';
-import type { FormShell, FormField } from '../renderer/types';
+import type { FormShell, FormField, FormConnector } from '../renderer/types';
 
 interface Props {
   form: FormShell;
+  connector?: FormConnector;
 }
 
-const { form } = Astro.props;
+const { form, connector } = Astro.props;
 
 if (form.transport_status !== 'unwired') {
   throw new Error(
@@ -31,7 +33,7 @@ if (form.transport_status !== 'unwired') {
   );
 }
 
-const isUnwired = true;
+const isWired = Boolean(connector?.endpoint);
 
 function parseField(raw: unknown): FormField {
   const rec = asRecord(raw);
@@ -55,7 +57,13 @@ function fieldId(field: FormField, index: number): string {
 }
 ---
 
-<form class="human-form" data-transport-status={isUnwired ? 'unwired' : 'wired'}>
+<form
+  class="human-form"
+  data-transport-status={isWired ? 'wired' : 'unwired'}
+  data-gas-endpoint={connector?.endpoint}
+  data-form-id={form.id}
+  novalidate={false}
+>
   {fields.length > 0 && (
     <ul class="human-form__fields">
       {fields.map((field, index) => {
@@ -89,7 +97,63 @@ function fieldId(field: FormField, index: number): string {
       })}
     </ul>
   )}
-  <button class="human-form__submit" type="submit" disabled={isUnwired}>
+  <div class="human-form__honeypot" aria-hidden="true">
+    <label for={`form-${form.id}-honeypot`}>Leave this field empty</label>
+    <input id={`form-${form.id}-honeypot`} name="_honeypot" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <button class="human-form__submit" type="submit" disabled={!isWired}>
     {form.submit_label}
   </button>
+  <p class="human-form__status" aria-live="polite" hidden></p>
 </form>
+
+{isWired && (
+  <script is:inline>
+    document.querySelectorAll('form[data-transport-status="wired"]').forEach((form) => {
+      if (!(form instanceof HTMLFormElement) || form.dataset.anweConnectorBound === 'true') return;
+      form.dataset.anweConnectorBound = 'true';
+      const endpoint = form.dataset.gasEndpoint;
+      const button = form.querySelector('.human-form__submit');
+      const status = form.querySelector('.human-form__status');
+      if (!endpoint || !(button instanceof HTMLButtonElement) || !(status instanceof HTMLElement)) return;
+
+      const setState = (state, message) => {
+        form.dataset.submitState = state;
+        button.disabled = state === 'submitting';
+        status.textContent = message;
+        status.hidden = !message;
+      };
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        const data = Object.fromEntries(new FormData(form).entries());
+        data.pageUrl = window.location.href;
+        data.source = document.referrer || '';
+        data.userAgent = navigator.userAgent;
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((key) => {
+          const value = new URLSearchParams(window.location.search).get(key);
+          if (value) data[key] = value;
+        });
+
+        setState('submitting', 'Отправляем…');
+        try {
+          // GAS Web Apps generally do not expose CORS response headers. The
+          // request is intentionally opaque; success means the browser handed
+          // it to the endpoint, not that the response body was inspected.
+          await fetch(endpoint, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(data)
+          });
+          form.reset();
+          setState('success', 'Спасибо! Заявка отправлена.');
+        } catch {
+          setState('error', 'Не удалось отправить форму. Попробуйте ещё раз.');
+          button.disabled = false;
+        }
+      });
+    });
+  </script>
+)}

@@ -1,0 +1,14 @@
+{
+  "schema_version":"0.1","theme_id":"anwe-editorial-ink",
+  "metadata":{"name":"ANWE Editorial Ink","description":"Спокойная редакционная тема для ясной маркетинговой диагностики.","interpreter_skill":"designer.theme.interpret","interpreter_version":"0.1"},
+  "colors":{"canvas":"#f6f2ec","surface":"#ffffff","surface_muted":"#ebe5dc","text":"#171717","text_muted":"#625f5a","primary":"#171717","primary_hover":"#34312d","on_primary":"#ffffff","accent":"#d9501c","on_accent":"#ffffff","inverse":"#171717","inverse_text":"#ffffff","line":"#d5cec4","focus":"#d9501c","accent_palette":["#d9501c","#dcae2d","#4d8d78"]},
+  "typography":{"font_display":"Inter, Arial, sans-serif","font_body":"Inter, Arial, sans-serif","font_mono":"ui-monospace, SFMono-Regular, Consolas, monospace","display":{"size":{"min":"2.75rem","preferred":"6vw","max":"5.5rem"},"weight":500,"line_height":1.04,"tracking":"-0.06em"},"heading":{"size":{"min":"2rem","preferred":"3.4vw","max":"3.5rem"},"weight":500,"line_height":1.12,"tracking":"-0.035em"},"body":{"size":"1rem","weight":400,"line_height":1.55,"tracking":"0"},"eyebrow":{"size":"0.875rem","weight":500,"line_height":1.35,"tracking":"0"}},
+  "spacing":{"density":"editorial","section":{"min":"3.5rem","preferred":"8vw","max":"6rem"},"content":{"min":"1.25rem","preferred":"4vw","max":"3rem"},"block_gap":{"min":"0.5rem","preferred":"1vw","max":"1rem"}},
+  "shape":{"card_radius":"0.75rem","panel_radius":"1rem","button_radius":"0.5rem"},
+  "effects":{"card_border":{"width":"1px","color_role":"line"},"card_shadow":{"x":"0","y":"8px","blur":"24px","spread":"0","color":"#171717","opacity":0.05}},
+  "decisions":[
+    {"id":"reference-principles","source_type":"SOURCE_DERIVED","decision":"Использовать кремовый canvas, белые карточки, тонкие линии, тёмную типографику и сдержанную геометрию.","evidence":["ANWE_STUDIO_DESIGN_REFERENCE.md","https://github.com/VoltAgent/awesome-design-md/blob/main/design-md/intercom/DESIGN.md"],"reason":"Это переносит editorial/product-led иерархию reference без буквального копирования чужих фирменных токенов."},
+    {"id":"anwe-accent","source_type":"INTERPRETER_DECISION","decision":"Заменить reference orange на приглушённый терракотовый accent ANWE.","evidence":["brand.existing_colors is empty","brand.reference is null"],"reason":"Внешний reference не является authoritative brand source; accent ограничен CTA, focus и небольшими акцентами."},
+    {"id":"html-first-visuals","source_type":"CONTEXT_DERIVED","decision":"Сделать cards и steps главными визуальными носителями вместо product screenshots.","evidence":["SiteContext has no approved media assets","content.required_messages"],"reason":"Review Build должен быть визуально полноценным средствами HTML/CSS без несуществующих медиа."}
+  ]
+}

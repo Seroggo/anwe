@@ -1,0 +1,8 @@
+{
+  "version": "0.1",
+  "forms": {
+    "example-rfq": {
+      "endpoint": "https://script.google.com/macros/s/DEPLOYMENT_ID/exec"
+    }
+  }
+}

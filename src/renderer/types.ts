@@ -58,6 +58,13 @@ export interface FormShell {
   submit_label: string;
 }
 
+/** Operator-owned production setting; deliberately outside SiteModel. */
+export interface FormConnector {
+  endpoint: string;
+}
+
+export type FormConnectors = Record<string, FormConnector>;
+
 export interface PageFixture {
   id: string;
   title: string;
