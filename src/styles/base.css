@@ -242,7 +242,8 @@ h3 { margin-bottom: 0.6rem; font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight
 .human-form__field { display: grid; gap: 0.4rem; }
 .human-form__field label { font-size: 0.85rem; font-weight: 700; color: var(--block-foreground); }
 .human-form__required { margin-left: 0.15rem; color: var(--color-focus, var(--block-muted-text)); }
-.human-form input, .human-form textarea { width: 100%; padding: 0.7rem 0.85rem; border: 1px solid var(--block-line); border-radius: 0.6rem; background: var(--color-surface); color: var(--block-foreground); font-family: var(--font-body); font-size: 1rem; line-height: 1.4; }
+.human-form input, .human-form textarea { width: 100%; padding: 0.7rem 0.85rem; border: 1px solid var(--block-line); border-radius: 0.6rem; background: var(--color-surface); color: var(--color-text, var(--block-foreground)); caret-color: var(--color-text, var(--block-foreground)); font-family: var(--font-body); font-size: 1rem; line-height: 1.4; }
+.human-form input::placeholder, .human-form textarea::placeholder { color: var(--color-text-muted, #626260); opacity: 1; }
 .human-form input:focus-visible, .human-form textarea:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
 .human-form textarea { resize: vertical; min-height: 6rem; }
 .human-form__submit { justify-self: start; padding: 0.72rem 1.4rem; border: 1px solid transparent; border-radius: var(--radius-button); background: var(--color-primary, var(--color-inverse)); color: var(--color-on-primary, #fff); font-weight: 700; cursor: pointer; }
