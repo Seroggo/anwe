@@ -6,6 +6,7 @@ import { discoverReviewSites } from '../../../runtime/review-build.mjs';
 import type { Block } from '../../../renderer/types';
 import type { MachineSpec } from '../../../machine/structured-data';
 import type { ThemeSpec } from '../../../theme/compile';
+import type { AnalyticsSpec } from '../../../analytics/track';
 
 interface ReviewPage { id: string; path: string; title: string; description: string | null; blocks: Block[]; }
 interface ReviewSite {
@@ -14,6 +15,7 @@ interface ReviewSite {
   machineSpec: MachineSpec;
   themeSpec: ThemeSpec;
   formConnectors: Record<string, { endpoint: string }>;
+  analyticsSpec?: AnalyticsSpec | null;
 }
 
 export const getStaticPaths = (() => {
@@ -42,4 +44,5 @@ if (!page) {
   mountBase={`/review/${site.folder}/`}
   theme={site.themeSpec}
   formConnectors={site.formConnectors}
+  analytics={site.analyticsSpec}
 />

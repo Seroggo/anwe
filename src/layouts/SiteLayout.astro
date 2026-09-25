@@ -3,15 +3,18 @@ import '../styles/base.css';
 import ThemeStyle from '../theme/ThemeStyle.astro';
 import type { MachinePage } from '../machine/structured-data';
 import type { ThemeSpec } from '../theme/compile';
+import AnalyticsRuntime from '../analytics/AnalyticsRuntime.astro';
+import type { AnalyticsSpec } from '../analytics/track';
 
 interface Props {
   title: string;
   description: string | null;
   machinePage?: MachinePage;
   theme?: ThemeSpec;
+  analytics?: AnalyticsSpec | null;
 }
 
-const { title, description, machinePage, theme } = Astro.props;
+const { title, description, machinePage, theme, analytics } = Astro.props;
 
 // Machine metadata wins when present; existing demo pages without MachineSpec
 // keep using the plain title/description props (backward compatibility).
@@ -44,6 +47,7 @@ const ogDescription = og ? og.description : null;
     {ogDescription != null && <meta property="og:description" content={ogDescription} />}
     {theme && <ThemeStyle spec={theme} />}
     <title>{pageTitle}</title>
+    <AnalyticsRuntime spec={analytics} />
   </head>
   <body>
     <div class="site-shell">

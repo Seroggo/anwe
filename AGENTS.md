@@ -746,6 +746,10 @@ explicit deploy approval
 
 Конкретные production integrations подключаются отдельными задачами.
 
+### Analytics Layer v0.1
+
+По явной команде «Добавь слой аналитики. Яндекс Метрика: <ID>. GA4: <ID>» подключи generic providers к текущему сайту после Review Build и до deploy. Прочитай [`docs/ANALYTICS.md`](docs/ANALYTICS.md), `contracts/analytics-events.json` и `contracts/analytics-spec.schema.json`; изучи SiteModel/Human Layer, создай `sites/<site-id>/ANALYTICS_SPEC.json` со стабильными bindings, выполни `npm run check:analytics` и `npm run build`, затем верни Analytics Deployment Report с mappings и оставшимися настройками целей/key events в аккаунтах. Эта интеграция не меняет автоматический pipeline и не запускает deploy.
+
 ---
 
 # DEPLOY

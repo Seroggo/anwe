@@ -32,6 +32,7 @@ import type { MachineSpec, MachinePage } from '../machine/structured-data';
 import type { Block } from './types';
 import type { FormConnectors } from './types';
 import type { ThemeSpec } from '../theme/compile';
+import type { AnalyticsSpec } from '../analytics/track';
 
 interface SiteModelPage {
   id: string;
@@ -47,9 +48,10 @@ interface Props {
   mountBase?: string;
   theme?: ThemeSpec;
   formConnectors?: FormConnectors;
+  analytics?: AnalyticsSpec | null;
 }
 
-const { page, machine, mountBase = '/', theme, formConnectors = {} } = Astro.props;
+const { page, machine, mountBase = '/', theme, formConnectors = {}, analytics } = Astro.props;
 
 // --- Machine page match (strict) ---
 const machinePage: MachinePage | undefined = machine.pages.find(
@@ -102,6 +104,7 @@ const middleRender = middleBlocks.map(rebase);
   description={headDescription}
   machinePage={machinePage}
   theme={theme}
+  analytics={analytics}
 >
   {headerRender && <BlockRenderer block={headerRender} formConnectors={formConnectors} />}
   <main id="top">

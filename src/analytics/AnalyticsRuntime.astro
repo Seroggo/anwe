@@ -1,0 +1,11 @@
+---
+import type { AnalyticsSpec } from './track';
+interface Props { spec?: AnalyticsSpec | null }
+const { spec } = Astro.props;
+const active = Boolean(spec?.enabled);
+---
+{active && <script type="application/json" id="anwe-analytics-config" set:html={JSON.stringify(spec)} />}
+<script>
+  import { initAnalytics } from './client';
+  initAnalytics();
+</script>

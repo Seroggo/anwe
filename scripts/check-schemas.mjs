@@ -17,6 +17,7 @@ const schemas = [
   { name: 'site.machine.build input', path: 'schemas/input/site.machine.build.json' },
   { name: 'site.machine.build output', path: 'schemas/output/site.machine.build.json' },
   { name: 'theme-spec contract', path: 'contracts/theme-spec.schema.json' },
+  { name: 'analytics-spec contract', path: 'contracts/analytics-spec.schema.json' },
   { name: 'designer.theme.interpret input', path: 'schemas/input/designer.theme.interpret.json' },
   { name: 'designer.theme.interpret output', path: 'schemas/output/designer.theme.interpret.json' }
 ];
@@ -72,7 +73,7 @@ for (const { path: relPath } of schemas) {
 }
 
 // Register canonical contracts first so wrappers can use their canonical $id refs.
-for (const relPath of ['contracts/site-context.schema.json', 'contracts/site-model.schema.json', 'contracts/machine-spec.schema.json', 'contracts/theme-spec.schema.json']) {
+for (const relPath of ['contracts/site-context.schema.json', 'contracts/site-model.schema.json', 'contracts/machine-spec.schema.json', 'contracts/theme-spec.schema.json', 'contracts/analytics-spec.schema.json']) {
   ajv.addSchema(rawSchemas.get(relPath));
 }
 

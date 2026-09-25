@@ -65,6 +65,11 @@ function readFormConnectors(directory, folder, siteModel) {
   return config.forms;
 }
 
+function readAnalyticsSpec(directory) {
+  const file = path.join(directory, 'ANALYTICS_SPEC.json');
+  return fs.existsSync(file) ? readJson(file) : null;
+}
+
 /** Discovers only complete, internally consistent site artifact sets. */
 export function discoverReviewSites(root = process.cwd()) {
   const sitesRoot = path.join(root, 'sites');
@@ -89,6 +94,6 @@ export function discoverReviewSites(root = process.cwd()) {
         throw new Error(`Review Build: site folder "${folder}" has invalid pages arrays.`);
       }
       assertConsistent(folder, siteModel, machineSpec);
-      return [{ folder, siteModel, machineSpec, themeSpec, formConnectors: readFormConnectors(directory, folder, siteModel) }];
+      return [{ folder, siteModel, machineSpec, themeSpec, formConnectors: readFormConnectors(directory, folder, siteModel), analyticsSpec: readAnalyticsSpec(directory) }];
     });
 }

@@ -62,6 +62,7 @@ function fieldId(field: FormField, index: number): string {
   data-transport-status={isWired ? 'wired' : 'unwired'}
   data-gas-endpoint={connector?.endpoint}
   data-form-id={form.id}
+  data-analytics-id={form.id}
   novalidate={false}
 >
   {fields.length > 0 && (

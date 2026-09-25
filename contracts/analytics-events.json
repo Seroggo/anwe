@@ -1,0 +1,12 @@
+{
+  "schema_version": "0.1",
+  "events": [
+    {"name":"lead_submit","description":"User initiated a valid form submission","category":"lead","required_parameters":["analytics_id","block_id"],"optional_parameters":["form_id"]},
+    {"name":"lead_submit_success","description":"Transport confirmed lead acceptance","category":"conversion","required_parameters":["analytics_id","block_id"],"optional_parameters":["form_id"],"ga4_event":"generate_lead"},
+    {"name":"lead_submit_error","description":"Transport reported a submission failure","category":"lead","required_parameters":["analytics_id","block_id"],"optional_parameters":["form_id"]},
+    {"name":"cta_click","description":"User activated a meaningful CTA","category":"engagement","required_parameters":["analytics_id","block_id"],"optional_parameters":["destination"]},
+    {"name":"phone_click","description":"User activated a telephone link","category":"contact","required_parameters":["analytics_id"],"optional_parameters":["block_id"]},
+    {"name":"email_click","description":"User activated an email link","category":"contact","required_parameters":["analytics_id"],"optional_parameters":["block_id"]},
+    {"name":"messenger_click","description":"User activated a supported messenger link","category":"contact","required_parameters":["analytics_id"],"optional_parameters":["block_id","messenger"]}
+  ]
+}

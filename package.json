@@ -19,8 +19,9 @@
     "check:human-build": "node scripts/check-human-build.mjs",
     "check:theme-build": "node scripts/check-theme-build.mjs",
     "check:form-connector": "node scripts/check-form-connector.mjs",
+    "check:analytics": "node scripts/check-analytics.mjs",
     "check:review-build": "npm run build && npm run check:human-build && npm run check:theme-build && node scripts/check-review-build.mjs",
-    "check": "npm run check:json && npm run check:blueprints && npm run check:blocks && npm run check:schemas && npm run check:site-model && npm run check:machine && npm run check:theme && npm run check:astro && npm run check:form-connector && npm run check:review-build"
+    "check": "npm run check:json && npm run check:blueprints && npm run check:blocks && npm run check:schemas && npm run check:site-model && npm run check:machine && npm run check:theme && npm run check:astro && npm run check:form-connector && npm run check:analytics && npm run check:review-build"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

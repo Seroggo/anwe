@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anwe.dev/contracts/analytics-spec.schema.json",
+  "title": "ANWE AnalyticsSpec",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "enabled", "providers", "bindings"],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "enabled": {"type": "boolean"},
+    "providers": {
+      "type": "object", "additionalProperties": false, "required": ["yandex_metrika", "ga4"],
+      "properties": {
+        "yandex_metrika": {"$ref": "#/$defs/yandex"},
+        "ga4": {"$ref": "#/$defs/ga4"}
+      }
+    },
+    "bindings": {"type": "array", "items": {"$ref": "#/$defs/binding"}}
+  },
+  "$defs": {
+    "yandex": {"type": "object", "additionalProperties": false, "required": ["enabled", "counter_id"], "properties": {"enabled": {"type": "boolean"}, "counter_id": {"type": "string", "pattern": "^[0-9]+$"}}},
+    "ga4": {"type": "object", "additionalProperties": false, "required": ["enabled", "measurement_id"], "properties": {"enabled": {"type": "boolean"}, "measurement_id": {"anyOf": [{"type": "string", "pattern": "^G-[A-Z0-9]+$"}, {"type": "null"}]}}},
+    "binding": {"type": "object", "additionalProperties": false, "required": ["event", "target", "parameters"], "properties": {"event": {"enum": ["lead_submit", "lead_submit_success", "lead_submit_error", "cta_click", "phone_click", "email_click", "messenger_click"]}, "target": {"type": "string", "minLength": 1}, "parameters": {"type": "object"}, "yandex_event": {"type": "string", "minLength": 1}, "ga4_event": {"type": "string", "minLength": 1}}}
+  }
+}
