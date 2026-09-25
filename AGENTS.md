@@ -660,7 +660,7 @@ STOP
 
 # HUMAN OPERATOR REFINEMENT — OUTSIDE AUTOMATIC PIPELINE
 
-После Review Build человек просматривает сайт и даёт конкретные команды.
+После Review Build человек просматривает сайт и даёт конкретные команды. Это постоянный operator-managed lifecycle для сайта, в том числе после первой production публикации. Последующие локальные изменения выполняются как локальные правки текущего сайта; они не запускают automatic pipeline повторно.
 
 Примеры:
 
@@ -728,7 +728,7 @@ body: "..."
 
 # PRE-DEPLOY
 
-Pre-deploy выполняется по отдельной команде после операторской доводки.
+Pre-deploy выполняется по отдельной команде после операторской доводки и может повторяться после любых последующих локальных изменений — как до первой публикации, так и после неё.
 
 Минимальный цикл:
 
@@ -750,9 +750,17 @@ explicit deploy approval
 
 # DEPLOY
 
-Deploy — отдельное явное действие оператора.
+Deploy — отдельное явное действие оператора для текущего approved локального состояния сайта. Целевая команда:
 
-До явного deploy approval автоматический pipeline не продолжает работу после Review Build.
+```text
+Deploy <site-id>
+```
+
+Команда может выполняться для первой публикации и повторно для production updates. Deploy не запускает полный SiteContext → SiteModel → Machine Layer → Human Layer → Theme pipeline. Editable source of truth остаётся в локальном ANWE repository; production hosting содержит опубликованный runtime state.
+
+Детальный deployment contract: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+
+После Review Build automatic pipeline останавливается. До отдельной явной команды `Deploy <site-id>` публикация не выполняется; deployment и последующие production updates остаются operator-managed действиями вне automatic pipeline.
 
 ---
 
