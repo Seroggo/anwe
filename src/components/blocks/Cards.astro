@@ -38,7 +38,7 @@ const variantClass = `cards-block--${block.variant}`;
   <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
   <div class="cards-block__list" style={cardColumnsStyle}>
     {cardViews.map((card) => (
-      <article class="card">
+      <article class="card" data-debug-item-id={asString(card.item.id) || undefined}>
         <div class="card__topline"><span class="card__index">{card.number}</span>{card.eyebrow && <span class="card__eyebrow">{card.eyebrow}</span>}</div>
         {card.media && <MediaFrame media={card.media} class="card__media" label={`Визуальный placeholder ${card.number}`} />}
         {!card.media && card.icon && <Icon name={card.icon} class="card__icon" size={32} />}

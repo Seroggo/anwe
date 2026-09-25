@@ -25,7 +25,7 @@ const variantClass = `gallery-block--${block.variant}`;
   <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
   <div class="gallery-block__list">
     {galleryViews.map((gItem) => (
-      <figure class="gallery-item">
+      <figure class="gallery-item" data-debug-item-id={asString(gItem.item.id) || undefined}>
         {gItem.media && <MediaFrame media={gItem.media} class="gallery-item__media" label={`Визуальный placeholder ${gItem.index + 1}`} />}
         <figcaption><strong>{gItem.title}</strong>{gItem.caption && <span>{gItem.caption}</span>}</figcaption>
       </figure>

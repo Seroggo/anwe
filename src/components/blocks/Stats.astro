@@ -17,6 +17,6 @@ const variantClass = `stats-block--${block.variant}`;
 <section id={block.id} class:list={['block', 'block--stats', surfaceClass, 'stats-block', variantClass]}>
   <SectionIntro eyebrow={asString(content.eyebrow)} title={asString(content.title)} description={asString(content.lead)} />
   <div class="stats-block__list">
-    {items.map((item) => <div class="stat"><strong>{asString(item.value)}</strong><span>{asString(item.label)}</span>{item.note && <small>{asString(item.note)}</small>}</div>)}
+    {items.map((item) => <div class="stat" data-debug-item-id={asString(item.id) || undefined}><strong>{asString(item.value)}</strong><span>{asString(item.label)}</span>{item.note && <small>{asString(item.note)}</small>}</div>)}
   </div>
 </section>
