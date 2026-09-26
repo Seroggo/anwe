@@ -173,7 +173,7 @@ Invariant: `sitemap = true` влечёт `robots.index = true` (эквивале
 
 ## sitemap
 
-Хранится один source of truth: `page.sitemap: boolean`. Отдельного дублирующего списка sitemap paths нет. Физический `sitemap.xml` создаётся deterministic Human/Deploy layer позже.
+Хранится один source of truth: `page.sitemap: boolean`. Отдельного дублирующего списка sitemap paths нет. Production build детерминированно создаёт `sitemap.xml` и `robots.txt` из MachineSpec и `sites/<site-id>/SITE_URL.json`; sitemap содержит только страницы с `sitemap=true` и `robots.index=true`.
 
 ## open_graph
 

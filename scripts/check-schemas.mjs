@@ -18,6 +18,7 @@ const schemas = [
   { name: 'site.machine.build output', path: 'schemas/output/site.machine.build.json' },
   { name: 'theme-spec contract', path: 'contracts/theme-spec.schema.json' },
   { name: 'analytics-spec contract', path: 'contracts/analytics-spec.schema.json' },
+  { name: 'site URL contract', path: 'contracts/site-url.schema.json' },
   { name: 'designer.theme.interpret input', path: 'schemas/input/designer.theme.interpret.json' },
   { name: 'designer.theme.interpret output', path: 'schemas/output/designer.theme.interpret.json' }
 ];
@@ -73,7 +74,7 @@ for (const { path: relPath } of schemas) {
 }
 
 // Register canonical contracts first so wrappers can use their canonical $id refs.
-for (const relPath of ['contracts/site-context.schema.json', 'contracts/site-model.schema.json', 'contracts/machine-spec.schema.json', 'contracts/theme-spec.schema.json', 'contracts/analytics-spec.schema.json']) {
+for (const relPath of ['contracts/site-context.schema.json', 'contracts/site-model.schema.json', 'contracts/machine-spec.schema.json', 'contracts/theme-spec.schema.json', 'contracts/analytics-spec.schema.json', 'contracts/site-url.schema.json']) {
   ajv.addSchema(rawSchemas.get(relPath));
 }
 
@@ -132,6 +133,7 @@ if (fs.existsSync(sitesDir)) {
     const modelPath = path.join('sites', siteId, 'SITE_MODEL.json');
     const machinePath = path.join('sites', siteId, 'MACHINE_SPEC.json');
     const themePath = path.join('sites', siteId, 'THEME_SPEC.json');
+    const siteUrlPath = path.join('sites', siteId, 'SITE_URL.json');
 
     if (fs.existsSync(path.join(root, contextPath))) {
       productionArtifacts.push({ name: `${siteId} SITE_CONTEXT`, dataPath: contextPath, contractPath: 'contracts/site-context.schema.json' });
@@ -147,6 +149,10 @@ if (fs.existsSync(sitesDir)) {
 
     if (fs.existsSync(path.join(root, themePath))) {
       productionArtifacts.push({ name: `${siteId} THEME_SPEC`, dataPath: themePath, contractPath: 'contracts/theme-spec.schema.json' });
+    }
+
+    if (fs.existsSync(path.join(root, siteUrlPath))) {
+      productionArtifacts.push({ name: `${siteId} SITE_URL`, dataPath: siteUrlPath, contractPath: 'contracts/site-url.schema.json' });
     }
   }
 }

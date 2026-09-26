@@ -239,7 +239,8 @@ sites/<site-id>/
 ├── SITE_CONTEXT.json
 ├── SITE_MODEL.json
 ├── MACHINE_SPEC.json
-└── THEME_SPEC.json
+├── THEME_SPEC.json
+└── SITE_URL.json                 публичный origin для crawler files
 ```
 
 Site-specific facts и copy хранятся в site artifacts, а не в generic renderer/components.
@@ -450,6 +451,8 @@ sites/<site-id>/SITE_MODEL.json
 sites/<site-id>/MACHINE_SPEC.json
 ```
 
+Production build материализует `robots.txt` и `sitemap.xml` в корне Review Build сайта. Sitemap включает только страницы с `sitemap=true` и `robots.index=true`; абсолютный URL строится из `sites/<site-id>/SITE_URL.json` (`{"base_url":"https://example.org"}`), содержащего HTTP(S) origin без пути, query и fragment. Production build проверяет наличие и содержимое обоих файлов.
+
 ## Responsibilities
 
 Минимум:
@@ -481,6 +484,7 @@ Machine semantics должны соответствовать реально п�
 - Organization/Service data grounded;
 - service/page relationships соответствуют visible SiteModel;
 - sitemap/robots plan валиден;
+- production build генерирует и проверяет `robots.txt` и `sitemap.xml` по MachineSpec и SITE_URL;
 - structured data не содержит unsupported claims;
 - entity naming consistent.
 
@@ -748,7 +752,7 @@ explicit deploy approval
 
 ### Analytics Layer v0.1
 
-По явной команде «Добавь слой аналитики. Яндекс Метрика: <ID>. GA4: <ID>» подключи generic providers к текущему сайту после Review Build и до deploy. Прочитай [`docs/ANALYTICS.md`](docs/ANALYTICS.md), `contracts/analytics-events.json` и `contracts/analytics-spec.schema.json`; изучи SiteModel/Human Layer, создай `sites/<site-id>/ANALYTICS_SPEC.json` со стабильными bindings, выполни `npm run check:analytics` и `npm run build`, затем верни Analytics Deployment Report с mappings и оставшимися настройками целей/key events в аккаунтах. Эта интеграция не меняет автоматический pipeline и не запускает deploy.
+По явной команде «Добавь слой аналитики. Яндекс Метрика: <ID>. GA4: <ID>» подключи generic providers к текущему сайту после Review Build и до deploy. Прочитай [`docs/ANALYTICS.md`](docs/ANALYTICS.md), `contracts/analytics-events.json` и `contracts/analytics-spec.schema.json`; изучи SiteModel/Human Layer, создай `sites/<site-id>/ANALYTICS_SPEC.json` со стабильными bindings. `npm run build` и `npm run check:analytics` автоматически генерируют `sites/<site-id>/ANALYTICS_GOALS.md` из реестра событий и site config. Выполни обе проверки, затем верни Analytics Deployment Report с mappings и оставшимися настройками целей/key events в аккаунтах. Эта интеграция не меняет автоматический pipeline и не запускает deploy.
 
 ---
 

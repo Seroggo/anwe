@@ -24,6 +24,13 @@ for (const dir of fs.readdirSync(sitesDir, { withFileTypes: true }).filter((entr
     ids.add(binding.target);
     for (const key of event.required_parameters) if (!(key in (binding.parameters || {})) && key !== 'analytics_id' && key !== 'block_id') { console.error(`${dir.name}: ${binding.event} missing required parameter ${key}`); failed = true; }
   }
+  const goalsPath = path.join(sitesDir, dir.name, 'ANALYTICS_GOALS.md');
+  if (!fs.existsSync(goalsPath)) { console.error(`${dir.name}: generated ANALYTICS_GOALS.md is missing; run npm run generate:analytics-goals`); failed = true; }
+  else {
+    const goals = fs.readFileSync(goalsPath, 'utf8');
+    if (!goals.includes(`# Цели аналитики: ${dir.name}`)) { console.error(`${dir.name}: ANALYTICS_GOALS.md has no matching site heading`); failed = true; }
+    for (const binding of spec.bindings) if (!goals.includes(`\`${binding.target}\``)) { console.error(`${dir.name}: ANALYTICS_GOALS.md is missing target ${binding.target}`); failed = true; }
+  }
 }
 
 const tsPath = path.join(root, 'src/analytics/track.ts');

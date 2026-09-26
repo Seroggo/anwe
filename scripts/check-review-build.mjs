@@ -27,6 +27,26 @@ for (const folder of folders) {
   const siteModel = JSON.parse(fs.readFileSync(path.join(directory, 'SITE_MODEL.json'), 'utf8'));
   const machineSpec = JSON.parse(fs.readFileSync(path.join(directory, 'MACHINE_SPEC.json'), 'utf8'));
   const themeSpec = JSON.parse(fs.readFileSync(path.join(directory, 'THEME_SPEC.json'), 'utf8'));
+  const siteUrlPath = path.join(directory, 'SITE_URL.json');
+  check(fs.existsSync(siteUrlPath), `[${folder}] missing SITE_URL.json required for absolute sitemap URLs`);
+  if (!fs.existsSync(siteUrlPath)) continue;
+  const siteOrigin = new URL(JSON.parse(fs.readFileSync(siteUrlPath, 'utf8')).base_url).origin;
+  const robotsFile = path.join(root, 'dist', 'review', folder, 'robots.txt');
+  const sitemapFile = path.join(root, 'dist', 'review', folder, 'sitemap.xml');
+  check(fs.existsSync(robotsFile), `[${folder}] missing generated robots.txt`);
+  check(fs.existsSync(sitemapFile), `[${folder}] missing generated sitemap.xml`);
+  if (fs.existsSync(robotsFile)) {
+    const robots = fs.readFileSync(robotsFile, 'utf8');
+    check(robots.includes('User-agent: *') && robots.includes('Allow: /'), `[${folder}] robots.txt has no general crawl policy`);
+    check(robots.includes(`Sitemap: ${siteOrigin}/sitemap.xml`), `[${folder}] robots.txt has incorrect sitemap URL`);
+  }
+  if (fs.existsSync(sitemapFile)) {
+    const sitemap = fs.readFileSync(sitemapFile, 'utf8');
+    const expectedUrls = machineSpec.pages.filter((page) => page.sitemap && page.robots.index).map((page) => new URL(page.path, `${siteOrigin}/`).href);
+    const foundUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+    check(sitemap.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'), `[${folder}] sitemap.xml has no sitemap urlset`);
+    check(JSON.stringify(foundUrls) === JSON.stringify(expectedUrls), `[${folder}] sitemap.xml URLs do not match indexable MachineSpec pages`);
+  }
 
   check(siteModel.site_id === machineSpec.site_id, `[${folder}] SiteModel.site_id does not match MachineSpec.site_id`);
   check(siteModel.source_context_id === machineSpec.source_context_id, `[${folder}] SiteModel.source_context_id does not match MachineSpec.source_context_id`);
