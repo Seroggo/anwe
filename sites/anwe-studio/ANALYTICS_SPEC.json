@@ -1,0 +1,46 @@
+{
+  "schema_version": "0.1",
+  "enabled": true,
+  "providers": {
+    "yandex_metrika": {
+      "enabled": true,
+      "counter_id": "113078525"
+    },
+    "ga4": {
+      "enabled": true,
+      "measurement_id": "G-37KN8H6GRN"
+    }
+  },
+  "bindings": [
+    {
+      "event": "lead_submit",
+      "target": "landing-audit-request",
+      "parameters": {
+        "form_id": "landing-audit-request"
+      },
+      "yandex_event": "lead_submit",
+      "ga4_event": "form_submit"
+    },
+    {
+      "event": "cta_click",
+      "target": "header-primary-cta",
+      "parameters": {},
+      "yandex_event": "cta_header_primary",
+      "ga4_event": "select_content"
+    },
+    {
+      "event": "cta_click",
+      "target": "hero-primary-cta",
+      "parameters": {},
+      "yandex_event": "cta_hero_primary",
+      "ga4_event": "select_content"
+    },
+    {
+      "event": "cta_click",
+      "target": "result-primary-cta",
+      "parameters": {},
+      "yandex_event": "cta_result_primary",
+      "ga4_event": "select_content"
+    }
+  ]
+}

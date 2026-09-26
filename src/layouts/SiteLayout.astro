@@ -15,6 +15,9 @@ interface Props {
 }
 
 const { title, description, machinePage, theme, analytics } = Astro.props;
+const yandexCounterId = analytics?.enabled && analytics.providers?.yandex_metrika?.enabled
+  ? analytics.providers.yandex_metrika.counter_id
+  : null;
 
 // Machine metadata wins when present; existing demo pages without MachineSpec
 // keep using the plain title/description props (backward compatibility).
@@ -50,6 +53,11 @@ const ogDescription = og ? og.description : null;
     <AnalyticsRuntime spec={analytics} />
   </head>
   <body>
+    {yandexCounterId && (
+      <noscript>
+        <div><img src={`https://mc.yandex.ru/watch/${yandexCounterId}`} style="position:absolute; left:-9999px;" alt="" /></div>
+      </noscript>
+    )}
     <div class="site-shell">
       <slot />
     </div>

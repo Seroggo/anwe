@@ -5,16 +5,29 @@ type AnalyticsWindow = Window & { ym?: YandexFunction; gtag?: (...args: unknown[
 
 function installYandex(counterId: string | number): void {
   const w = window as AnalyticsWindow;
+  w.dataLayer = w.dataLayer || [];
   if (!w.ym) {
     const queue: YandexFunction = (...args: unknown[]) => { queue.a = queue.a || []; queue.a.push(args); };
     queue.l = Date.now();
     w.ym = queue;
   }
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = 'https://mc.yandex.ru/metrika/tag.js';
-  document.head.append(script);
-  w.ym(counterId, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true });
+  const scriptUrl = `https://mc.yandex.ru/metrika/tag.js?id=${encodeURIComponent(counterId)}`;
+  if (![...document.scripts].some((script) => script.src === scriptUrl)) {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = scriptUrl;
+    document.head.append(script);
+  }
+  w.ym(counterId, 'init', {
+    ssr: true,
+    webvisor: true,
+    clickmap: true,
+    ecommerce: 'dataLayer',
+    referrer: document.referrer,
+    url: location.href,
+    accurateTrackBounce: true,
+    trackLinks: true
+  });
 }
 
 function installGa4(measurementId: string): void {
@@ -53,8 +66,8 @@ export function initAnalytics(): void {
     const api = window.anweAnalytics;
     if (!api) return;
     if (explicit && id) api.track(explicit, { analytics_id: id, block_id: blockId, destination: href });
-    else if (/^tel:/i.test(href)) api.track('phone_click', { analytics_id: id || `phone-${blockId || 'site'}`, block_id: blockId });
-    else if (/^mailto:/i.test(href)) api.track('email_click', { analytics_id: id || `email-${blockId || 'site'}`, block_id: blockId });
+    else if (link.dataset.contactStatus !== 'placeholder' && /^tel:/i.test(href)) api.track('phone_click', { analytics_id: id || `phone-${blockId || 'site'}`, block_id: blockId });
+    else if (link.dataset.contactStatus !== 'placeholder' && /^mailto:/i.test(href)) api.track('email_click', { analytics_id: id || `email-${blockId || 'site'}`, block_id: blockId });
     else if (/(?:wa\.me|api\.whatsapp\.com|t\.me|telegram\.me|viber\.com|m\.me)(?:\/|$)/i.test(href)) api.track('messenger_click', { analytics_id: id || `messenger-${blockId || 'site'}`, block_id: blockId, messenger: href });
     else if (link.classList.contains('action-link--primary') && blockId) api.track('cta_click', { analytics_id: `${blockId}-primary-cta`, block_id: blockId, destination: href });
   });
